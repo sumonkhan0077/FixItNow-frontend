@@ -1,13 +1,18 @@
 import { Navbar } from "@/components/shared/navbar";
+import { getMe } from "@/service/getMe";
 
+const AuthGroupLayout = async ({ children }: { children: React.ReactNode }) => {
+//   const res = await getMe();
 
-const AuthGroupLayout = async (
-    { children }: { children: React.ReactNode }) => {
-  return <div>
-    <Navbar />
-    {children}  
-  
-  </div>;
+// //   console.log("Backend Response:", res); 
+//   const userProfile = res?.data?.profile || res?.profile || res?.data || null;
+
+  return (
+    <div>
+      {/* <Navbar user={userProfile} /> */}
+      {children}
+    </div>
+  );
 };
 
 export default AuthGroupLayout;

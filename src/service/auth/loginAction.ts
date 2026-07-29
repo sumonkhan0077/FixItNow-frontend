@@ -55,11 +55,11 @@ export const loginAction = async (redirectTo : string, prevState : LoginState , 
             redirect(redirectTo)
         }
 
-        if(decodedToken.role === "USER"){
+        if(decodedToken.role === "CUSTOMER"){
             redirect("/dashboard");
         } else if (decodedToken.role === "ADMIN"){
             redirect("/admin-dashboard");
-        } else if (decodedToken.role === "AUTHOR"){
+        } else if (decodedToken.role === "TECHNICIAN"){
             redirect("/author-dashboard");
         }
     }

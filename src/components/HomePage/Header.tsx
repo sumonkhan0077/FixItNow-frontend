@@ -137,7 +137,7 @@ export default function HeaderSection() {
 
   return (
     <main className="min-h-screen bg-background font-sans">
-      <Navbar />
+
 
       {/* ================= HERO SLIDER SECTION ================= */}
       <section

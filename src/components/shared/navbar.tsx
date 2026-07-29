@@ -29,6 +29,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GetProfileResponse, NavbarProps } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { logout } from "@/service/auth/logout";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 // Primary navigation links
 const navLinks = [
@@ -48,9 +53,33 @@ const userMenuGroups = [
   [{ label: "Support", href: "/support", icon: LifeBuoy }],
 ];
 
-export function Navbar() {
+export function Navbar({user} : NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+   const router = useRouter()
+  const handleUserMenuAction = async (action: string) => {
+
+    if(action === "dashboard" ){
+      if(user.role === "CUSTOMER"){
+        router.push("/dashboard")
+      }
+      else if(user.role === "TECHNICIAN"){
+        router.push("/author-dashboard")
+      }
+      else if(user.role === "ADMIN"){
+        router.push("/admin-dashboard")
+      }
+
+      return;
+    }
+
+    if(action === "logout"){
+        await logout();
+        toast.success("User Logged Out Successfully!");
+        router.push("/login");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +101,7 @@ export function Navbar() {
           "flex h-16 items-center justify-between gap-4 transition-all duration-300 px-4 sm:px-6 lg:px-10",
           scrolled
             ? "bg-background/85 border-b border-border shadow-lg shadow-black/5 backdrop-blur-xl"
-            : ""
+            : "",
         )}
       >
         {/* Logo */}
@@ -83,7 +112,7 @@ export function Navbar() {
           <span
             className={cn(
               "text-xl font-bold tracking-tight transition-colors",
-              scrolled ? "text-foreground" : "text-white"
+              scrolled ? "text-foreground" : "text-white",
             )}
           >
             Acme<span className="text-primary">.</span>
@@ -103,7 +132,7 @@ export function Navbar() {
                   "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-4/5",
                   scrolled
                     ? "text-muted-foreground hover:text-foreground"
-                    : "text-white hover:text-white"
+                    : "text-white hover:text-white",
                 )}
               >
                 <Icon className="size-4 opacity-80" />
@@ -114,6 +143,8 @@ export function Navbar() {
         </nav>
 
         {/* Right Section */}
+    {
+         user ? 
         <div className="flex items-center gap-3">
           {/* ==================== DESKTOP USER MENU ==================== */}
           <div className="hidden md:block">
@@ -125,12 +156,15 @@ export function Navbar() {
                       "flex items-center gap-2 rounded-full p-1 pl-1.5 transition-all outline-none cursor-pointer border",
                       scrolled
                         ? "border-border hover:bg-accent"
-                        : "border-white/20 hover:bg-white/15 text-white"
+                        : "border-white/20 hover:bg-white/15 text-white",
                     )}
                     aria-label="Open user menu"
                   >
                     <Avatar className="size-8 border border-white/20">
-                      <AvatarImage src="/diverse-avatars.png" alt="User avatar" />
+                      <AvatarImage
+                        src="/diverse-avatars.png"
+                        alt="User avatar"
+                      />
                       <AvatarFallback className="text-xs font-semibold">
                         JD
                       </AvatarFallback>
@@ -148,10 +182,10 @@ export function Navbar() {
                   <DropdownMenuLabel className="font-normal px-2 py-1.5">
                     <div className="flex flex-col gap-1">
                       <span className="text-sm font-semibold text-foreground">
-                        Jane Doe
+                        {user?.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        jane@acme.com
+                        {user?.email}
                       </span>
                     </div>
                   </DropdownMenuLabel>
@@ -161,17 +195,20 @@ export function Navbar() {
                   <div key={i}>
                     <DropdownMenuGroup>
                       {group.map((item) => (
-                        <DropdownMenuItem key={item.href} render={<Link
-                            href={item.href}
-                            className="flex items-center gap-2.5 py-2 px-2 rounded-lg cursor-pointer"
-                          >
-                            <item.icon className="size-4 text-muted-foreground" />
-                            <span className="font-medium text-sm">
-                              {item.label}
-                            </span>
-                          </Link>}>
-                          
-                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          key={item.href}
+                          render={
+                            <Link
+                              href={item.href}
+                              className="flex items-center gap-2.5 py-2 px-2 rounded-lg cursor-pointer"
+                            >
+                              <item.icon className="size-4 text-muted-foreground" />
+                              <span className="font-medium text-sm">
+                                {item.label}
+                              </span>
+                            </Link>
+                          }
+                        ></DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator className="my-1.5" />
@@ -180,7 +217,7 @@ export function Navbar() {
                 <DropdownMenuItem
                   variant="destructive"
                   className="flex items-center gap-2.5 py-2 px-2 rounded-lg cursor-pointer"
-                  onClick={() => console.log("Sign out clicked")}
+                  onClick={() => handleUserMenuAction("logout")}
                 >
                   <LogOut className="size-4" />
                   <span className="font-medium text-sm">Sign out</span>
@@ -191,34 +228,39 @@ export function Navbar() {
 
           {/* ==================== MOBILE 3-DOT ALL-IN-ONE DROPDOWN ==================== */}
           <div className="md:hidden">
-        <DropdownMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <DropdownMenuTrigger
-            render={
-              <button
-                className={cn(
-                  "flex items-center justify-center rounded-xl p-2 transition-all outline-none cursor-pointer border",
-                  scrolled
-                    ? "border-border hover:bg-accent text-foreground"
-                    : "border-white/20 hover:bg-white/15 text-white"
-                )}
-                aria-label="Open menu"
-              >
-                {/* ২. স্মুথ রোটেশন অ্যানিমেশন সহ ডায়নামিক আইকন */}
-                <div
-                  className={cn(
-                    "transition-transform duration-300 ease-in-out",
-                    mobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
-                  )}
-                >
-                  {mobileMenuOpen ? (
-                    <X className="size-5" />
-                  ) : (
-                    <Menu className="size-5" />
-                  )}
-                </div>
-              </button>
-            }
-          />
+            <DropdownMenu
+              open={mobileMenuOpen}
+              onOpenChange={setMobileMenuOpen}
+            >
+              <DropdownMenuTrigger
+                render={
+                  <button
+                    className={cn(
+                      "flex items-center justify-center rounded-xl p-2 transition-all outline-none cursor-pointer border",
+                      scrolled
+                        ? "border-border hover:bg-accent text-foreground"
+                        : "border-white/20 hover:bg-white/15 text-white",
+                    )}
+                    aria-label="Open menu"
+                  >
+                    {/* ২. স্মুথ রোটেশন অ্যানিমেশন সহ ডায়নামিক আইকন */}
+                    <div
+                      className={cn(
+                        "transition-transform duration-300 ease-in-out",
+                        mobileMenuOpen
+                          ? "rotate-90 scale-110"
+                          : "rotate-0 scale-100",
+                      )}
+                    >
+                      {mobileMenuOpen ? (
+                        <X className="size-5" />
+                      ) : (
+                        <Menu className="size-5" />
+                      )}
+                    </div>
+                  </button>
+                }
+              />
 
               <DropdownMenuContent
                 align="end"
@@ -229,17 +271,20 @@ export function Navbar() {
                   <DropdownMenuLabel className="font-normal px-2 py-1.5">
                     <div className="flex items-center gap-3">
                       <Avatar className="size-9 border border-border">
-                        <AvatarImage src="/diverse-avatars.png" alt="User avatar" />
+                        <AvatarImage
+                          src="/diverse-avatars.png"
+                          alt="User avatar"
+                        />
                         <AvatarFallback className="text-xs font-semibold">
                           JD
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-bold text-foreground">
-                          Jane Doe
+                          {user?.name}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          jane@acme.com
+                          {user?.email}
                         </span>
                       </div>
                     </div>
@@ -256,20 +301,20 @@ export function Navbar() {
                   {navLinks.map((link) => {
                     const Icon = link.icon;
                     return (
-                      <DropdownMenuItem key={link.href}  render={
-
-                        <Link
-                          href={link.href}
-                          className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer"
-                        >
-                          <Icon className="size-4 " />
-                          <span className="font-semibold text-sm uppercase">
-                            {link.label}
-                          </span>
-                        </Link>
-                    }>
-                   
-                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        key={link.href}
+                        render={
+                          <Link
+                            href={link.href}
+                            className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer"
+                          >
+                            <Icon className="size-4 " />
+                            <span className="font-semibold text-sm uppercase">
+                              {link.label}
+                            </span>
+                          </Link>
+                        }
+                      ></DropdownMenuItem>
                     );
                   })}
                 </DropdownMenuGroup>
@@ -281,20 +326,20 @@ export function Navbar() {
                   <div key={i}>
                     <DropdownMenuGroup>
                       {group.map((item) => (
-                        <DropdownMenuItem key={item.href}  render={
-                          <Link
-                            href={item.href}
-                            className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer"
-                          >
-                            <item.icon className="size-4 text-muted-foreground" />
-                            <span className="font-medium text-sm">
-                              {item.label}
-                            </span>
-                          </Link>
-
-                            }>
-                           
-                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          key={item.href}
+                          render={
+                            <Link
+                              href={item.href}
+                              className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer"
+                            >
+                              <item.icon className="size-4 text-muted-foreground" />
+                              <span className="font-medium text-sm">
+                                {item.label}
+                              </span>
+                            </Link>
+                          }
+                        ></DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator className="my-1.5" />
@@ -305,7 +350,7 @@ export function Navbar() {
                 <DropdownMenuItem
                   variant="destructive"
                   className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer mt-1"
-                  onClick={() => console.log("Sign out clicked")}
+                  onClick={() => handleUserMenuAction("logout")}
                 >
                   <LogOut className="size-4" />
                   <span className="font-semibold text-sm">Sign out</span>
@@ -313,7 +358,12 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>
+        </div> :  <Link href={"/login"} >
+                   <Button className="cursor-pointer">
+                        Login
+                   </Button>
+            </Link>
+    }
       </div>
     </header>
   );

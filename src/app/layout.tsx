@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google"; 
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Navbar } from "@/components/shared/navbar";
 
 const monaSans = Mona_Sans({
   variable: "--font-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({
       lang="en"
       className={`${monaSans.variable} h-full antialiased`}
     >
+      
       <body className="min-h-full flex flex-col font-sans ">{children}
 
          <Toaster richColors position="top-right" />
