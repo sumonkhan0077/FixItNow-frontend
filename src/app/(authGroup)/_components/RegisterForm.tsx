@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { registerAction } from "@/service/auth/registerAction";
+import { registerAction } from "@/service/auth/RegisterAction";
 
 const RegisterForm = () => {
   const [state, action, pending] = useActionState(
