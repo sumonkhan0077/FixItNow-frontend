@@ -100,7 +100,7 @@ export function Navbar() {
                 href={link.href}
                 className={cn(
                   "relative flex items-center gap-2 px-3 py-2 text-sm font-semibold uppercase transition-colors rounded-lg",
-                  "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-1/2",
+                  "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-4/5",
                   scrolled
                     ? "text-muted-foreground hover:text-foreground"
                     : "text-white hover:text-white"
@@ -161,8 +161,7 @@ export function Navbar() {
                   <div key={i}>
                     <DropdownMenuGroup>
                       {group.map((item) => (
-                        <DropdownMenuItem key={item.href} asChild>
-                          <Link
+                        <DropdownMenuItem key={item.href} render={<Link
                             href={item.href}
                             className="flex items-center gap-2.5 py-2 px-2 rounded-lg cursor-pointer"
                           >
@@ -170,7 +169,8 @@ export function Navbar() {
                             <span className="font-medium text-sm">
                               {item.label}
                             </span>
-                          </Link>
+                          </Link>}>
+                          
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
