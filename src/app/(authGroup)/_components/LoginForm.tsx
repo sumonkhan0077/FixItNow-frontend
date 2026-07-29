@@ -21,11 +21,6 @@ const LoginForm = () => {
     useEffect(()=> {
         if(!state) return;
 
-        // if(state.success){
-        //     toast.success(state.message || "Login Successful");
-        //     // router.push("/dashboard")
-        // }
-
         if(!state.success){
             toast.error(state.message || "Login failed");
         }
