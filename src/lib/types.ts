@@ -124,3 +124,73 @@ export type GetProfileResponse = {
 export type NavbarProps = {
   user?: UserProfile;
 };
+
+// ── Bookings (matches GET /api/bookings/technician-bookings) ─────────
+export type BookingStatus =
+  | "REQUESTED"
+  | "ACCEPTED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "DECLINED"
+  | "CANCELLED";
+
+export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+
+export type BookingReview = {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+};
+
+export type Booking = {
+  id: string;
+  customerId: string;
+  serviceId: string;
+  bookingDate: string;
+  timeSlot?: string;
+  address: string;
+  totalAmount: string;
+  status: BookingStatus;
+  createdAt: string;
+  updatedAt: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    profileImage?: string | null;
+  };
+  service: {
+    id: string;
+    technicianProfileId?: string;
+    categoryId?: string;
+    title: string;
+    description?: string;
+    price: string;
+    createdAt?: string;
+    updatedAt?: string;
+    category: {
+      id?: string;
+      name: string;
+      description?: string;
+      icon?: string | null;
+    };
+  };
+  payment?: { id?: string; status: PaymentStatus; amount?: string } | null;
+  review?: BookingReview | null;
+};
+
+export type BookingsMeta = {
+  page: number;
+  limit: number;
+  total: number;
+};
+
+export type BookingsApiResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Booking[];
+  meta?: BookingsMeta;
+};

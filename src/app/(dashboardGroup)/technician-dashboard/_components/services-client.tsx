@@ -110,8 +110,8 @@ function ServiceCard({
       {/* Footer */}
       <div className="mt-auto flex items-center justify-between border-t border-border/50 pt-3">
         <span className="flex items-center gap-1 text-base font-bold text-emerald-600 dark:text-emerald-400">
-          <DollarSign className="size-4" />
-          {service.price}
+         
+          ৳ {service.price}
         </span>
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <Calendar className="size-3" />
@@ -376,7 +376,7 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
             </Field>
 
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Price ($)" required error={errors.price}>
+              <Field label="Price (৳)" required error={errors.price}>
                 <Input
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
