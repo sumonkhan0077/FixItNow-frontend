@@ -20,11 +20,33 @@ export type TechnicianService = {
   category: { name: string };
 };
 
+export type DayOfWeek =
+  | "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY"
+  | "FRIDAY" | "SATURDAY" | "SUNDAY";
+
 export type TechnicianAvailability = {
-  dayOfWeek: string;
+  id: string;
+  technicianProfileId?: string;
+  dayOfWeek: DayOfWeek;
   startTime: string;
   endTime: string;
   isAvailable: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type AvailabilityPayload = {
+  dayOfWeek: DayOfWeek;
+  startTime: string;
+  endTime: string;
+  isAvailable: boolean;
+};
+
+export type AvailabilityApiResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data?: TechnicianAvailability;
 };
 
 export type TechnicianReview = {
@@ -129,6 +151,7 @@ export type NavbarProps = {
 export type BookingStatus =
   | "REQUESTED"
   | "ACCEPTED"
+  | "PAID"
   | "IN_PROGRESS"
   | "COMPLETED"
   | "DECLINED"

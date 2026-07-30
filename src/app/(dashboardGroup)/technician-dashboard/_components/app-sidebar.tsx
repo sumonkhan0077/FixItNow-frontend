@@ -40,7 +40,6 @@ const navItems = [
   { title: "Edit Profile",  url: "/technician-dashboard/edit-profile", icon: Settings },
   { title: "My Services",   url: "/technician-dashboard/services",     icon: Wrench },
   { title: "Bookings",      url: "/technician-dashboard/bookings",     icon: CalendarDays },
-  { title: "Earnings",      url: "/technician-dashboard/earnings",     icon: Wallet },
   { title: "Reviews",       url: "/technician-dashboard/reviews",      icon: Star },
   { title: "Notifications", url: "/technician-dashboard/notifications",icon: Bell },
 ];

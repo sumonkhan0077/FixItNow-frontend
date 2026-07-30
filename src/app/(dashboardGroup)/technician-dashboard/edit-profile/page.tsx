@@ -1,5 +1,6 @@
 import { getMyTechnicianProfile } from "@/service/technician/getTechnicianProfile";
 import { EditProfileForm } from "../_components/edit-profile-form";
+import { AvailabilityManager } from "../_components/availability-manager";
 import { GsapWrapper } from "../_components/gsap-wrapper";
 import { PenLine, Plus } from "lucide-react";
 
@@ -35,6 +36,12 @@ export default async function EditProfilePage() {
       </GsapWrapper>
 
       <EditProfileForm profile={profile} />
+
+      {isEditMode && (
+        <GsapWrapper animation="fadeUp" delay={0.2}>
+          <AvailabilityManager initialSlots={profile.availabilities} />
+        </GsapWrapper>
+      )}
     </div>
   );
 }

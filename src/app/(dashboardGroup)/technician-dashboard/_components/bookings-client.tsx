@@ -22,7 +22,6 @@ import {
   CalendarDays,
   MapPin,
   DollarSign,
-  User,
   Wrench,
   RefreshCw,
   CheckCircle2,
@@ -31,16 +30,18 @@ import {
   PlayCircle,
   AlertCircle,
   Eye,
-  CreditCard,
   Mail,
   Tag,
   FileText,
+  CreditCard,
+  Lock,
 } from "lucide-react";
 
 // ── Status transition map ────────────────────────────────────────────
 const NEXT_STATUS: Partial<Record<BookingStatus, BookingStatus>> = {
   REQUESTED: "ACCEPTED",
-  ACCEPTED: "IN_PROGRESS",
+  ACCEPTED: "PAID",
+  PAID:"IN_PROGRESS",
   IN_PROGRESS: "COMPLETED",
 };
 
@@ -54,32 +55,32 @@ const STATUS_CONFIG: Record<
 > = {
   REQUESTED: {
     label: "Requested",
-    className:
-      "border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400",
+    className: "border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400",
     icon: Clock,
   },
   ACCEPTED: {
     label: "Accepted",
-    className:
-      "border-violet-500/20 bg-violet-500/10 text-violet-600 dark:text-violet-400",
+    className: "border-violet-500/20 bg-violet-500/10 text-violet-600 dark:text-violet-400",
+    icon: CheckCircle2,
+  },
+  PAID: {
+    label: "Paid",
+    className: "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     icon: CheckCircle2,
   },
   IN_PROGRESS: {
     label: "In Progress",
-    className:
-      "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    className: "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
     icon: PlayCircle,
   },
   COMPLETED: {
     label: "Completed",
-    className:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    className: "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     icon: CheckCircle2,
   },
   DECLINED: {
     label: "Declined",
-    className:
-      "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
+    className: "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
     icon: XCircle,
   },
   CANCELLED: {
@@ -92,18 +93,19 @@ const STATUS_CONFIG: Record<
 const PAYMENT_CONFIG: Record<string, { label: string; className: string }> = {
   PAID: {
     label: "Paid",
-    className:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    className: "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  },
+  UNPAID: {
+    label: "Unpaid",
+    className: "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
   },
   PENDING: {
-    label: "Unpaid / Pending",
-    className:
-      "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    label: "Pending",
+    className: "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
   },
   FAILED: {
     label: "Failed",
-    className:
-      "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
+    className: "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
   },
 };
 
@@ -122,28 +124,28 @@ function BookingCard({
   const isUpdating = updatingId === booking.id;
   const isTerminal = TERMINAL.includes(booking.status as BookingStatus);
   const nextStatus = NEXT_STATUS[booking.status as BookingStatus];
-  const canDecline = CAN_DECLINE.includes(booking.status as BookingStatus);
-  const statusCfg =
-    STATUS_CONFIG[booking.status as BookingStatus] || STATUS_CONFIG.REQUESTED;
+  
+  // Checking Payment Status Safely
+  const rawPaymentStatus = booking.payment?.status || (booking.payment ? "PENDING" : "UNPAID");
+  const isPaid = rawPaymentStatus === "PAID";
 
-  // Handling optional payment status safely
-  const paymentStatusKey = booking.payment?.status || "PENDING";
-  const paymentCfg = PAYMENT_CONFIG[paymentStatusKey] || PAYMENT_CONFIG.PENDING;
+  // Decline option is available only for REQUESTED status and UNPAID bookings
+  const canDecline = CAN_DECLINE.includes(booking.status as BookingStatus) && !isPaid;
+
+  const statusCfg = STATUS_CONFIG[booking.status as BookingStatus] || STATUS_CONFIG.REQUESTED;
+  const paymentCfg = PAYMENT_CONFIG[rawPaymentStatus] || PAYMENT_CONFIG.UNPAID;
   const StatusIcon = statusCfg.icon;
 
-  const formattedDate = new Date(booking.bookingDate).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }
-  );
+  const formattedDate = new Date(booking.bookingDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   return (
     <div className="booking-card flex flex-col justify-between rounded-2xl border border-border/70 bg-card p-5 shadow-sm transition-all duration-300 hover:border-primary/40 hover:shadow-md">
       <div className="space-y-4">
-        {/* Top Header: Customer Info & Badges */}
+        {/* Top Header */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Avatar className="size-11 shrink-0 border border-border/80 shadow-xs">
@@ -171,17 +173,12 @@ function BookingCard({
               <StatusIcon className="size-3 mr-1" />
               {statusCfg.label}
             </Badge>
-            <Badge
-              variant="outline"
-              className={`text-[10px] font-medium px-2 py-0 rounded-full ${paymentCfg.className}`}
-            >
-              {paymentCfg.label}
-            </Badge>
+           
           </div>
         </div>
 
+        {/* Service Details */}
         <div className="border-t border-border/50 pt-3 space-y-2">
-          {/* Service Title & Category */}
           <div className="flex items-start gap-2.5">
             <div className="p-1.5 rounded-lg bg-primary/10 text-primary mt-0.5">
               <Wrench className="size-4 shrink-0" />
@@ -197,7 +194,6 @@ function BookingCard({
             </div>
           </div>
 
-          {/* Service Description */}
           {booking.service?.description && (
             <p className="text-xs text-muted-foreground line-clamp-1 italic bg-muted/40 p-2 rounded-lg">
               "{booking.service.description}"
@@ -205,7 +201,7 @@ function BookingCard({
           )}
         </div>
 
-        {/* Detailed Grid */}
+        {/* Details Grid */}
         <div className="grid grid-cols-2 gap-2.5 rounded-xl bg-muted/30 p-3 text-xs border border-border/40">
           <div className="flex items-center gap-2 text-foreground font-medium">
             <CalendarDays className="size-4 text-primary shrink-0" />
@@ -231,7 +227,7 @@ function BookingCard({
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Area */}
       <div className="mt-4 pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-2">
         <Button
           size="sm"
@@ -285,7 +281,7 @@ function BookingCard({
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────
+// ── Main Component ──────────────────────────────────────────────────
 const FILTERS: { label: string; value: BookingStatus | "ALL" }[] = [
   { label: "All", value: "ALL" },
   { label: "Requested", value: "REQUESTED" },
@@ -295,11 +291,7 @@ const FILTERS: { label: string; value: BookingStatus | "ALL" }[] = [
   { label: "Declined", value: "DECLINED" },
 ];
 
-export function BookingsClient({
-  initialBookings,
-}: {
-  initialBookings: any[];
-}) {
+export function BookingsClient({ initialBookings }: { initialBookings: any[] }) {
   const [bookings, setBookings] = useState<any[]>(initialBookings);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -308,7 +300,6 @@ export function BookingsClient({
 
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // GSAP Animation
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -319,7 +310,6 @@ export function BookingsClient({
     );
   }, [bookings, filter]);
 
-  // Refetch Bookings
   const refetch = useCallback(async () => {
     setLoading(true);
     try {
@@ -330,11 +320,7 @@ export function BookingsClient({
     }
   }, []);
 
-  // Update Status
-  const handleStatusUpdate = async (
-    bookingId: string,
-    status: BookingStatus
-  ) => {
+  const handleStatusUpdate = async (bookingId: string, status: BookingStatus) => {
     setUpdatingId(bookingId);
     try {
       const result = await updateBookingStatus(bookingId, status);
@@ -351,10 +337,7 @@ export function BookingsClient({
     }
   };
 
-  const filtered =
-    filter === "ALL"
-      ? bookings
-      : bookings.filter((b) => b.status === filter);
+  const filtered = filter === "ALL" ? bookings : bookings.filter((b) => b.status === filter);
 
   return (
     <div className="space-y-6">
@@ -413,7 +396,7 @@ export function BookingsClient({
         })}
       </div>
 
-      {/* Bookings Display Grid */}
+      {/* Grid */}
       {loading ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -429,10 +412,7 @@ export function BookingsClient({
           </p>
         </div>
       ) : (
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
-        >
+        <div ref={gridRef} className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((booking) => (
             <BookingCard
               key={booking.id}
@@ -446,10 +426,7 @@ export function BookingsClient({
       )}
 
       {/* Detailed Modal Dialog */}
-      <Dialog
-        open={!!selectedBooking}
-        onOpenChange={() => setSelectedBooking(null)}
-      >
+      <Dialog open={!!selectedBooking} onOpenChange={() => setSelectedBooking(null)}>
         <DialogContent className="max-w-md rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold flex items-center gap-2">
@@ -460,10 +437,9 @@ export function BookingsClient({
 
           {selectedBooking && (
             <div className="space-y-4 text-xs">
-              {/* Customer Info */}
               <div className="p-3 bg-muted/40 rounded-xl space-y-2">
                 <span className="font-bold text-muted-foreground uppercase text-[10px]">
-                  Customer Information
+                  Customer Details
                 </span>
                 <div className="flex items-center gap-3">
                   <Avatar className="size-10">
@@ -476,14 +452,11 @@ export function BookingsClient({
                     <p className="font-bold text-sm text-foreground">
                       {selectedBooking.customer?.name}
                     </p>
-                    <p className="text-muted-foreground">
-                      {selectedBooking.customer?.email}
-                    </p>
+                    <p className="text-muted-foreground">{selectedBooking.customer?.email}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Booking Service & Pricing */}
               <div className="space-y-2 border-t pt-2">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Service Title:</span>
@@ -507,6 +480,12 @@ export function BookingsClient({
                   <span className="text-muted-foreground">Address:</span>
                   <span className="font-semibold capitalize">{selectedBooking.address}</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Payment Status:</span>
+                  <span className="font-semibold">
+                    {selectedBooking.payment?.status || "UNPAID"}
+                  </span>
+                </div>
                 <div className="flex justify-between text-sm border-t pt-2">
                   <span className="font-bold">Total Amount:</span>
                   <span className="font-bold text-emerald-600">
@@ -515,9 +494,10 @@ export function BookingsClient({
                 </div>
               </div>
 
-              {/* System Metadata */}
               <div className="bg-card border p-3 rounded-xl space-y-1 text-[11px] text-muted-foreground">
-                <p>Booking ID: <span className="font-mono text-foreground">{selectedBooking.id}</span></p>
+                <p>
+                  Booking ID: <span className="font-mono text-foreground">{selectedBooking.id}</span>
+                </p>
                 <p>Created At: {new Date(selectedBooking.createdAt).toLocaleString()}</p>
               </div>
             </div>
