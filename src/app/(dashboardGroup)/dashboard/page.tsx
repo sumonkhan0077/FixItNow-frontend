@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import {
   CalendarDays, Star, ArrowRight, Wrench,
   Bell, User, CheckCircle2, Clock, Settings,
+  ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function CustomerDashboardPage() {
   const [meRes, bookingsRes] = await Promise.all([
@@ -98,8 +100,20 @@ export default async function CustomerDashboardPage() {
                 className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3 hover:border-primary/20 hover:bg-primary/5 transition-all"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <Wrench className="size-4 text-primary" />
+                  <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">
+                    {b.service.image ? (
+                      <Image
+                        src={b.service.image}
+                        alt={b.service.title}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center">
+                        <Wrench className="size-5 text-muted-foreground" />
+                      </div>
+                    )}
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">{b.service.title}</p>

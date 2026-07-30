@@ -18,7 +18,9 @@ import {
   CheckCircle2, XCircle, PlayCircle, CreditCard,
   Star, User, Tag, Eye, AlertCircle, Info,
   Hash, Send, Search, ChevronLeft, ChevronRight, ArrowUpDown,
+  ImageIcon,
 } from "lucide-react";
+import Image from "next/image";
 
 // ── Status config ─────────────────────────────────────────────────────
 const STATUS_CFG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
@@ -168,6 +170,22 @@ function BookingDrawer({ booking, open, onClose, onReviewSubmitted }: {
           <div className="space-y-2">
             <SectionTitle>Service</SectionTitle>
             <div className="rounded-xl border border-border/60 bg-card/60 p-3 space-y-2.5">
+              {/* Service image */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted mb-2">
+                {booking.service.image ? (
+                  <Image
+                    src={booking.service.image}
+                    alt={booking.service.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="flex size-full items-center justify-center">
+                    <Wrench className="size-8 text-muted-foreground/40" />
+                  </div>
+                )}
+              </div>
               <Row icon={Wrench}     label="Title"    value={booking.service.title} />
               <Row icon={Tag}        label="Category" value={booking.service.category.name} />
               <Row icon={DollarSign} label="Price"    value={`$${booking.service.price}`} valueClass="text-emerald-600 dark:text-emerald-400" />
@@ -268,6 +286,23 @@ function BookingCard({ booking, onView }: { booking: CustomerBooking; onView: (b
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-card/60 p-4 hover:border-primary/20 hover:shadow-sm transition-all duration-200">
+      {/* Service image */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+        {booking.service.image ? (
+          <Image
+            src={booking.service.image}
+            alt={booking.service.title}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center">
+            <Wrench className="size-8 text-muted-foreground/40" />
+          </div>
+        )}
+      </div>
+
       {/* Service + badge */}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">

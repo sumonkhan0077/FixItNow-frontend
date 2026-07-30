@@ -139,6 +139,7 @@ export type Service = {
   title: string;
   description: string;
   price: string;
+  image?:string;
   categoryId: string;
   technicianProfileId: string;
   createdAt: string;
@@ -216,6 +217,7 @@ export type Booking = {
     title: string;
     description?: string;
     price: string;
+    image?:string;
     createdAt?: string;
     updatedAt?: string;
     category: {
@@ -249,6 +251,7 @@ export type CustomerBooking = {
     title: string;
     description?: string;
     price: string;
+    image?:string;
     category: { id?: string; name: string };
     technicianProfile?: {
       id: string;
