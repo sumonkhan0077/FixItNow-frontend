@@ -60,7 +60,7 @@ export const loginAction = async (redirectTo : string, prevState : LoginState , 
         } else if (decodedToken.role === "ADMIN"){
             redirect("/admin-dashboard");
         } else if (decodedToken.role === "TECHNICIAN"){
-            redirect("/author-dashboard");
+            redirect("/technician-dashboard");
         }
     }
 
