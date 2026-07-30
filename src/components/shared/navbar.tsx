@@ -37,23 +37,40 @@ import { Button } from "../ui/button";
 
 // Primary navigation links
 const navLinks = [
-  { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Projects", href: "/projects", icon: FolderKanban },
   { label: "Team", href: "/team", icon: Users },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-// User dropdown options
-const userMenuGroups = [
-  [
-    { label: "Profile", href: "/profile", icon: User },
-    { label: "Billing", href: "/billing", icon: CreditCard },
-    { label: "Settings", href: "/settings", icon: Settings },
-  ],
-  [{ label: "Support", href: "/support", icon: LifeBuoy }],
-];
+// // User dropdown options
+// const userMenuGroups = [
+//   [
+//     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+//     { label: "Billing", href: "/billing", icon: CreditCard },
+//     { label: "Settings", href: "/settings", icon: Settings },
+//   ],
+//   [{ label: "Support", href: "/support", icon: LifeBuoy }],
+// ];
 
 export function Navbar({user} : NavbarProps) {
+
+  const userMenuGroups = [
+    [
+      {
+        label: "Dashboard",
+        href:
+          user?.role === "ADMIN"
+            ? "/admin-dashboard"
+            : user?.role === "TECHNICIAN"
+            ? "/technician-dashboard"
+            : "/dashboard",
+        icon: LayoutDashboard,
+      },
+      { label: "Billing", href: "/billing", icon: CreditCard },
+      { label: "Settings", href: "/settings", icon: Settings },
+    ],
+    [{ label: "Support", href: "/support", icon: LifeBuoy }],
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -162,11 +179,11 @@ export function Navbar({user} : NavbarProps) {
                   >
                     <Avatar className="size-8 border border-white/20">
                       <AvatarImage
-                        src="/diverse-avatars.png"
-                        alt="User avatar"
+                        src={user?.profileImage ?? undefined}
+                        alt={user?.name ?? "User"}
                       />
-                      <AvatarFallback className="text-xs font-semibold">
-                        JD
+                      <AvatarFallback className="text-xs font-bold bg-primary/20 text-primary">
+                        {user?.name ? user.name.slice(0, 2).toUpperCase() : "ME"}
                       </AvatarFallback>
                     </Avatar>
                     <ChevronDown className="size-3.5 opacity-70 mr-1" />
@@ -272,11 +289,11 @@ export function Navbar({user} : NavbarProps) {
                     <div className="flex items-center gap-3">
                       <Avatar className="size-9 border border-border">
                         <AvatarImage
-                          src="/diverse-avatars.png"
-                          alt="User avatar"
+                          src={user?.profileImage ?? undefined}
+                          alt={user?.name ?? "User"}
                         />
-                        <AvatarFallback className="text-xs font-semibold">
-                          JD
+                        <AvatarFallback className="text-xs font-bold bg-primary/10 text-primary">
+                          {user?.name ? user.name.slice(0, 2).toUpperCase() : "ME"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col gap-0.5">
