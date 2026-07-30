@@ -28,6 +28,7 @@ import {
   Plus, Pencil, Trash2, Wrench,
   DollarSign, Tag, Calendar, AlertTriangle,
 } from "lucide-react";
+import Image from "next/image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type FormState = {
@@ -35,9 +36,10 @@ type FormState = {
   description: string;
   price: string;
   categoryId: string;
+  image: string;
 };
 
-const emptyForm: FormState = { title: "", description: "", price: "", categoryId: "" };
+const emptyForm: FormState = { title: "", description: "", price: "", categoryId: "", image: "" };
 
 // ── Field component ───────────────────────────────────────────────────────────
 function Field({
@@ -68,11 +70,26 @@ function ServiceCard({
 }) {
   return (
     <div className="service-card group flex flex-col gap-4 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+      {/* Service image */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+        {service.image ? (
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center">
+            <Wrench className="size-8 text-muted-foreground/40" />
+          </div>
+        )}
+      </div>
+
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-          <Wrench className="size-5 text-primary" />
-        </div>
+       
         <div className="flex gap-1.5">
           <Button
             size="icon-sm"
@@ -233,6 +250,7 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
       description: service.description,
       price:       service.price,
       categoryId:  service.categoryId,
+      image:       service.image || "",
     });
     setErrors({});
     setModalOpen(true);
@@ -249,6 +267,7 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
       description: form.description.trim(),
       price:       form.price.trim(),
       categoryId:  form.categoryId,
+      image:       form.image.trim() || undefined,
     };
 
     setSubmitting(true);
@@ -373,6 +392,16 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
                 placeholder="Describe what this service includes..."
                 className="min-h-[90px] resize-none bg-background/50"
               />
+            </Field>
+
+            <Field label="Image URL" error={errors.image}>
+              <Input
+                value={form.image}
+                onChange={(e) => setForm({ ...form, image: e.target.value })}
+                placeholder="https://example.com/image.jpg"
+                className="bg-background/50"
+              />
+              <p className="text-[10px] text-muted-foreground mt-1">Paste a direct image link for the service thumbnail</p>
             </Field>
 
             <div className="grid grid-cols-2 gap-4">

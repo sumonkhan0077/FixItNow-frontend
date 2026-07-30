@@ -36,6 +36,7 @@ import {
   CreditCard,
   Lock,
 } from "lucide-react";
+import Image from "next/image";
 
 // ── Status transition map ────────────────────────────────────────────
 const NEXT_STATUS: Partial<Record<BookingStatus, BookingStatus>> = {
@@ -178,28 +179,44 @@ function BookingCard({
         </div>
 
         {/* Service Details */}
-        <div className="border-t border-border/50 pt-3 space-y-2">
-          <div className="flex items-start gap-2.5">
-            <div className="p-1.5 rounded-lg bg-primary/10 text-primary mt-0.5">
-              <Wrench className="size-4 shrink-0" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-foreground leading-tight">
-                {booking.service?.title}
-              </p>
-              <span className="text-xs font-medium text-muted-foreground flex items-center gap-1 mt-0.5">
-                <Tag className="size-3" />
-                {booking.service?.category?.name}
-              </span>
-            </div>
-          </div>
-
-          {booking.service?.description && (
-            <p className="text-xs text-muted-foreground line-clamp-1 italic bg-muted/40 p-2 rounded-lg">
-              "{booking.service.description}"
-            </p>
-          )}
+       <div className="border-t border-border/50 pt-3 space-y-2">
+  <div className="flex items-center gap-3">
+    {/* Service Image Container */}
+    <div className="relative size-12 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted shadow-sm group">
+      {booking.service?.image ? (
+        <Image
+          src={booking.service.image}
+          alt={booking.service?.title || "Service image"}
+          fill
+          sizes="48px"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      ) : (
+        <div className="flex size-full items-center justify-center bg-primary/10 text-primary">
+          <Wrench className="size-5" />
         </div>
+      )}
+    </div>
+
+    {/* Title & Category */}
+    <div className="min-w-0 flex-1">
+      <p className="text-sm font-bold text-foreground leading-snug truncate">
+        {booking.service?.title}
+      </p>
+      <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 mt-0.5">
+        <Tag className="size-3 text-primary/70 shrink-0" />
+        <span className="truncate">{booking.service?.category?.name}</span>
+      </span>
+    </div>
+  </div>
+
+  {/* Description */}
+  {booking.service?.description && (
+    <p className="text-xs text-muted-foreground line-clamp-1 italic bg-muted/40 px-2.5 py-1.5 rounded-lg border border-border/30">
+      "{booking.service.description}"
+    </p>
+  )}
+</div>
 
         {/* Details Grid */}
         <div className="grid grid-cols-2 gap-2.5 rounded-xl bg-muted/30 p-3 text-xs border border-border/40">
@@ -214,7 +231,7 @@ function BookingCard({
           </div>
 
           <div className="flex items-center gap-2 text-foreground font-medium">
-            <DollarSign className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            
             <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
               ৳ {booking.totalAmount}
             </span>
