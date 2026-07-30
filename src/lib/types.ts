@@ -14,10 +14,15 @@ export type UserProfile = {
 
 // ── Technician profile (matches GET /api/technician-profile/my-profile) ──
 export type TechnicianService = {
+  id: string;
+  technicianProfileId?: string;
+  categoryId?: string;
   title: string;
   description: string;
   price: string;
-  category: { name: string };
+  createdAt?: string;
+  updatedAt?: string;
+  category: { id?: string; name: string; description?: string };
 };
 
 export type DayOfWeek =
@@ -51,9 +56,29 @@ export type AvailabilityApiResponse = {
 
 export type TechnicianReview = {
   id: string;
+  bookingId?: string;
+  customerId?: string;
+  technicianProfileId?: string;
   rating: number;
   comment?: string;
   createdAt: string;
+  customer?: {
+    id: string;
+    name: string;
+    email: string;
+    profileImage?: string | null;
+  };
+  booking?: {
+    id: string;
+    status?: string;
+    serviceId?: string;
+    bookingDate?: string;
+    service?: {
+      id: string;
+      title: string;
+      price: string;
+    };
+  };
 };
 
 export type TechnicianProfileData = {
