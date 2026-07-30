@@ -6,7 +6,7 @@ import serverFetch from "@/utils/server-fatch";
 export const getMyTechnicianProfile = async (): Promise<TechnicianProfileApiResponse | null> => {
   try {
     const res = await serverFetch.get("/api/technician-profile/my-profile", {
-      next: { tags: ["technician-profile"] },
+      cache: "no-store",
     } as RequestInit);
 
     if (!res.ok) return null;
@@ -24,9 +24,7 @@ export const updateTechnicianProfile = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
-    const result = await res.json();
-    return result;
+    return res.json();
   } catch {
     return { success: false, message: "Something went wrong." };
   }

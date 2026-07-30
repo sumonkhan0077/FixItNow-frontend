@@ -22,7 +22,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
         <Avatar className="size-16 md:size-20 border-4 border-white/30 shadow-xl shrink-0">
           <AvatarImage src={user.profileImage} alt={user.name} />
           <AvatarFallback className="bg-white/20 text-white text-xl font-bold">
-            {user.name.slice(0, 2).toUpperCase()}
+            {user?.name?.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
 

@@ -1,37 +1,59 @@
-export type TechnicianProfile = {
+// ── Auth / shared user ──────────────────────────────────────────────
+export type UserProfile = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  profileImage?: string | null;
+  address?: string;
+  role: "CUSTOMER" | "TECHNICIAN" | "ADMIN";
+  status?: "ACTIVE" | "BANNED";
+  createdAt: string;
+  updatedAt: string;
+};
+
+// ── Technician profile (matches GET /api/technician-profile/my-profile) ──
+export type TechnicianService = {
+  title: string;
+  description: string;
+  price: string;
+  category: { name: string };
+};
+
+export type TechnicianAvailability = {
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+  isAvailable: boolean;
+};
+
+export type TechnicianReview = {
+  id: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+};
+
+export type TechnicianProfileData = {
   id: string;
   userId: string;
   bio?: string;
   experience?: number;
   serviceArea?: string;
   averageRating?: number;
-  completedJobs?: number;
-  skills?: string[];
-  availability?: "AVAILABLE" | "BUSY" | "OFFLINE";
-  hourlyRate?: number;
   createdAt: string;
   updatedAt: string;
-};
-
-export type UserProfile = {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  profileImage?: string;
-  address?: string;
-  role: "CUSTOMER" | "TECHNICIAN" | "ADMIN";
-  status?: "ACTIVE" | "BANNED";
-  createdAt: string;
-  updatedAt: string;
-  technicianProfile?: TechnicianProfile | null;
+  user: UserProfile;
+  services: TechnicianService[];
+  availabilities: TechnicianAvailability[];
+  reviews: TechnicianReview[];
 };
 
 export type TechnicianProfileApiResponse = {
   success: boolean;
   statusCode: number;
   message: string;
-  data: UserProfile;
+  data: TechnicianProfileData;
 };
 
 export type UpdateProfilePayload = {
@@ -46,13 +68,12 @@ export type UpdateProfilePayload = {
   hourlyRate?: number;
 };
 
+// ── Navbar / shared response types ──────────────────────────────────
 export type GetProfileResponse = {
   success: boolean;
   statusCode: number;
   message: string;
-  data: {
-    profile: UserProfile;
-  };
+  data: { profile: UserProfile };
 };
 
 export type NavbarProps = {
