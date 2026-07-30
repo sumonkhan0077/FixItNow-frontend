@@ -57,15 +57,15 @@ export type TechnicianProfileApiResponse = {
 };
 
 export type UpdateProfilePayload = {
-  name?: string;
-  phone?: string;
-  address?: string;
   bio?: string;
   experience?: number;
   serviceArea?: string;
-  skills?: string[];
-  availability?: "AVAILABLE" | "BUSY" | "OFFLINE";
-  hourlyRate?: number;
+};
+
+export type CreateProfilePayload = {
+  bio: string;
+  experience: number;
+  serviceArea: string;
 };
 
 // ── Navbar / shared response types ──────────────────────────────────

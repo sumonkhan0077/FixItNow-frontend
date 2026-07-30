@@ -1,6 +1,10 @@
 "use server";
 
-import { TechnicianProfileApiResponse, UpdateProfilePayload } from "@/lib/types";
+import {
+  TechnicianProfileApiResponse,
+  UpdateProfilePayload,
+  CreateProfilePayload,
+} from "@/lib/types";
 import serverFetch from "@/utils/server-fatch";
 
 export const getMyTechnicianProfile = async (): Promise<TechnicianProfileApiResponse | null> => {
@@ -13,6 +17,20 @@ export const getMyTechnicianProfile = async (): Promise<TechnicianProfileApiResp
     return res.json();
   } catch {
     return null;
+  }
+};
+
+export const createTechnicianProfile = async (
+  payload: CreateProfilePayload
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const res = await serverFetch.post("/api/technician-profile/create", {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  } catch {
+    return { success: false, message: "Something went wrong." };
   }
 };
 
