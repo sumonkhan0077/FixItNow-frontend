@@ -229,10 +229,60 @@ export type Booking = {
   review?: BookingReview | null;
 };
 
-export type BookingsMeta = {
-  page: number;
-  limit: number;
-  total: number;
+// ── Customer Bookings (matches GET /api/bookings/my-bookings) ────────
+export type CustomerBookingStatus =
+  | "REQUESTED" | "ACCEPTED" | "PAID" | "IN_PROGRESS" | "COMPLETED" | "DECLINED" | "CANCELLED";
+
+export type CustomerBooking = {
+  id: string;
+  customerId: string;
+  serviceId: string;
+  bookingDate: string;
+  timeSlot?: string;
+  address: string;
+  totalAmount: string;
+  status: CustomerBookingStatus;
+  createdAt: string;
+  updatedAt: string;
+  service: {
+    id: string;
+    title: string;
+    description?: string;
+    price: string;
+    category: { id?: string; name: string };
+    technicianProfile?: {
+      id: string;
+      bio?: string;
+      experience?: number;
+      serviceArea?: string;
+      averageRating?: number;
+      user: { id: string; name: string; email: string; profileImage?: string | null };
+    };
+  };
+  payment?: {
+    id: string;
+    amount: string;
+    status: string;
+    provider?: string;
+    transactionId?: string;
+    paidAt?: string;
+  } | null;
+  review?: {
+    id: string;
+    rating: number;
+    comment?: string | null;
+    createdAt: string;
+  } | null;
+};
+
+export type CustomerBookingsApiResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    meta: { page: number; limit: number; total: number };
+    data: CustomerBooking[];
+  };
 };
 
 export type BookingsApiResponse = {
@@ -240,5 +290,5 @@ export type BookingsApiResponse = {
   statusCode: number;
   message: string;
   data: Booking[];
-  meta?: BookingsMeta;
+  meta?: { page: number; limit: number; total: number };
 };
