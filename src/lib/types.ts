@@ -20,6 +20,7 @@ export type TechnicianService = {
   title: string;
   description: string;
   price: string;
+  image?:string;
   createdAt?: string;
   updatedAt?: string;
   category: { id?: string; name: string; description?: string };
@@ -77,6 +78,7 @@ export type TechnicianReview = {
       id: string;
       title: string;
       price: string;
+      image?: string;
     };
   };
 };
@@ -158,6 +160,7 @@ export type ServicePayload = {
   title: string;
   description: string;
   price: string;
+  image?:string;
   categoryId: string;
 };
 

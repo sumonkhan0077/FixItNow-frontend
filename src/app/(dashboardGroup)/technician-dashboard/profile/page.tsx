@@ -3,6 +3,7 @@ import { GsapWrapper } from "../_components/gsap-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Mail, MapPin, Star, Clock, CalendarDays,
   Pencil, Wrench, DollarSign, ShieldCheck,
@@ -115,21 +116,56 @@ export default async function ProfilePage() {
             <p className="text-sm text-muted-foreground">No services added yet.</p>
           ) : (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {profile.services.map((svc, i) => (
-                <div key={i} className="rounded-xl border border-border/50 bg-background/50 p-4 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
-                  <div className="mb-2 flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{svc.title}</p>
-                      <Badge variant="secondary" className="mt-1 text-xs">{svc.category.name}</Badge>
-                    </div>
-                    <span className="flex items-center gap-0.5 text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
-                      <DollarSign className="size-3.5" />{svc.price}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{svc.description}</p>
-                </div>
-              ))}
-            </div>
+  {profile.services.map((svc, i) => (
+    <div
+      key={i}
+      className="group relative flex items-center gap-3.5 rounded-xl border border-border/50 bg-background/50 p-3 hover:-translate-y-0.5 hover:shadow-md hover:border-border transition-all duration-200"
+    >
+      {/* Small Service Image Thumbnail */}
+      <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted border border-border/40">
+        {svc.image ? (
+          <Image
+            src={svc.image}
+            alt={svc.title}
+            fill
+            sizes="80px"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            unoptimized
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center bg-primary/5">
+            <Wrench className="size-6 text-muted-foreground/40" />
+          </div>
+        )}
+      </div>
+
+      {/* Service Content Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h4 className="text-sm font-semibold text-foreground truncate pr-1">
+            {svc.title}
+          </h4>
+          <span className="flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+            <DollarSign className="size-3 -mr-0.5" />
+            {svc.price}
+          </span>
+        </div>
+
+        <div className="mb-1.5">
+          <Badge variant="secondary" className="text-[10px] px-2 py-0 h-4 font-normal">
+            {svc.category?.name}
+          </Badge>
+        </div>
+
+        {svc.description && (
+          <p className="text-xs text-muted-foreground line-clamp-1 leading-normal">
+            {svc.description}
+          </p>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
           )}
         </div>
       </GsapWrapper>

@@ -1,6 +1,7 @@
 "use server";
 
 import serverFetch from "@/utils/server-fatch";
+import { revalidatePath } from "next/cache";
 
 export type UpdateMePayload = {
   name?: string;
@@ -17,7 +18,15 @@ export const updateMe = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    return res.json();
+
+    const data = await res.json();
+
+    if (data.success) {
+      
+      revalidatePath("/technician-dashboard/profile");
+    }
+
+    return data;
   } catch {
     return { success: false, message: "Something went wrong." };
   }
