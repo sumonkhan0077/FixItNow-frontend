@@ -2,6 +2,7 @@ import { getCookie } from "@/utils/getCookies";
 
 const BASE_URL = "http://localhost:5000";
 
+
 export type UserQueryParams = {
   page?: number;
   limit?: number;
