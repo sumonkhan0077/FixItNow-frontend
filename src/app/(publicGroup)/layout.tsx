@@ -1,3 +1,4 @@
+import Footer from "@/components/HomePage/Footer";
 import { Navbar } from "@/components/shared/navbar";
 import { getMe } from "@/service/getMe";
 
@@ -15,6 +16,7 @@ export default async function PublicLayout({
     <>
    <Navbar user={userProfile}></Navbar>
       {children}
+      <Footer></Footer>
     </>
   );
 }

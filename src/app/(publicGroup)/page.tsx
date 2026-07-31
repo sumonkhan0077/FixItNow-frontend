@@ -2,6 +2,7 @@
 import AboutSection from '@/components/HomePage/AboutSection';
 import CategorySection from '@/components/HomePage/CategorySection';
 import HeaderSection from '@/components/HomePage/Header';
+import ServicesSection from '@/components/HomePage/ServicesSection';
 import TeamSection from '@/components/HomePage/TeamSection';
 import { Navbar } from '@/components/shared/navbar';
 import { getMe } from '@/service/getMe';
@@ -19,6 +20,7 @@ const page = async () => {
       <AboutSection></AboutSection>
 
       <TeamSection></TeamSection>
+      <ServicesSection></ServicesSection>
     </div>
   );
 };
