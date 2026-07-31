@@ -1,11 +1,30 @@
 import { getAllUsers } from "@/service/admin/technician";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
-import { Wrench, Star, MapPin, User, ShieldCheck, Sparkles } from "lucide-react";
+import { Wrench, Star, MapPin, User, ShieldCheck, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { TechnicianDetailsSheet } from "../_components/TechnicianDetailsSheet";
+import { SearchInput } from "../_components/SearchInput";
 
-export default async function AdminTechniciansPage() {
-  const result = await getAllUsers();
+interface PageProps {
+  searchParams: Promise<{
+    search?: string;
+    page?: string;
+  }>;
+}
+
+export default async function AdminTechniciansPage({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const query = resolvedParams.search || "";
+  const currentPage = Number(resolvedParams.page) || 1;
+  const limit = 10;
+
+  // 🔴 সমাধান এখানে: সার্ভিস অবজেক্ট আকারে প্যারামিটার গ্রহণ করে এবং কি-ওয়ার্ড হচ্ছে searchTerm
+  const result = await getAllUsers({
+    searchTerm: query,
+    page: currentPage,
+    limit: limit,
+  });
 
   if ("error" in result) {
     return (
@@ -18,13 +37,15 @@ export default async function AdminTechniciansPage() {
     );
   }
 
-  const technicians: TechnicianProfile[] = result.data || [];
+  const technicians = result.data || [];
+  const totalItems = result.meta?.total || 0;
+  const totalPages = Math.ceil(totalItems / limit) || 1;
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
-      {/* Header Section */}
+      {/* Header & Search Section */}
       <GsapWrapper animation="fadeUp" delay={0}>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
             <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 shadow-sm">
               <Wrench className="size-6" />
@@ -34,9 +55,14 @@ export default async function AdminTechniciansPage() {
                 Technicians Directory
               </h1>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Manage and monitor all technician profiles ({result.meta?.total || 0} registered)
+                Manage and monitor all technician profiles ({totalItems} registered)
               </p>
             </div>
+          </div>
+
+          {/* Search Box Component */}
+          <div className="w-full sm:w-72">
+            <SearchInput defaultValue={query} />
           </div>
         </div>
       </GsapWrapper>
@@ -47,7 +73,9 @@ export default async function AdminTechniciansPage() {
           <div className="rounded-3xl border border-dashed border-border/80 bg-card/40 p-12 text-center backdrop-blur-sm">
             <Wrench className="size-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="font-bold text-foreground">No Technicians Found</p>
-            <p className="text-xs text-muted-foreground mt-1">There are currently no technician profiles registered.</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {query ? `No profile matching "${query}"` : "There are currently no technician profiles registered."}
+            </p>
           </div>
         </GsapWrapper>
       ) : (
@@ -55,7 +83,6 @@ export default async function AdminTechniciansPage() {
           <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-xl overflow-hidden backdrop-blur-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
-                {/* Stylish Table Header */}
                 <thead className="bg-muted/60 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 border-b border-border/70 sticky top-0 backdrop-blur-md">
                   <tr>
                     <th className="py-4 px-5 font-bold">Technician Info</th>
@@ -67,14 +94,12 @@ export default async function AdminTechniciansPage() {
                   </tr>
                 </thead>
 
-                {/* Table Body */}
                 <tbody className="divide-y divide-border/40 text-xs">
                   {technicians.map((tech) => (
                     <tr 
                       key={tech.id} 
                       className="hover:bg-purple-500/[0.03] transition-colors duration-150 group"
                     >
-                      {/* Name & Avatar */}
                       <td className="py-3.5 px-5">
                         <div className="flex items-center gap-3.5 min-w-[220px]">
                           <div className="relative size-11 rounded-xl overflow-hidden bg-muted border border-border/80 shadow-sm shrink-0 group-hover:border-purple-500/40 transition-colors">
@@ -103,7 +128,6 @@ export default async function AdminTechniciansPage() {
                         </div>
                       </td>
 
-                      {/* Service Area */}
                       <td className="py-3.5 px-5">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/50 text-foreground font-medium text-xs border border-border/30 max-w-[160px] truncate">
                           <MapPin className="size-3.5 text-purple-500 shrink-0" />
@@ -111,7 +135,6 @@ export default async function AdminTechniciansPage() {
                         </div>
                       </td>
 
-                      {/* Experience */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <div className="inline-flex items-center gap-1 text-muted-foreground font-semibold">
                           <Sparkles className="size-3 text-purple-500" />
@@ -119,7 +142,6 @@ export default async function AdminTechniciansPage() {
                         </div>
                       </td>
 
-                      {/* Rating */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 shadow-xs">
                           <Star className="size-3.5 fill-amber-500 text-amber-500" />
@@ -127,7 +149,6 @@ export default async function AdminTechniciansPage() {
                         </div>
                       </td>
 
-                      {/* Status Badge */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border ${
@@ -147,7 +168,6 @@ export default async function AdminTechniciansPage() {
                         </span>
                       </td>
 
-                      {/* View Details Action Button */}
                       <td className="py-3.5 px-5 text-right whitespace-nowrap">
                         <div className="inline-block w-32">
                           <TechnicianDetailsSheet tech={tech} />
@@ -158,6 +178,40 @@ export default async function AdminTechniciansPage() {
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="p-4 border-t border-border/60 flex items-center justify-between bg-muted/20 text-xs">
+                <span className="text-muted-foreground font-medium">
+                  Page <strong className="text-foreground">{currentPage}</strong> of <strong className="text-foreground">{totalPages}</strong>
+                </span>
+
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`?search=${query}&page=${currentPage - 1}`}
+                    className={`p-2 rounded-lg border border-border/60 transition-all ${
+                      currentPage <= 1
+                        ? "pointer-events-none opacity-40 bg-muted"
+                        : "hover:bg-purple-500/10 hover:text-purple-600 hover:border-purple-500/30"
+                    }`}
+                  >
+                    <ChevronLeft className="size-4" />
+                  </Link>
+
+                  <Link
+                    href={`?search=${query}&page=${currentPage + 1}`}
+                    className={`p-2 rounded-lg border border-border/60 transition-all ${
+                      currentPage >= totalPages
+                        ? "pointer-events-none opacity-40 bg-muted"
+                        : "hover:bg-purple-500/10 hover:text-purple-600 hover:border-purple-500/30"
+                    }`}
+                  >
+                    <ChevronRight className="size-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
           </div>
         </GsapWrapper>
       )}
