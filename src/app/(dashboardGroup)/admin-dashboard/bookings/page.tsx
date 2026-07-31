@@ -3,9 +3,23 @@ import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper
 import { CalendarDays } from "lucide-react";
 import { BookingTableView } from "../_components/booking-table-view";
 
+interface PageProps {
+  searchParams: Promise<{
+    searchTerm?: string;
+    status?: string;
+  }>;
+}
 
-export default async function AdminBookingsPage() {
-  const result = await getAllBookings();
+export default async function AdminBookingsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const searchTerm = params?.searchTerm || "";
+  const status = params?.status || "";
+
+  // Dynamic parameters সহ API Call করা হচ্ছে
+  const result = await getAllBookings({
+    searchTerm,
+    status: status === "ALL" ? "" : status,
+  });
 
   if ("error" in result) {
     return (

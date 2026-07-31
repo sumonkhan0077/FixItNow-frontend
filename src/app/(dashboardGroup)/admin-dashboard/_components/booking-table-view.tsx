@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useRef } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { 
   Search, X, User, CalendarDays, CheckCircle2, 
   CreditCard, Hourglass, AlertCircle, XCircle 
@@ -8,6 +9,7 @@ import {
 import Image from "next/image";
 import { BookingDetailsModal } from "../_components/booking-details-modal";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
+import { BookingItem } from "@/service/admin/booking";
 
 // Status Badge Helper
 const getStatusBadge = (status: string) => {
@@ -45,35 +47,61 @@ const getStatusBadge = (status: string) => {
   }
 };
 
-export function BookingTableView({ bookings }: { bookings: any[] }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("ALL");
+interface BookingTableViewProps {
+  bookings: BookingItem[];
+}
 
-  // Client side Search & Filter Logic
-  const filteredBookings = useMemo(() => {
-    return bookings.filter((booking) => {
-      const customerName = booking.customer?.name?.toLowerCase() || "";
-      const customerEmail = booking.customer?.email?.toLowerCase() || "";
-      const serviceTitle = booking.service?.title?.toLowerCase() || "";
-      const query = searchTerm.toLowerCase();
+export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-      const matchesSearch =
-        customerName.includes(query) ||
-        customerEmail.includes(query) ||
-        serviceTitle.includes(query);
+  // URL parameters থেকে initial state সেট করা
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("searchTerm") || "");
+  const [selectedStatus, setSelectedStatus] = useState(searchParams.get("status") || "ALL");
 
-      const matchesStatus =
-        selectedStatus === "ALL" || booking.status === selectedStatus;
+  const debouncedReference = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-      return matchesSearch && matchesStatus;
-    });
-  }, [bookings, searchTerm, selectedStatus]);
+  // Search input change handler with debounce
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+
+    if (debouncedReference.current) {
+      clearTimeout(debouncedReference.current);
+    }
+
+    debouncedReference.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value) {
+        params.set("searchTerm", value);
+      } else {
+        params.delete("searchTerm");
+      }
+
+      router.replace(`${pathname}?${params.toString()}`);
+    }, 500);
+  };
+
+  // Status Filter Change handler
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (status && status !== "ALL") {
+      params.set("status", status);
+    } else {
+      params.delete("status");
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <div className="space-y-4">
       {/* Search Bar & Filter Controls */}
       <GsapWrapper animation="fadeUp" delay={0.02}>
-        <div className="p-4 rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+        <div className="p-3 sm:p-4 rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-sm">
           
           {/* Search Input Box */}
           <div className="relative w-full sm:w-80">
@@ -82,12 +110,12 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
               type="text"
               placeholder="Search by customer or service..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-background border border-border/80 focus:outline-none focus:border-emerald-500 transition-colors text-foreground"
             />
             {searchTerm && (
               <button
-                onClick={() => setSearchTerm("")}
+                onClick={() => handleSearchChange("")}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 <X className="size-3.5" />
@@ -96,11 +124,11 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
           </div>
 
           {/* Status Filter Dropdown */}
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <select
               value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 text-xs rounded-xl bg-background border border-border/80 focus:outline-none focus:border-emerald-500 text-foreground cursor-pointer"
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="w-full sm:w-auto px-3 py-2 text-xs rounded-xl bg-background border border-border/80 focus:outline-none focus:border-emerald-500 text-foreground cursor-pointer"
             >
               <option value="ALL">All Status</option>
               <option value="REQUESTED">Requested</option>
@@ -113,12 +141,12 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
         </div>
       </GsapWrapper>
 
-      {/* Main Table */}
-      {filteredBookings.length === 0 ? (
+      {/* Main Content */}
+      {bookings.length === 0 ? (
         <GsapWrapper animation="fadeUp" delay={0.05}>
-          <div className="rounded-3xl border border-dashed border-border/80 bg-card/40 p-12 text-center backdrop-blur-sm">
-            <CalendarDays className="size-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="font-bold text-foreground">No Bookings Found</p>
+          <div className="rounded-3xl border border-dashed border-border/80 bg-card/40 p-8 sm:p-12 text-center backdrop-blur-sm">
+            <CalendarDays className="size-10 sm:size-12 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="font-bold text-foreground text-sm sm:text-base">No Bookings Found</p>
             <p className="text-xs text-muted-foreground mt-1">
               No results match your search term or filter parameters.
             </p>
@@ -126,7 +154,88 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
         </GsapWrapper>
       ) : (
         <GsapWrapper animation="fadeUp" delay={0.05}>
-          <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-xl overflow-hidden backdrop-blur-xl">
+          {/* Mobile Card View (visible below 'md' breakpoint) */}
+          <div className="grid grid-cols-1 gap-3 md:hidden">
+            {bookings.map((booking) => (
+              <div
+                key={booking.id}
+                className="p-4 rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-md space-y-3"
+              >
+                {/* Top Row: Customer & Status */}
+                <div className="flex items-start justify-between gap-2 border-b border-border/40 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative size-9 rounded-full overflow-hidden bg-muted border border-border/80 shrink-0">
+                      {booking.customer?.profileImage && booking.customer.profileImage !== "fsdfs" ? (
+                        <Image
+                          src={booking.customer.profileImage}
+                          alt={booking.customer.name || "Customer"}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-emerald-500/10 text-emerald-600">
+                          <User className="size-4" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-bold text-foreground text-xs">
+                        {booking.customer?.name || "N/A"}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">
+                        {booking.customer?.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div>{getStatusBadge(booking.status)}</div>
+                </div>
+
+                {/* Middle Row: Service Details */}
+                <div className="space-y-1">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                    Service Details
+                  </p>
+                  <p className="font-semibold text-foreground text-xs">
+                    {booking.service?.title}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Category: {booking.service?.category?.name || "N/A"}
+                  </p>
+                </div>
+
+                {/* Bottom Row: Date, Amount & Action */}
+                <div className="flex items-center justify-between pt-2 border-t border-border/40">
+                  <div>
+                    <p className="text-[10px] text-muted-foreground">Booking Date</p>
+                    <p className="font-medium text-xs text-foreground">
+                      {booking.bookingDate
+                        ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "N/A"}
+                    </p>
+                  </div>
+
+                  <div className="text-right flex items-center gap-3">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground">Amount</p>
+                      <p className="font-bold text-xs text-foreground">
+                        ৳{booking.totalAmount}
+                      </p>
+                    </div>
+                    <div className="pt-1">
+                      <BookingDetailsModal booking={booking} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View (visible on 'md' screens and above) */}
+          <div className="hidden md:block rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-xl overflow-hidden backdrop-blur-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead className="bg-muted/60 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 border-b border-border/70 sticky top-0 backdrop-blur-md">
@@ -141,7 +250,7 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
                 </thead>
 
                 <tbody className="divide-y divide-border/40 text-xs">
-                  {filteredBookings.map((booking) => (
+                  {bookings.map((booking) => (
                     <tr
                       key={booking.id}
                       className="hover:bg-emerald-500/[0.02] transition-colors duration-150 group"
@@ -187,7 +296,7 @@ export function BookingTableView({ bookings }: { bookings: any[] }) {
                       </td>
 
                       {/* Schedule Date */}
-                      <td className="py-3 px-5 font-medium text-muted-foreground">
+                      <td className="py-3 px-5 font-medium text-muted-foreground whitespace-nowrap">
                         {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",

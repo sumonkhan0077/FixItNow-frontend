@@ -1,9 +1,17 @@
-// service/admin/booking.ts
 import { getCookie } from "@/utils/getCookies";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export type BookingStatus = "REQUESTED" | "ACCEPTED" | "PAID" | "COMPLETED" | "CANCELLED";
+
+export type BookingQueryParams = {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  status?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+};
 
 export type BookingCustomer = {
   id: string;
@@ -59,6 +67,7 @@ export type BookingItem = {
   review: {
     rating: number;
     comment: string;
+    createdAt: string;
   } | null;
 };
 
@@ -74,10 +83,29 @@ export type BookingsApiResponse = {
   };
 };
 
-export async function getAllBookings(): Promise<BookingsApiResponse | { error: string }> {
+export type GetAllBookingsError = {
+  error: string;
+  status?: number;
+  details?: unknown;
+};
+
+export const getAllBookings = async (
+  params: BookingQueryParams = {}
+): Promise<BookingsApiResponse | GetAllBookingsError> => {
   try {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit));
+    if (params.searchTerm) query.set("searchTerm", params.searchTerm);
+    if (params.status && params.status !== "ALL") query.set("status", params.status);
+    if (params.sortBy) query.set("sortBy", params.sortBy);
+    if (params.sortOrder) query.set("sortOrder", params.sortOrder);
+
+    const qs = query.toString();
+    const url = `/api/bookings/all-bookings${qs ? `?${qs}` : ""}`;
+
     const accessToken = await getCookie("accessToken");
-    const res = await fetch(`${BASE_URL}/api/bookings/all-bookings`, {
+    const res = await fetch(`${BASE_URL}${url}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -88,11 +116,21 @@ export async function getAllBookings(): Promise<BookingsApiResponse | { error: s
 
     if (!res.ok) {
       const errorText = await res.text();
-      return { error: `Failed to fetch bookings: ${res.status}` };
+      console.error("Bookings API Error Response:", res.status, errorText);
+      return {
+        error: `API returned ${res.status}: ${errorText || res.statusText}`,
+        status: res.status,
+      };
     }
 
-    return await res.json();
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : "Something went wrong" };
+    const data: BookingsApiResponse = await res.json();
+    console.log("Bookings API Success:", data);
+    return data;
+  } catch (err) {
+    console.error("Bookings API Exception:", err);
+    return {
+      error: err instanceof Error ? err.message : "Failed to fetch bookings",
+      details: err,
+    };
   }
-}
+};
