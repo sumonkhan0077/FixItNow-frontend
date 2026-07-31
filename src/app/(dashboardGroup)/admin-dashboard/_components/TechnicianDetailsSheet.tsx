@@ -26,7 +26,7 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
-      <DialogTrigger asChild>
+      <DialogTrigger >
         <button className="w-full mt-4 py-2.5 px-4 bg-purple-500/10 hover:bg-purple-600 hover:text-white text-purple-600 dark:text-purple-300 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-2 border border-purple-500/20 shadow-sm active:scale-[0.98]">
           <Eye className="size-4" />
           View Details

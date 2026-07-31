@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { updateUser } from "@/service/admin/users";
 import { Loader2 } from "lucide-react";
 
+type UserRole = "ADMIN" | "TECHNICIAN" | "CUSTOMER";
+type UserStatus = "ACTIVE" | "BANNED";
+
 interface RoleSelectProps {
   userId: string;
   currentRole: string;
@@ -14,9 +17,10 @@ export function UserRoleSelect({ userId, currentRole }: RoleSelectProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const handleRoleChange = (newRole: string) => {
+  const handleRoleChange = (newRole: UserRole) => {
     if (newRole === currentRole) return;
     startTransition(async () => {
+  
       const res = await updateUser(userId, { role: newRole });
       if ("error" in res) {
         alert(`Failed to update role: ${res.error}`);
@@ -26,7 +30,6 @@ export function UserRoleSelect({ userId, currentRole }: RoleSelectProps) {
     });
   };
 
-  // রোল অনুযায়ী স্টাইলিং ক্লাস সেট করার ফাংশন
   const getRoleStyle = (role: string) => {
     switch (role) {
       case "ADMIN":
@@ -44,7 +47,7 @@ export function UserRoleSelect({ userId, currentRole }: RoleSelectProps) {
       <select
         disabled={isPending}
         value={currentRole}
-        onChange={(e) => handleRoleChange(e.target.value)}
+        onChange={(e) => handleRoleChange(e.target.value as UserRole)}
         className={`h-8 rounded-lg border px-2 text-xs font-semibold outline-none focus:ring-1 focus:ring-primary cursor-pointer disabled:opacity-50 transition-colors ${getRoleStyle(
           currentRole
         )}`}
@@ -73,9 +76,10 @@ export function UserStatusSelect({ userId, currentStatus }: StatusSelectProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: UserStatus) => {
     if (newStatus === currentStatus) return;
     startTransition(async () => {
+    
       const res = await updateUser(userId, { status: newStatus });
       if ("error" in res) {
         alert(`Failed to update status: ${res.error}`);
@@ -92,7 +96,7 @@ export function UserStatusSelect({ userId, currentStatus }: StatusSelectProps) {
       <select
         disabled={isPending}
         value={statusVal}
-        onChange={(e) => handleStatusChange(e.target.value)}
+        onChange={(e) => handleStatusChange(e.target.value as UserStatus)}
         className={`h-8 rounded-lg border px-2 text-xs font-semibold outline-none focus:ring-1 focus:ring-primary cursor-pointer disabled:opacity-50 transition-colors ${
           statusVal === "ACTIVE"
             ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"

@@ -64,7 +64,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
-      <DialogTrigger asChild>
+      <DialogTrigger >
         <button className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center gap-1.5 border border-emerald-500/20 shadow-sm active:scale-[0.98]">
           <Eye className="size-3.5" />
           Details
