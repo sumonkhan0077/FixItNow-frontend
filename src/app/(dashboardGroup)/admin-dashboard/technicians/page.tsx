@@ -1,31 +1,166 @@
-
+import { getAllUsers } from "@/service/admin/technician";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
-import { Wrench } from "lucide-react";
+import { Wrench, Star, MapPin, User, ShieldCheck, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { TechnicianDetailsSheet } from "../_components/TechnicianDetailsSheet";
 
 export default async function AdminTechniciansPage() {
+  const result = await getAllUsers();
 
+  if ("error" in result) {
+    return (
+      <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+        <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive">
+          <p className="font-semibold">Failed to load technicians</p>
+          <p className="text-sm mt-1">{result.error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const technicians: TechnicianProfile[] = result.data || [];
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+      {/* Header Section */}
       <GsapWrapper animation="fadeUp" delay={0}>
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-purple-500/10">
-            <Wrench className="size-5 text-purple-500" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Technicians</h1>
-            <p className="text-sm text-muted-foreground">Manage technician profiles</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3.5">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 shadow-sm">
+              <Wrench className="size-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                Technicians Directory
+              </h1>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Manage and monitor all technician profiles ({result.meta?.total || 0} registered)
+              </p>
+            </div>
           </div>
         </div>
       </GsapWrapper>
 
-      <GsapWrapper animation="fadeUp" delay={0.1}>
-        <div className="rounded-2xl border border-border/60 bg-card/60 p-8 text-center">
-          <Wrench className="size-12 text-muted-foreground/30 mx-auto mb-4" />
-          <p className="font-semibold text-foreground">Technicians Management</p>
-          <p className="text-sm text-muted-foreground mt-1">Technician management features coming soon.</p>
-        </div>
-      </GsapWrapper>
+      {/* Table Section */}
+      {technicians.length === 0 ? (
+        <GsapWrapper animation="fadeUp" delay={0.1}>
+          <div className="rounded-3xl border border-dashed border-border/80 bg-card/40 p-12 text-center backdrop-blur-sm">
+            <Wrench className="size-12 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="font-bold text-foreground">No Technicians Found</p>
+            <p className="text-xs text-muted-foreground mt-1">There are currently no technician profiles registered.</p>
+          </div>
+        </GsapWrapper>
+      ) : (
+        <GsapWrapper animation="fadeUp" delay={0.05}>
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-xl overflow-hidden backdrop-blur-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                {/* Stylish Table Header */}
+                <thead className="bg-muted/60 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 border-b border-border/70 sticky top-0 backdrop-blur-md">
+                  <tr>
+                    <th className="py-4 px-5 font-bold">Technician Info</th>
+                    <th className="py-4 px-5 font-bold">Service Area</th>
+                    <th className="py-4 px-5 font-bold">Experience</th>
+                    <th className="py-4 px-5 font-bold">Rating</th>
+                    <th className="py-4 px-5 font-bold">Account Status</th>
+                    <th className="py-4 px-5 font-bold text-right">Actions</th>
+                  </tr>
+                </thead>
+
+                {/* Table Body */}
+                <tbody className="divide-y divide-border/40 text-xs">
+                  {technicians.map((tech) => (
+                    <tr 
+                      key={tech.id} 
+                      className="hover:bg-purple-500/[0.03] transition-colors duration-150 group"
+                    >
+                      {/* Name & Avatar */}
+                      <td className="py-3.5 px-5">
+                        <div className="flex items-center gap-3.5 min-w-[220px]">
+                          <div className="relative size-11 rounded-xl overflow-hidden bg-muted border border-border/80 shadow-sm shrink-0 group-hover:border-purple-500/40 transition-colors">
+                            {tech.user?.profileImage ? (
+                              <Image
+                                src={tech.user.profileImage}
+                                alt={tech.user.name || "Technician"}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-purple-500/10 text-purple-500">
+                                <User className="size-5" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <p className="font-bold text-foreground text-sm truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                                {tech.user?.name || "Unknown Technician"}
+                              </p>
+                              <ShieldCheck className="size-3.5 text-purple-500 shrink-0" />
+                            </div>
+                            <p className="text-[11px] text-muted-foreground/80 truncate mt-0.5">{tech.user?.email || "No Email"}</p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Service Area */}
+                      <td className="py-3.5 px-5">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/50 text-foreground font-medium text-xs border border-border/30 max-w-[160px] truncate">
+                          <MapPin className="size-3.5 text-purple-500 shrink-0" />
+                          <span className="truncate">{tech.serviceArea || "N/A"}</span>
+                        </div>
+                      </td>
+
+                      {/* Experience */}
+                      <td className="py-3.5 px-5 whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1 text-muted-foreground font-semibold">
+                          <Sparkles className="size-3 text-purple-500" />
+                          <span>{tech.experience || 0} Years Exp.</span>
+                        </div>
+                      </td>
+
+                      {/* Rating */}
+                      <td className="py-3.5 px-5 whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 shadow-xs">
+                          <Star className="size-3.5 fill-amber-500 text-amber-500" />
+                          <span>{tech.averageRating ? tech.averageRating.toFixed(1) : "0.0"}</span>
+                        </div>
+                      </td>
+
+                      {/* Status Badge */}
+                      <td className="py-3.5 px-5 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border ${
+                            tech.user?.status === "ACTIVE"
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                              : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                          }`}
+                        >
+                          <span 
+                            className={`size-2 rounded-full ${
+                              tech.user?.status === "ACTIVE" 
+                                ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" 
+                                : "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]"
+                            }`} 
+                          />
+                          {tech.user?.status || "INACTIVE"}
+                        </span>
+                      </td>
+
+                      {/* View Details Action Button */}
+                      <td className="py-3.5 px-5 text-right whitespace-nowrap">
+                        <div className="inline-block w-32">
+                          <TechnicianDetailsSheet tech={tech} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </GsapWrapper>
+      )}
     </div>
   );
 }
