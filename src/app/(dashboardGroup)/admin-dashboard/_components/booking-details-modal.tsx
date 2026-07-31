@@ -4,7 +4,7 @@ import { useState } from "react";
 import { 
   Eye, Star, MapPin, User, Wrench, Calendar, 
   CheckCircle2, XCircle, Clock, CreditCard, 
-  Sparkles, X, AlertCircle, Hourglass, Receipt, Tag
+  Sparkles, X, AlertCircle, Hourglass, Receipt, Tag, MessageSquareQuote
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -59,6 +59,7 @@ const getStatusBadge = (status: string) => {
 
 export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
   const [open, setOpen] = useState(false);
+  const [showFullReview, setShowFullReview] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -119,7 +120,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                   {booking.customer?.profileImage && booking.customer.profileImage !== "fsdfs" ? (
                     <Image
                       src={booking.customer.profileImage}
-                      alt={booking.customer.name}
+                      alt={booking.customer.name || "Customer"}
                       fill
                       className="object-cover"
                     />
@@ -171,7 +172,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                     <div className="relative size-12 rounded-lg overflow-hidden border border-border shrink-0 bg-muted">
                       <Image
                         src={booking.service.image}
-                        alt={booking.service.title}
+                        alt={booking.service.title || "Service"}
                         fill
                         className="object-cover"
                       />
@@ -214,11 +215,11 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                 <div>
                   <p className="text-[10px] text-muted-foreground font-medium">Date</p>
                   <p className="font-semibold text-foreground">
-                    {new Date(booking.bookingDate).toLocaleDateString("en-US", {
+                    {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
-                    })}
+                    }) : "N/A"}
                   </p>
                 </div>
               </div>
@@ -227,7 +228,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                 <Clock className="size-4 text-emerald-500 shrink-0" />
                 <div>
                   <p className="text-[10px] text-muted-foreground font-medium">Time Slot</p>
-                  <p className="font-semibold text-foreground">{booking.timeSlot}</p>
+                  <p className="font-semibold text-foreground">{booking.timeSlot || "N/A"}</p>
                 </div>
               </div>
 
@@ -235,7 +236,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                 <MapPin className="size-4 text-emerald-500 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-[10px] text-muted-foreground font-medium">Address</p>
-                  <p className="font-semibold text-foreground capitalize truncate">{booking.address}</p>
+                  <p className="font-semibold text-foreground capitalize truncate">{booking.address || "N/A"}</p>
                 </div>
               </div>
             </div>
@@ -261,12 +262,14 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground">Transaction ID</p>
-                    <p className="font-mono text-foreground font-semibold truncate">{booking.payment.transactionId}</p>
+                    <p className="font-mono text-foreground font-semibold truncate" title={booking.payment.transactionId}>
+                      {booking.payment.transactionId}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground">Paid At</p>
                     <p className="font-semibold text-foreground">
-                      {booking.payment.paidAt ? new Date(booking.payment.paidAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "N/A"}
+                      {booking.payment.paidAt ? new Date(booking.payment.paidAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -278,18 +281,56 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
             </div>
           </div>
 
-          {/* SECTION 5: REVIEW (IF AVAILABLE) */}
+          {/* SECTION 5: CUSTOMER REVIEW (ENHANCED) */}
           {booking.review && (
-            <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Star className="size-4 fill-amber-500 text-amber-500" /> Customer Review
-                </p>
-                <span className="font-extrabold text-xs text-amber-600">{booking.review.rating}.0 / 5.0</span>
+            <div className="space-y-2.5">
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
+                <MessageSquareQuote className="size-3.5 text-amber-500" /> Customer Review
+              </h3>
+
+              <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  {/* Star Rating Render */}
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`size-4 ${
+                          star <= (booking.review?.rating || 0)
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-muted-foreground/30"
+                        }`}
+                      />
+                    ))}
+                    <span className="ml-1.5 font-bold text-xs text-foreground">
+                      {booking.review.rating}.0
+                    </span>
+                  </div>
+
+                  <span className="text-[10px] text-muted-foreground">
+                    {new Date(booking.review.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric"
+                    })}
+                  </span>
+                </div>
+
+                {/* Comment area with collapsible text for long reviews */}
+                <div className="text-xs text-foreground/90 italic bg-background/60 dark:bg-card/60 p-3 rounded-lg border border-border/40">
+                  <p className={!showFullReview && booking.review.comment.length > 120 ? "line-clamp-2" : ""}>
+                    "{booking.review.comment}"
+                  </p>
+                  {booking.review.comment.length > 120 && (
+                    <button
+                      onClick={() => setShowFullReview(!showFullReview)}
+                      className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline mt-1.5 not-italic block"
+                    >
+                      {showFullReview ? "Show Less" : "Read Full Review"}
+                    </button>
+                  )}
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground italic">
-                "{booking.review.comment}"
-              </p>
             </div>
           )}
 

@@ -19,7 +19,6 @@ export default async function AdminTechniciansPage({ searchParams }: PageProps) 
   const currentPage = Number(resolvedParams.page) || 1;
   const limit = 10;
 
-  // 🔴 সমাধান এখানে: সার্ভিস অবজেক্ট আকারে প্যারামিটার গ্রহণ করে এবং কি-ওয়ার্ড হচ্ছে searchTerm
   const result = await getAllUsers({
     searchTerm: query,
     page: currentPage,
