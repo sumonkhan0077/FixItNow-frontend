@@ -6,21 +6,22 @@ import { Users, Wrench, CalendarDays, Tag, BarChart3, Settings, ArrowRight } fro
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
-  const res  = await getMe();
+  const res = await getMe();
+
   const user = res?.data?.profile || null;
   const name = user?.name ?? "Admin";
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   const stats = [
-    { title: "Total Users",       value: "—", subtitle: "Customers & technicians", icon: Users,       color: "blue"   as const },
-    { title: "Technicians",       value: "—", subtitle: "Registered professionals", icon: Wrench,     color: "purple" as const },
+    { title: "Total Users",       value: "—", subtitle: "Customers & technicians", icon: Users,        color: "blue"   as const },
+    { title: "Technicians",       value: "—", subtitle: "Registered professionals", icon: Wrench,       color: "purple" as const },
     { title: "Total Bookings",    value: "—", subtitle: "All time",                 icon: CalendarDays,color: "green"  as const },
-    { title: "Categories",        value: "—", subtitle: "Service categories",       icon: Tag,         color: "yellow" as const },
+    { title: "Categories",        value: "—", subtitle: "Service categories",       icon: Tag,          color: "yellow" as const },
   ];
 
   const quickActions = [
-    { label: "Manage Users",       href: "/admin-dashboard/users",       desc: "View & moderate users",        icon: Users },
+    { label: "Manage Users",      href: "/admin-dashboard/users",       desc: "View & moderate users",        icon: Users },
     { label: "Technicians",        href: "/admin-dashboard/technicians", desc: "Approve & manage technicians", icon: Wrench },
     { label: "All Bookings",       href: "/admin-dashboard/bookings",    desc: "Monitor all bookings",         icon: CalendarDays },
     { label: "Categories",         href: "/admin-dashboard/categories",  desc: "Manage service categories",    icon: Tag },
@@ -30,7 +31,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
-
       {/* Hero */}
       <GsapWrapper animation="fadeUp" delay={0}>
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-600 via-rose-500 to-rose-400 p-6 md:p-8 shadow-lg shadow-rose-500/20">

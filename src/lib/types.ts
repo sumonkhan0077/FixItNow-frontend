@@ -298,3 +298,33 @@ export type BookingsApiResponse = {
   data: Booking[];
   meta?: { page: number; limit: number; total: number };
 };
+
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  profileImage: string | null;
+  address: string | null;
+  role: "ADMIN" | "TECHNICIAN" | "CUSTOMER" | string;
+  status: "ACTIVE" | "BANNED" | string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Meta {
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+}
+
+export interface UsersApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: IUser[];      
+  meta?: Meta;       
+}
+
