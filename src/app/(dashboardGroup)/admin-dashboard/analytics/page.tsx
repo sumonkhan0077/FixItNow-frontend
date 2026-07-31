@@ -2,23 +2,30 @@
 
 import { formatDate } from "@/utils/formatDate";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
-import { BarChart3, DollarSign, TrendingUp, CreditCard, CheckCircle2, Calendar } from "lucide-react";
+import {
+  BarChart3,
+  DollarSign,
+  TrendingUp,
+  CreditCard,
+  CheckCircle2,
+  Calendar,
+} from "lucide-react";
 import Image from "next/image";
 import { getPaymentsData } from "@/service/admin/payment";
 
 export default async function AdminAnalyticsPage() {
   const payments = await getPaymentsData();
 
-  
-  const totalRevenue = payments.reduce((acc: number, curr: any) => acc + Number(curr.amount || 0), 0);
+  const totalRevenue = payments.reduce(
+    (acc: number, curr: any) => acc + Number(curr.amount || 0),
+    0,
+  );
   const totalTransactions = payments.length;
 
-  
   const now = new Date();
   const currentMonth = now.getUTCMonth();
   const currentYear = now.getUTCFullYear();
 
-  
   const startOfWeek = new Date(now);
   startOfWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
   startOfWeek.setUTCHours(0, 0, 0, 0);
@@ -32,19 +39,26 @@ export default async function AdminAnalyticsPage() {
     const pDate = new Date(paymentDateStr);
     const amount = Number(p.amount || 0);
 
-  
-    if (pDate.getUTCMonth() === currentMonth && pDate.getUTCFullYear() === currentYear) {
+    if (
+      pDate.getUTCMonth() === currentMonth &&
+      pDate.getUTCFullYear() === currentYear
+    ) {
       monthlyRevenue += amount;
     }
 
-   
     if (pDate >= startOfWeek) {
       weeklyRevenue += amount;
     }
   });
 
-
-  const serviceRevenueMap: { [key: string]: { title: string; image: string; totalAmount: number; count: number } } = {};
+  const serviceRevenueMap: {
+    [key: string]: {
+      title: string;
+      image: string;
+      totalAmount: number;
+      count: number;
+    };
+  } = {};
 
   payments.forEach((p: any) => {
     const service = p.booking?.service;
@@ -78,19 +92,31 @@ export default async function AdminAnalyticsPage() {
             <BarChart3 className="size-5 text-rose-500" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground">Analytics & Revenue</h1>
-            <p className="text-sm text-muted-foreground">Platform insights, earnings, and payment statistics</p>
+            <h1 className="text-xl font-bold text-foreground">
+              Analytics & Revenue
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Platform insights, earnings, and payment statistics
+            </p>
           </div>
         </div>
       </GsapWrapper>
 
       {/* Top Overview Cards (Total, Monthly, Weekly & Transactions) */}
-      <GsapWrapper animation="fadeUp" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <GsapWrapper
+        animation="fadeUp"
+        delay={0.1}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         {/* Total Revenue */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Revenue</p>
-            <h3 className="text-xl font-black text-foreground mt-1">৳ {totalRevenue.toLocaleString()}</h3>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Revenue
+            </p>
+            <h3 className="text-xl font-black text-foreground mt-1">
+              ৳ {totalRevenue.toLocaleString()}
+            </h3>
             <p className="text-[11px] text-emerald-500 font-medium flex items-center gap-1 mt-1">
               <TrendingUp className="size-3" /> All-time earnings
             </p>
@@ -103,9 +129,15 @@ export default async function AdminAnalyticsPage() {
         {/* Monthly Revenue */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">This Month</p>
-            <h3 className="text-xl font-black text-foreground mt-1">৳ {monthlyRevenue.toLocaleString()}</h3>
-            <p className="text-[11px] text-muted-foreground mt-1">Current month earnings</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              This Month
+            </p>
+            <h3 className="text-xl font-black text-foreground mt-1">
+              ৳ {monthlyRevenue.toLocaleString()}
+            </h3>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Current month earnings
+            </p>
           </div>
           <div className="size-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
             <Calendar className="size-5" />
@@ -115,9 +147,15 @@ export default async function AdminAnalyticsPage() {
         {/* Weekly Revenue */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">This Week</p>
-            <h3 className="text-xl font-black text-foreground mt-1">৳ {weeklyRevenue.toLocaleString()}</h3>
-            <p className="text-[11px] text-muted-foreground mt-1">Current week earnings</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              This Week
+            </p>
+            <h3 className="text-xl font-black text-foreground mt-1">
+              ৳ {weeklyRevenue.toLocaleString()}
+            </h3>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Current week earnings
+            </p>
           </div>
           <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
             <TrendingUp className="size-5" />
@@ -127,9 +165,15 @@ export default async function AdminAnalyticsPage() {
         {/* Total Payments Count */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Transactions</p>
-            <h3 className="text-xl font-black text-foreground mt-1">{totalTransactions}</h3>
-            <p className="text-[11px] text-muted-foreground mt-1">Successful checkouts</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Transactions
+            </p>
+            <h3 className="text-xl font-black text-foreground mt-1">
+              {totalTransactions}
+            </h3>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Successful checkouts
+            </p>
           </div>
           <div className="size-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 shrink-0">
             <CreditCard className="size-5" />
@@ -139,18 +183,25 @@ export default async function AdminAnalyticsPage() {
 
       {/* Service-wise Revenue breakdown */}
       <GsapWrapper animation="fadeUp" delay={0.2} className="space-y-4">
-        <h2 className="text-base font-bold text-foreground">Most Revenue by Service</h2>
+        <h2 className="text-base font-bold text-foreground">
+          Most Revenue by Service
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {serviceRevenueList.length > 0 ? (
             serviceRevenueList.map((item, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="p-4 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm space-y-3 hover:border-rose-500/30 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-3">
                   {item.image ? (
                     <div className="relative size-12 rounded-xl overflow-hidden border border-border/50 shrink-0 bg-muted">
-                      <Image src={item.image} alt={item.title} fill className="object-cover" />
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   ) : (
                     <div className="size-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 shrink-0">
@@ -158,13 +209,19 @@ export default async function AdminAnalyticsPage() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-sm text-foreground truncate">{item.title}</h4>
-                    <p className="text-xs text-muted-foreground">{item.count} Bookings completed</p>
+                    <h4 className="font-bold text-sm text-foreground truncate">
+                      {item.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      {item.count} Bookings completed
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="pt-2 border-t border-border/50 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground font-medium">Total Earned:</span>
+                  <span className="text-muted-foreground font-medium">
+                    Total Earned:
+                  </span>
                   <span className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">
                     ৳ {item.totalAmount.toLocaleString()} BDT
                   </span>
@@ -181,9 +238,13 @@ export default async function AdminAnalyticsPage() {
 
       {/* Recent Payment History Table */}
       <GsapWrapper animation="fadeUp" delay={0.3} className="space-y-4">
-        <h2 className="text-base font-bold text-foreground">Recent Payment History</h2>
+        <h2 className="text-base font-bold text-foreground">
+          Recent Payment History
+        </h2>
+
         <div className="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
+          {/* --- Desktop Table View (md screen ba tar upor dekhabe) --- */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-border/60 bg-muted/40 text-muted-foreground font-semibold uppercase text-[10px] tracking-wider">
@@ -198,10 +259,15 @@ export default async function AdminAnalyticsPage() {
               <tbody className="divide-y divide-border/40">
                 {payments.length > 0 ? (
                   payments.slice(0, 10).map((payment: any) => (
-                    <tr key={payment.id} className="hover:bg-muted/30 transition-colors">
+                    <tr
+                      key={payment.id}
+                      className="hover:bg-muted/30 transition-colors"
+                    >
                       <td className="p-3.5 font-medium text-foreground">
                         {payment.customer?.name || "N/A"}
-                        <span className="block text-[10px] text-muted-foreground">{payment.customer?.email}</span>
+                        <span className="block text-[10px] text-muted-foreground">
+                          {payment.customer?.email}
+                        </span>
                       </td>
                       <td className="p-3.5 font-semibold text-foreground">
                         {payment.booking?.service?.title || "N/A"}
@@ -224,13 +290,76 @@ export default async function AdminAnalyticsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="p-6 text-center text-muted-foreground italic">
+                    <td
+                      colSpan={6}
+                      className="p-6 text-center text-muted-foreground italic"
+                    >
                       No payments found.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* --- Mobile Card View (small screen ba mobile-e table-er bodole eta dekhabe) --- */}
+          <div className="block md:hidden divide-y divide-border/80">
+            {payments.length > 0 ? (
+              payments.slice(0, 10).map((payment: any) => (
+                <div
+                  key={payment.id}
+                  className="p-4 space-y-3 hover:bg-muted/30 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-xs text-foreground">
+                        {payment.customer?.name || "N/A"}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {payment.customer?.email}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      <CheckCircle2 className="size-3" /> {payment.status}
+                    </span>
+                  </div>
+
+                  <div className="text-xs space-y-1 bg-muted/20 p-2.5 rounded-xl">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Service:</span>
+                      <span className="font-semibold text-foreground">
+                        {payment.booking?.service?.title || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Trx ID:</span>
+                      <span className="font-mono text-muted-foreground">
+                        {payment.transactionId}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Date:</span>
+                      <span className="text-muted-foreground">
+                        {formatDate(payment.paidAt || payment.createdAt)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[10px] text-muted-foreground uppercase font-semibold">
+                      Amount
+                    </span>
+                    <span className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">
+                      ৳{payment.amount} BDT
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-6 text-center text-muted-foreground italic text-xs">
+                No payments found.
+              </div>
+            )}
           </div>
         </div>
       </GsapWrapper>
