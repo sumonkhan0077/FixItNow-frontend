@@ -1,12 +1,11 @@
 import { getAllUsers } from "@/service/admin/users";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
 import { AdminTableControls } from "../_components/admin-table-controls";
+import { UserRoleSelect, UserStatusSelect } from "../_components/user-row-actions";
 import { Users, AlertCircle } from "lucide-react";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IUser } from "@/lib/types";
-
 
 interface Props {
   searchParams: Promise<{
@@ -18,12 +17,12 @@ interface Props {
     sortOrder?: string;
   }>;
 }
+
 type MetaType = {
   page: number;
   limit: number;
   total: number;
 };
-
 
 export default async function AdminUsersPage({ searchParams }: Props) {
   const sp = await searchParams;
@@ -42,15 +41,12 @@ export default async function AdminUsersPage({ searchParams }: Props) {
   const errorMessage = isError ? (res as { error: string }).error : null;
   const isSuccess = !isError && "success" in res && Boolean(res.success);
 
-  
   const users: IUser[] = isSuccess && Array.isArray(res.data) ? res.data : [];
 
-
-const meta: MetaType =
-  isSuccess && "meta" in res && res.meta
-    ? (res.meta as MetaType)
-    : { page: 1, limit: 10, total: 0 };
- 
+  const meta: MetaType =
+    isSuccess && "meta" in res && res.meta
+      ? (res.meta as MetaType)
+      : { page: 1, limit: 10, total: 0 };
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
@@ -147,14 +143,17 @@ const meta: MetaType =
                             </div>
                           </div>
                         </td>
+
+                        {/* Editable Inline Role */}
                         <td className="px-4 py-3">
-                          <Badge variant="outline">{user.role}</Badge>
+                          <UserRoleSelect userId={user.id} currentRole={user.role} />
                         </td>
+
+                        {/* Editable Inline Status */}
                         <td className="px-4 py-3">
-                          <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
-                            {user.status || "ACTIVE"}
-                          </Badge>
+                          <UserStatusSelect userId={user.id} currentStatus={user.status} />
                         </td>
+
                         <td className="px-4 py-3">
                           <span className="text-sm text-muted-foreground">{user.phone || "—"}</span>
                         </td>

@@ -55,8 +55,8 @@ export const getAllUsers = async (
     if (params.page) query.set("page", String(params.page));
     if (params.limit) query.set("limit", String(params.limit));
     if (params.searchTerm) query.set("searchTerm", params.searchTerm);
-    if (params.role) query.set("role", params.role);      // 👈 role ফিল্টার যুক্ত করা হলো
-    if (params.status) query.set("status", params.status);  // 👈 status ফিল্টার যুক্ত করা হলো
+    if (params.role) query.set("role", params.role);     
+    if (params.status) query.set("status", params.status);  
     if (params.sortBy) query.set("sortBy", params.sortBy);
     if (params.sortOrder) query.set("sortOrder", params.sortOrder);
 
@@ -89,6 +89,62 @@ export const getAllUsers = async (
     console.error("Users API Exception:", err);
     return {
       error: err instanceof Error ? err.message : "Failed to fetch users",
+      details: err,
+    };
+  }
+};
+
+
+// ২. Single User API Response Type
+export type SingleUserApiResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: UserProfile;
+};
+
+export type UpdateUserPayload = {
+  name?: string;
+  email?: string;
+  phone?: string | null;
+  profileImage?: string | null;
+  address?: string | null;
+  role?: "ADMIN" | "CUSTOMER" | "TECHNICIAN";
+  status?: "ACTIVE" | "BANNED" ;
+};
+
+export const updateUser = async (
+  id: string,
+  payload: UpdateUserPayload
+): Promise<SingleUserApiResponse | GetAllUsersError> => {
+  try {
+    const accessToken = await getCookie("accessToken");
+
+    const res = await fetch(`${BASE_URL}/api/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Cookie: `accessToken=${accessToken}` }),
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Update User API Error:", res.status, errorText);
+      return {
+        error: `API returned ${res.status}: ${errorText || res.statusText}`,
+        status: res.status,
+      };
+    }
+
+    const data: SingleUserApiResponse = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Update User Exception:", err);
+    return {
+      error: err instanceof Error ? err.message : "Failed to update user",
       details: err,
     };
   }
