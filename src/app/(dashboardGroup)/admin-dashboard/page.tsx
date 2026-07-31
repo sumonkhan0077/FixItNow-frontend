@@ -13,13 +13,7 @@ export default async function AdminDashboardPage() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
-  const stats = [
-    { title: "Total Users",       value: "—", subtitle: "Customers & technicians", icon: Users,        color: "blue"   as const },
-    { title: "Technicians",       value: "—", subtitle: "Registered professionals", icon: Wrench,       color: "purple" as const },
-    { title: "Total Bookings",    value: "—", subtitle: "All time",                 icon: CalendarDays,color: "green"  as const },
-    { title: "Categories",        value: "—", subtitle: "Service categories",       icon: Tag,          color: "yellow" as const },
-  ];
-
+  
   const quickActions = [
     { label: "Manage Users",      href: "/admin-dashboard/users",       desc: "View & moderate users",        icon: Users },
     { label: "Technicians",        href: "/admin-dashboard/technicians", desc: "Approve & manage technicians", icon: Wrench },
@@ -53,11 +47,11 @@ export default async function AdminDashboardPage() {
       </GsapWrapper>
 
       {/* Stats */}
-      <GsapWrapper animation="stagger" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      {/* <GsapWrapper animation="stagger" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((s) => (
           <StatsCard key={s.title} {...s} />
         ))}
-      </GsapWrapper>
+      </GsapWrapper> */}
 
       {/* Quick actions */}
       <GsapWrapper animation="fadeUp" delay={0.2}>

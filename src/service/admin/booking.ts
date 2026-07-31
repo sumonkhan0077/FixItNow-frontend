@@ -124,7 +124,7 @@ export const getAllBookings = async (
     }
 
     const data: BookingsApiResponse = await res.json();
-    console.log("Bookings API Success:", data);
+    // console.log("Bookings API Success:", data);
     return data;
   } catch (err) {
     console.error("Bookings API Exception:", err);

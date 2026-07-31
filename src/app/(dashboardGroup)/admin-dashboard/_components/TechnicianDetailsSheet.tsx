@@ -13,24 +13,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose, // Cross button integration
+  DialogClose,
 } from "@/components/ui/dialog";
 
 interface TechnicianDetailsProps {
   tech: any;
 }
 
+// Timezone-safe Date Formatter to avoid Hydration Mismatch
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "N/A";
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getUTCDate();
+  const month = months[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+
+  return `${month} ${day}, ${year}`;
+};
+
 export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Trigger Button */}
+     
       <DialogTrigger >
-        <button className="w-full mt-4 py-2.5 px-4 bg-purple-500/10 hover:bg-purple-600 hover:text-white text-purple-600 dark:text-purple-300 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-2 border border-purple-500/20 shadow-sm active:scale-[0.98]">
+        <div className="w-full mt-4 py-2.5 px-4 bg-purple-500/10 hover:bg-purple-600 hover:text-white text-purple-600 dark:text-purple-300 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-2 border border-purple-500/20 shadow-sm active:scale-[0.98]">
           <Eye className="size-4" />
           View Details
-        </button>
+        </div>
       </DialogTrigger>
 
       {/* Center Dialog Content */}
@@ -262,7 +276,7 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
 
         {/* Footer */}
         <div className="p-3 border-t border-border/60 bg-muted/30 text-center text-[11px] text-muted-foreground">
-          Joined System: {tech.createdAt ? new Date(tech.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A"}
+          Joined System: {formatDate(tech.createdAt)}
         </div>
 
       </DialogContent>

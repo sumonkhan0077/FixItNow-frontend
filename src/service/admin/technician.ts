@@ -121,7 +121,7 @@ export const getAllUsers = async (
     }
 
     const data: TechnicianApiResponse = await res.json();
-    console.log("Technicians API Success:", data);
+    // console.log("Technicians API Success:", data);
     return data;
   } catch (err) {
     console.error("Technicians API Exception:", err);

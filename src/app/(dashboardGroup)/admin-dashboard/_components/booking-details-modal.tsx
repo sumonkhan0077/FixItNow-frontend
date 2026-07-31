@@ -21,7 +21,21 @@ interface BookingDetailsModalProps {
   booking: BookingItem;
 }
 
-// স্ট্যাটাস অনুযায়ী ব্যাজের কালার ডাইনামিক করার ফাংশন
+// Timezone-safe Date Formatter to avoid Hydration Mismatch
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "N/A";
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getUTCDate();
+  const month = months[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+
+  return `${month} ${day}, ${year}`;
+};
+
+// স্ট্যাটাস অনুযায়ী ব্যাজের কালার ডাইনামিক করার ফাংশন
 const getStatusBadge = (status: string) => {
   switch (status) {
     case "COMPLETED":
@@ -63,13 +77,11 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Trigger Button */}
-      <DialogTrigger >
-        <button className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center gap-1.5 border border-emerald-500/20 shadow-sm active:scale-[0.98]">
-          <Eye className="size-3.5" />
-          Details
-        </button>
-      </DialogTrigger>
+      {/* Trigger Button (asChild যোগ করা হয়েছে এবং <button> ফিক্স করা হয়েছে) */}
+      <DialogTrigger className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center gap-1.5 border border-emerald-500/20 shadow-sm active:scale-[0.98]">
+  <Eye className="size-3.5" />
+  Details
+</DialogTrigger>
 
       {/* Center Dialog Content */}
       <DialogContent className="!w-[90vw] !max-w-sm sm:!max-w-xl md:!max-w-2xl lg:!max-w-3xl max-h-[90vh] overflow-y-auto p-0 bg-background/95 backdrop-blur-xl sm:rounded-2xl border border-border/80 shadow-2xl transition-all [&>button]:hidden">
@@ -215,11 +227,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                 <div>
                   <p className="text-[10px] text-muted-foreground font-medium">Date</p>
                   <p className="font-semibold text-foreground">
-                    {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    }) : "N/A"}
+                    {formatDate(booking.bookingDate)}
                   </p>
                 </div>
               </div>
@@ -269,7 +277,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                   <div>
                     <p className="text-[10px] text-muted-foreground">Paid At</p>
                     <p className="font-semibold text-foreground">
-                      {booking.payment.paidAt ? new Date(booking.payment.paidAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A"}
+                      {formatDate(booking.payment.paidAt)}
                     </p>
                   </div>
                 </div>
@@ -281,7 +289,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
             </div>
           </div>
 
-          {/* SECTION 5: CUSTOMER REVIEW (ENHANCED) */}
+          {/* SECTION 5: CUSTOMER REVIEW */}
           {booking.review && (
             <div className="space-y-2.5">
               <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
@@ -308,21 +316,18 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                   </div>
 
                   <span className="text-[10px] text-muted-foreground">
-                    {new Date(booking.review.createdAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric"
-                    })}
+                    {formatDate(booking.review.createdAt)}
                   </span>
                 </div>
 
-                {/* Comment area with collapsible text for long reviews */}
+                {/* Comment area */}
                 <div className="text-xs text-foreground/90 italic bg-background/60 dark:bg-card/60 p-3 rounded-lg border border-border/40">
                   <p className={!showFullReview && booking.review.comment.length > 120 ? "line-clamp-2" : ""}>
                     "{booking.review.comment}"
                   </p>
                   {booking.review.comment.length > 120 && (
                     <button
+                      type="button"
                       onClick={() => setShowFullReview(!showFullReview)}
                       className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline mt-1.5 not-italic block"
                     >
@@ -338,7 +343,7 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
 
         {/* Footer */}
         <div className="p-3 border-t border-border/60 bg-muted/30 text-center text-[11px] text-muted-foreground">
-          Created: {new Date(booking.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+          Created: {formatDate(booking.createdAt)}
         </div>
 
       </DialogContent>

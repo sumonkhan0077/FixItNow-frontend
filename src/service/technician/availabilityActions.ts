@@ -12,7 +12,7 @@ export const createAvailability = async (
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    console.log("[createAvailability] status:", res.status, "body:", JSON.stringify(data));
+    // console.log("[createAvailability] status:", res.status, "body:", JSON.stringify(data));
     return data;
   } catch (err) {
     console.error("[createAvailability] error:", err);
@@ -30,7 +30,7 @@ export const updateAvailability = async (
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    console.log("[updateAvailability] status:", res.status, "body:", JSON.stringify(data));
+    // console.log("[updateAvailability] status:", res.status, "body:", JSON.stringify(data));
     return data;
   } catch (err) {
     console.error("[updateAvailability] error:", err);
@@ -44,7 +44,7 @@ export const deleteAvailability = async (
   try {
     const res = await serverFetch.delete(`/api/availability/${timeId}`);
     const data = await res.json();
-    console.log("[deleteAvailability] status:", res.status, "body:", JSON.stringify(data));
+    // console.log("[deleteAvailability] status:", res.status, "body:", JSON.stringify(data));
     return data;
   } catch (err) {
     console.error("[deleteAvailability] error:", err);

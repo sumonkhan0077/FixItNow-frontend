@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { 
   Search, X, User, CalendarDays, CheckCircle2, 
@@ -10,6 +10,21 @@ import Image from "next/image";
 import { BookingDetailsModal } from "../_components/booking-details-modal";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
 import { BookingItem } from "@/service/admin/booking";
+
+// Helper function to safely format dates avoiding timezone hydration mismatches
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "N/A";
+
+  // Use UTC methods to guarantee server and client produce identical output
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getUTCDate();
+  const month = months[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+
+  return `${month} ${day}, ${year}`;
+};
 
 // Status Badge Helper
 const getStatusBadge = (status: string) => {
@@ -56,9 +71,14 @@ export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // URL parameters থেকে initial state সেট করা
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("searchTerm") || "");
-  const [selectedStatus, setSelectedStatus] = useState(searchParams.get("status") || "ALL");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("ALL");
+
+  // Sync state with URL params on client side
+  useEffect(() => {
+    setSearchTerm(searchParams.get("searchTerm") || "");
+    setSelectedStatus(searchParams.get("status") || "ALL");
+  }, [searchParams]);
 
   const debouncedReference = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -154,7 +174,7 @@ export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
         </GsapWrapper>
       ) : (
         <GsapWrapper animation="fadeUp" delay={0.05}>
-          {/* Mobile Card View (visible below 'md' breakpoint) */}
+          {/* Mobile Card View */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
             {bookings.map((booking) => (
               <div
@@ -208,13 +228,7 @@ export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
                   <div>
                     <p className="text-[10px] text-muted-foreground">Booking Date</p>
                     <p className="font-medium text-xs text-foreground">
-                      {booking.bookingDate
-                        ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "N/A"}
+                      {formatDate(booking.bookingDate)}
                     </p>
                   </div>
 
@@ -234,7 +248,7 @@ export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
             ))}
           </div>
 
-          {/* Desktop Table View (visible on 'md' screens and above) */}
+          {/* Desktop Table View */}
           <div className="hidden md:block rounded-2xl border border-border/60 bg-gradient-to-b from-card via-card/90 to-card/60 shadow-xl overflow-hidden backdrop-blur-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
@@ -297,11 +311,7 @@ export function BookingTableView({ bookings = [] }: BookingTableViewProps) {
 
                       {/* Schedule Date */}
                       <td className="py-3 px-5 font-medium text-muted-foreground whitespace-nowrap">
-                        {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        }) : "N/A"}
+                        {formatDate(booking.bookingDate)}
                       </td>
 
                       {/* Amount */}
