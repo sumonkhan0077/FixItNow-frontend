@@ -1,160 +1,194 @@
-"use client";
-
-import Link from "next/link";
-import { Wrench, PhoneCall, Mail, MapPin, ArrowRight } from "lucide-react";
+"use client"
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import {
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import { MdOutlineArrowOutward } from "react-icons/md";
+import { FaXTwitter } from "react-icons/fa6";
+import Link from "next/link";
+import { IoPencil } from "react-icons/io5";
 
-export default function Footer() {
+const Footer = () => {
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-20 pb-10 border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-16">
-        
-        {/* Top Newsletter / CTA Row */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
-          <div className="space-y-2 text-center lg:text-left">
-            <h3 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
-              Need Professional & Emergency Services?
-            </h3>
-            <p className="text-sm text-slate-400">
-              We are available 24/7 to solve all your home and business maintenance issues.
+    <footer className="bg-slate-900 text-gray-300 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 bg-slate-900 shadow-xl ring-2 ring-black/30 pt-16 pb-16 pl-6 pr-6 rounded-2xl">
+          {/* Logo & Description */}
+          <div className="lg:col-span-1">
+            <Link href="/">
+              <div className="mb-5">
+                <span className="text-white text-5xl font-normal">FixIt</span>
+                <span className="text-primary text-xl font-normal">Now</span>
+              </div>
+            </Link>
+            <p className="text-sm leading-relaxed mb-6">
+              We design spaces that reflect your style and comfort. Our expert decorators bring creativity, quality, and elegance to every home.
             </p>
+            <div className="flex space-x-4">
+              <a
+                href="#"
+                className="text-white hover:text-orange-500 transition"
+              >
+                <FaFacebookF size={20} />
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-orange-500 transition"
+              >
+                <FaInstagram size={20} />
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-orange-500 transition"
+              >
+                <Mail size={20} />
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-orange-500 transition"
+              >
+                <FaXTwitter size={20} />
+              </a>
+            </div>
           </div>
-          <div className="flex items-center gap-4 w-full lg:w-auto">
-            <Link
-              href="#"
-              className="w-full lg:w-auto bg-primary text-white px-8 py-4 rounded-full font-medium shadow-lg hover:opacity-90 transition-all text-center inline-flex items-center justify-center gap-2 group"
-            >
-              <span>Get In Touch</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+
+          {/* Address */}
+          <div>
+            <h3 className="text-white text-2xl mb-6">Address</h3>
+            <div className="space-y-4 text-sm">
+              <div className="flex items-start gap-3">
+                <MapPin
+                  size={18}
+                  className="text-orange-500 mt-1 flex-shrink-0"
+                />
+                <p>
+                  Dhaka Bangladesh,
+                  <br />
+                  CA 90059
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone size={18} className="text-orange-500 flex-shrink-0" />
+                <div>
+                  <p>+369 458 4739</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail size={18} className="text-orange-500 flex-shrink-0" />
+                <p>fixitnow@services.com</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <IoPencil size={18} className="text-orange-500 flex-shrink-0" />
+                <p>Working hours: <br />7/24</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Blogs */}
+          <div>
+            <h3 className="text-white text-2xl mb-6">Blogs</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Design
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Model
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Newsletter
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Help
+                </Link>
+              </li>
+              <li>
+                <Link href="/" className="hover:text-orange-500 transition">
+                  Fixit Now
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h3 className="text-white text-2xl mb-6">Resources</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  FixIt Now
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Locations
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  News
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="hover:text-orange-500 transition">
+                  Portfolio Detail
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-white text-2xl mb-6">
+              Newsletter
+            </h3>
+            <form className="space-y-4">
+              <input
+                type="email"
+                placeholder="youremail@gmail.com"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-orange-500 text-white placeholder-gray-500"
+              />
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 main-btn2"
+              >
+                Subscribe
+                <span className="text-xl">
+                  <MdOutlineArrowOutward />
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+          <p>© {new Date().getFullYear()} FixIt Now. All Rights Reserved.</p>
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <Link href="#" className="hover:text-orange-500 transition">
+              Terms And Condition
+            </Link>
+            <Link href="#" className="hover:text-orange-500 transition">
+              Privacy Policy
             </Link>
           </div>
         </div>
-
-        {/* Main Footer Links & Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          
-          {/* Column 1: Brand Info */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
-                <Wrench className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                Service<span className="text-primary">Pro</span>
-              </span>
-            </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Providing top-notch 24/7 maintenance, electrical, plumbing, and professional home solutions with expert care.
-            </p>
-            {/* Social Icons from react-icons */}
-            <div className="flex items-center gap-3 pt-2">
-              <Link href="#" className="w-10 h-10 bg-slate-900 hover:bg-primary text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-all">
-                <FaFacebookF className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="w-10 h-10 bg-slate-900 hover:bg-primary text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-all">
-                <FaTwitter className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="w-10 h-10 bg-slate-900 hover:bg-primary text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-all">
-                <FaInstagram className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="w-10 h-10 bg-slate-900 hover:bg-primary text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-all">
-                <FaLinkedinIn className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Column 2: Quick Links */}
-          <div className="space-y-6">
-            <h4 className="text-white font-semibold text-lg tracking-wide border-l-2 border-primary pl-3">
-              Quick Links
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> Our Services
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> Service Areas
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> Pricing & Plans
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Services */}
-          <div className="space-y-6">
-            <h4 className="text-white font-semibold text-lg tracking-wide border-l-2 border-primary pl-3">
-              Our Services
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors">General Maintenance</Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors">Electrical Care</Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors">Plumbing & Pipe Fit</Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors">Interior & Painting</Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition-colors">24/7 Emergency Support</Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Contact Info */}
-          <div className="space-y-6">
-            <h4 className="text-white font-semibold text-lg tracking-wide border-l-2 border-primary pl-3">
-              Contact Info
-            </h4>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span className="text-slate-400">110 Irving St NW First Floor, Washington, DC 20010</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <PhoneCall className="w-5 h-5 text-primary shrink-0" />
-                <span className="text-slate-400">(888) 4567890</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary shrink-0" />
-                <span className="text-slate-400">support@servicepro.com</span>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Bottom Copyright Row */}
-        <div className="border-t border-slate-900 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} ServicePro. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-primary transition-colors">Cookie Policy</Link>
-          </div>
-        </div>
-
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

@@ -16,6 +16,9 @@ import {
   MoreVertical,
   Menu,
   X,
+  Home,
+  Wrench,
+  PhoneCall,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -37,11 +40,11 @@ import { Button } from "../ui/button";
 
 // Primary navigation links
 const navLinks = [
-  { label: "Projects", href: "/projects", icon: FolderKanban },
-  { label: "Team", href: "/team", icon: Users },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Services", href: "/services", icon: Wrench },
+  { label: "Contact Us", href: "/contactus", icon: PhoneCall },
+  { label: "About Us", href: "/aboutus", icon: Users },,
 ];
-
 // // User dropdown options
 // const userMenuGroups = [
 //   [
@@ -69,7 +72,7 @@ export function Navbar({user} : NavbarProps) {
       { label: "Billing", href: "/billing", icon: CreditCard },
       { label: "Settings", href: "/settings", icon: Settings },
     ],
-    [{ label: "Support", href: "/support", icon: LifeBuoy }],
+    [{ label: "Support", href: "/contactus", icon: LifeBuoy }],
   ];
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -115,10 +118,7 @@ export function Navbar({user} : NavbarProps) {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div
         className={cn(
-          "flex h-16 items-center justify-between gap-4 transition-all duration-300 px-4 sm:px-6 lg:px-10",
-          scrolled
-            ? "bg-background/85 border-b border-border shadow-lg shadow-black/5 backdrop-blur-xl"
-            : "",
+          "flex h-16 items-center justify-between gap-4 transition-all duration-300 px-4 sm:px-6 lg:px-10  bg-white/5 backdrop-blur-xl  shadow-xl backdrop-saturate-150",
         )}
       >
         {/* Logo */}
@@ -139,13 +139,13 @@ export function Navbar({user} : NavbarProps) {
         {/* Desktop Nav Links (শুধু বড় স্ক্রিনে দেখাবে) */}
         <nav className="hidden items-center gap-1.5 md:flex uppercase">
           {navLinks.map((link) => {
-            const Icon = link.icon;
+            const Icon = link?.icon;
             return (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link?.href}
+                href={link?.href as string}
                 className={cn(
-                  "relative flex items-center gap-2 px-3 py-2 text-sm font-semibold uppercase transition-colors rounded-lg",
+                  "relative flex items-center gap-2 px-3 py-2 text-sm !text-black  uppercase transition-colors font-medium rounded-lg",
                   "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-4/5",
                   scrolled
                     ? "text-muted-foreground hover:text-foreground"
@@ -153,7 +153,7 @@ export function Navbar({user} : NavbarProps) {
                 )}
               >
                 <Icon className="size-4 opacity-80" />
-                <span>{link.label}</span>
+                <span>{link?.label}</span>
               </Link>
             );
           })}
@@ -260,7 +260,7 @@ export function Navbar({user} : NavbarProps) {
                     )}
                     aria-label="Open menu"
                   >
-                    {/* ২. স্মুথ রোটেশন অ্যানিমেশন সহ ডায়নামিক আইকন */}
+                    
                     <div
                       className={cn(
                         "transition-transform duration-300 ease-in-out",
@@ -316,18 +316,18 @@ export function Navbar({user} : NavbarProps) {
                     Navigation
                   </div>
                   {navLinks.map((link) => {
-                    const Icon = link.icon;
+                    const Icon = link?.icon;
                     return (
                       <DropdownMenuItem
-                        key={link.href}
+                        key={link?.href}
                         render={
                           <Link
-                            href={link.href}
+                            href={link?.href as string} 
                             className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer"
                           >
                             <Icon className="size-4 " />
-                            <span className="font-semibold text-sm uppercase">
-                              {link.label}
+                            <span className="font-medium text-sm !text-black uppercase">
+                              {link?.label}
                             </span>
                           </Link>
                         }

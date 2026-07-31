@@ -22,7 +22,7 @@ export default function ServicesSection() {
           
           {/* Card 1: Working Hours (Dark Theme) */}
           <GsapWrapper animation="fadeUp" delay={0.2}>
-            <div className="bg-slate-950 text-white p-8 rounded-3xl shadow-xl flex flex-col justify-between h-full border border-slate-800">
+            <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl flex flex-col justify-between h-full border border-slate-800">
               <div>
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-xl font-medium">Working Hours</h3>
@@ -77,7 +77,7 @@ export default function ServicesSection() {
               <div className="mt-8">
                 <Link
                   href="#"
-                  className="inline-flex items-center justify-between w-full bg-slate-950 dark:bg-slate-800 text-white py-3 px-6 rounded-full font-medium shadow-md hover:bg-primary transition-all group"
+                  className="inline-flex items-center justify-between w-full bg-slate-900 dark:bg-slate-800 text-white py-3 px-6 rounded-full font-medium shadow-md hover:bg-primary transition-all group"
                 >
                   <span>All Service Areas</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
