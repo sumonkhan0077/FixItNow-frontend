@@ -14,7 +14,7 @@ export type UserQueryParams = {
   sortOrder?: "asc" | "desc";
 };
 
-// 1. API Response অনুযায়ী সঠিক User Type
+
 export type UserProfile = {
   id: string;
   name: string;
@@ -76,7 +76,7 @@ export const getAllUsers = async (
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("API Error Response:", res.status, errorText);
+      // console.error("API Error Response:", res.status, errorText);
       return {
         error: `API returned ${res.status}: ${errorText || res.statusText}`,
         status: res.status,

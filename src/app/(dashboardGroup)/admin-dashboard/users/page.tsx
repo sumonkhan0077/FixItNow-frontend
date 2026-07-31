@@ -63,14 +63,7 @@ export default async function AdminUsersPage({ searchParams }: Props) {
       </GsapWrapper>
 
       {/* Error Display */}
-      {isError && (
-        <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4">
-          <div className="flex items-center gap-2 text-red-500">
-            <AlertCircle className="size-4" />
-            <p className="text-sm font-medium">Error: {errorMessage}</p>
-          </div>
-        </div>
-      )}
+      
 
       <GsapWrapper animation="fadeUp" delay={0.1}>
         <AdminTableControls

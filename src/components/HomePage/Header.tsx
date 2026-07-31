@@ -21,7 +21,7 @@ const slides = [
     description:
       "From pipe installations to bathroom fittings, we provide complete residential plumbing services with guaranteed workmanship and long-lasting results.",
     bgImage:
-      "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1709803857195-dbd9eb6dc4bf?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     cta: "Schedule Inspection",
     badgeIcon: Wrench,
   },
@@ -114,7 +114,7 @@ export default function HeaderSection() {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       changeSlide((current + 1) % slides.length);
-    }, 5000); // 5000ms = 5 seconds
+    }, 5000);
   }, [changeSlide, current]);
 
   useEffect(() => {
@@ -137,8 +137,6 @@ export default function HeaderSection() {
 
   return (
     <main className="min-h-screen bg-background font-sans">
-
-
       {/* ================= HERO SLIDER SECTION ================= */}
       <section
         ref={heroRef}
@@ -169,27 +167,27 @@ export default function HeaderSection() {
               <span className="p-1 rounded-full bg-primary text-primary-foreground">
                 <BadgeIcon className="w-3.5 h-3.5" />
               </span>
-              <span className="text-xs font-bold tracking-widest text-slate-200 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-slate-200 uppercase">
                 {activeSlide.tag}
               </span>
             </div>
 
-            {/* Headline */}
-            <h1 className="slide-content text-4xl sm:text-6xl lg:text-7xl font-medium font-black tracking-tight leading-[1.08] whitespace-pre-line drop-shadow-md">
+            {/* Headline (Font weight normal & clean like previous section) */}
+            <h1 className="slide-content text-3xl sm:text-5xl lg:text-6xl font-normal text-white tracking-tight leading-tight whitespace-pre-line">
               {activeSlide.title}
             </h1>
 
             {/* Description */}
-            <p className="slide-content text-base sm:text-lg text-slate-300 font-medium leading-relaxed max-w-xl">
+            <p className="slide-content text-xs sm:text-sm text-slate-300 leading-relaxed font-normal max-w-xl">
               {activeSlide.description}
             </p>
 
             {/* Action Button */}
             <div className="slide-content pt-2">
-              <button className="group flex items-center gap-3 px-7 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/40 active:scale-95 transition-all duration-300 cursor-pointer">
+              <button className="group inline-flex items-center gap-2 text-xs font-medium text-white px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 transition-all duration-300 cursor-pointer shadow-lg shadow-primary/20">
                 <span>{activeSlide.cta}</span>
-                <span className="p-1 rounded-lg bg-white/20 group-hover:translate-x-1.5 transition-transform duration-300">
-                  <ArrowRight className="w-4 h-4 text-white" />
+                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </span>
               </button>
             </div>
@@ -234,9 +232,6 @@ export default function HeaderSection() {
           </div>
         </div>
       </section>
-
-      {/* Next Section Placeholder */}
-      <div className="min-h-screen bg-background font-sans p-10">dfdsf</div>
     </main>
   );
 }

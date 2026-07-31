@@ -1,4 +1,6 @@
 
+import AboutSection from '@/components/HomePage/AboutSection';
+import CategorySection from '@/components/HomePage/CategorySection';
 import HeaderSection from '@/components/HomePage/Header';
 import { Navbar } from '@/components/shared/navbar';
 import { getMe } from '@/service/getMe';
@@ -12,6 +14,8 @@ const page = async () => {
     <div>
       <Navbar user={userProfile}></Navbar>
       <HeaderSection></HeaderSection>
+      <CategorySection></CategorySection>
+      <AboutSection></AboutSection>
     </div>
   );
 };
