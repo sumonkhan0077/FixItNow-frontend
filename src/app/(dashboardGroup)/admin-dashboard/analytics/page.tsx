@@ -2,16 +2,47 @@
 
 import { formatDate } from "@/utils/formatDate";
 import { GsapWrapper } from "../../technician-dashboard/_components/gsap-wrapper";
-import { BarChart3, DollarSign, TrendingUp, CreditCard, CheckCircle2 } from "lucide-react";
+import { BarChart3, DollarSign, TrendingUp, CreditCard, CheckCircle2, Calendar } from "lucide-react";
 import Image from "next/image";
 import { getPaymentsData } from "@/service/admin/payment";
 
 export default async function AdminAnalyticsPage() {
   const payments = await getPaymentsData();
 
-
+  
   const totalRevenue = payments.reduce((acc: number, curr: any) => acc + Number(curr.amount || 0), 0);
   const totalTransactions = payments.length;
+
+  
+  const now = new Date();
+  const currentMonth = now.getUTCMonth();
+  const currentYear = now.getUTCFullYear();
+
+  
+  const startOfWeek = new Date(now);
+  startOfWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
+  startOfWeek.setUTCHours(0, 0, 0, 0);
+
+  let monthlyRevenue = 0;
+  let weeklyRevenue = 0;
+
+  payments.forEach((p: any) => {
+    const paymentDateStr = p.paidAt || p.createdAt;
+    if (!paymentDateStr) return;
+    const pDate = new Date(paymentDateStr);
+    const amount = Number(p.amount || 0);
+
+  
+    if (pDate.getUTCMonth() === currentMonth && pDate.getUTCFullYear() === currentYear) {
+      monthlyRevenue += amount;
+    }
+
+   
+    if (pDate >= startOfWeek) {
+      weeklyRevenue += amount;
+    }
+  });
+
 
   const serviceRevenueMap: { [key: string]: { title: string; image: string; totalAmount: number; count: number } } = {};
 
@@ -34,9 +65,9 @@ export default async function AdminAnalyticsPage() {
     }
   });
 
-const serviceRevenueList = Object.values(serviceRevenueMap)
-  .sort((a, b) => b.totalAmount - a.totalAmount) 
-  .slice(0, 10);
+  const serviceRevenueList = Object.values(serviceRevenueMap)
+    .sort((a, b) => b.totalAmount - a.totalAmount)
+    .slice(0, 10);
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
@@ -53,36 +84,62 @@ const serviceRevenueList = Object.values(serviceRevenueMap)
         </div>
       </GsapWrapper>
 
-      {/* Top Overview Cards */}
-      <GsapWrapper animation="fadeUp" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Top Overview Cards (Total, Monthly, Weekly & Transactions) */}
+      <GsapWrapper animation="fadeUp" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Revenue */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Revenue</p>
-            <h3 className="text-2xl font-black text-foreground mt-1">৳ {totalRevenue.toLocaleString()} BDT</h3>
+            <h3 className="text-xl font-black text-foreground mt-1">৳ {totalRevenue.toLocaleString()}</h3>
             <p className="text-[11px] text-emerald-500 font-medium flex items-center gap-1 mt-1">
-              <TrendingUp className="size-3" /> From completed transactions
+              <TrendingUp className="size-3" /> All-time earnings
             </p>
           </div>
-          <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-            <DollarSign className="size-6" />
+          <div className="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+            <DollarSign className="size-5" />
           </div>
         </div>
 
+        {/* Monthly Revenue */}
         <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Payments</p>
-            <h3 className="text-2xl font-black text-foreground mt-1">{totalTransactions}</h3>
-            <p className="text-[11px] text-muted-foreground mt-1">Successful stripe checkouts</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">This Month</p>
+            <h3 className="text-xl font-black text-foreground mt-1">৳ {monthlyRevenue.toLocaleString()}</h3>
+            <p className="text-[11px] text-muted-foreground mt-1">Current month earnings</p>
           </div>
-          <div className="size-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500">
-            <CreditCard className="size-6" />
+          <div className="size-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+            <Calendar className="size-5" />
+          </div>
+        </div>
+
+        {/* Weekly Revenue */}
+        <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">This Week</p>
+            <h3 className="text-xl font-black text-foreground mt-1">৳ {weeklyRevenue.toLocaleString()}</h3>
+            <p className="text-[11px] text-muted-foreground mt-1">Current week earnings</p>
+          </div>
+          <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
+            <TrendingUp className="size-5" />
+          </div>
+        </div>
+
+        {/* Total Payments Count */}
+        <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm flex items-center justify-between shadow-sm">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Transactions</p>
+            <h3 className="text-xl font-black text-foreground mt-1">{totalTransactions}</h3>
+            <p className="text-[11px] text-muted-foreground mt-1">Successful checkouts</p>
+          </div>
+          <div className="size-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 shrink-0">
+            <CreditCard className="size-5" />
           </div>
         </div>
       </GsapWrapper>
 
       {/* Service-wise Revenue breakdown */}
       <GsapWrapper animation="fadeUp" delay={0.2} className="space-y-4">
-        <h2 className="text-base font-bold text-foreground">Most Revenue by Service </h2>
+        <h2 className="text-base font-bold text-foreground">Most Revenue by Service</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {serviceRevenueList.length > 0 ? (
             serviceRevenueList.map((item, index) => (
