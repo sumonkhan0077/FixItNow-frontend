@@ -70,11 +70,15 @@ const categories = [
 export default function CategorySection() {
   return (
     <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
-      {/* --- Section Header --- */}
-      <GsapWrapper animation="fadeUp" delay={0.1} className="mb-20 text-center">
-        <span className="inline-block px-4 py-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 text-[11px] font-semibold tracking-wider text-slate-600 dark:text-slate-300 uppercase mb-4 backdrop-blur-sm">
-          Our Handyman Services
-        </span>
+      {/* --- Section Header (Centered) --- */}
+      <GsapWrapper animation="fadeUp" delay={0.1} className="mb-20 text-center flex flex-col items-center">
+        <div className="flex items-center justify-center gap-2 mb-4">
+            <span className="w-6 h-[2px] bg-primary"></span>
+            <span className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase">
+             Our Handyman Services
+            </span>
+            <span className="w-6 h-[2px] bg-primary"></span>
+          </div>
         <h2 className="text-3xl md:text-5xl font-normal text-slate-900 dark:text-white tracking-tight leading-tight">
           Reliable Handyman Solutions, <br />
           From Repairs{" "}
