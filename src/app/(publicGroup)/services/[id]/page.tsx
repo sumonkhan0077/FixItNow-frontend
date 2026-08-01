@@ -7,19 +7,23 @@ import ServiceImageGallery from "../_components/ServiceImageGallery";
 import ServiceActionCard from "../_components/ServiceActionCard";
 import ServiceAvailabilities from "../_components/ServiceAvailabilities";
 import ServiceReviews from "../_components/ServiceReviews";
-import ServiceDescriptionView from "../_components/ServiceDescriptionView"; 
+import ServiceDescriptionView from "../_components/ServiceDescriptionView";
+import { getMe } from "@/service/getMe";
 
 interface ServicesDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
 const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
+  const res = await getMe();
   const { id } = await params;
   const response = await getSingleService(id);
 
   if (!response || "error" in response || !("data" in response)) {
     notFound();
   }
+
+   const userProfile = res?.data?.profile || res?.profile || res?.data || null;
 
   const service = response.data;
   const tech = service.technicianProfile;
@@ -28,7 +32,6 @@ const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
   return (
     <div className="min-h-screen bg-[#FDFBF7] dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-32 px-4 md:px-8 transition-colors">
       <div className="max-w-7xl mx-auto space-y-8">
-        
         {/* Back Button Section */}
         <div>
           <Link
@@ -44,20 +47,19 @@ const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
           {/* Top Section */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-7">
-              <ServiceImageGallery 
-                image={service.image} 
-                title={service.title} 
-                categoryName={service.category.name} 
+              <ServiceImageGallery
+                image={service.image}
+                title={service.title}
+                categoryName={service.category.name}
               />
             </div>
             <div className="lg:col-span-5">
-              <ServiceActionCard service={service} tech={tech} />
+              <ServiceActionCard user={userProfile} service={service} tech={tech} />
             </div>
           </div>
 
           {/* Bottom Section */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-10 border-t border-stone-200 dark:border-slate-800">
-            
             {/* Left Details */}
             <div className="lg:col-span-7 space-y-8">
               <ServiceDescriptionView description={service.description} />
@@ -67,7 +69,7 @@ const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
                 <h3 className="text-xl font-serif text-slate-900 dark:text-white border-b border-stone-100 dark:border-slate-800 pb-4">
                   About the Technician
                 </h3>
-                
+
                 <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                   <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-[#F4EFE6] dark:border-slate-800 shrink-0 bg-stone-100 dark:bg-slate-800 flex items-center justify-center shadow-inner">
                     {techUser.profileImage ? (
@@ -96,7 +98,7 @@ const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
                         {tech.bio}
                       </p>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-3 pt-1">
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 text-xs text-stone-600 dark:text-slate-300">
                         <Mail className="w-3.5 h-3.5 text-[#C05621]" />
@@ -125,10 +127,8 @@ const ServicesDetailsPage = async ({ params }: ServicesDetailsPageProps) => {
               <ServiceAvailabilities availabilities={tech.availabilities} />
               <ServiceReviews reviews={tech.reviews} />
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );

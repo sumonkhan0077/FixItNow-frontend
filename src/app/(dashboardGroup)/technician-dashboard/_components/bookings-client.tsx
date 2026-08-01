@@ -35,6 +35,7 @@ import {
   FileText,
   CreditCard,
   Lock,
+  Star,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -443,84 +444,146 @@ export function BookingsClient({ initialBookings }: { initialBookings: any[] }) 
       )}
 
       {/* Detailed Modal Dialog */}
-      <Dialog open={!!selectedBooking} onOpenChange={() => setSelectedBooking(null)}>
-        <DialogContent className="max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold flex items-center gap-2">
-              <FileText className="size-5 text-primary" />
-              Booking Details
-            </DialogTitle>
-          </DialogHeader>
+     <Dialog open={!!selectedBooking} onOpenChange={() => setSelectedBooking(null)}>
+  <DialogContent className="!max-w-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
+    <DialogHeader>
+      <DialogTitle className="text-lg font-bold flex items-center gap-2">
+        <FileText className="size-5 text-primary" />
+        Booking Details
+      </DialogTitle>
+    </DialogHeader>
 
-          {selectedBooking && (
-            <div className="space-y-4 text-xs">
-              <div className="p-3 bg-muted/40 rounded-xl space-y-2">
-                <span className="font-bold text-muted-foreground uppercase text-[10px]">
-                  Customer Details
+    {selectedBooking && (
+      <div className="space-y-4 text-xs">
+        {/* Customer Details */}
+        <div className="p-3 bg-muted/40 rounded-xl space-y-2">
+          <span className="font-bold text-muted-foreground uppercase text-[10px]">
+            Customer Details
+          </span>
+          <div className="flex items-center gap-3">
+            <Avatar className="size-10">
+              <AvatarImage src={selectedBooking.customer?.profileImage} />
+              <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                {selectedBooking.customer?.name?.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-bold text-sm text-foreground">
+                {selectedBooking.customer?.name}
+              </p>
+              <p className="text-muted-foreground">{selectedBooking.customer?.email}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Info */}
+        <div className="space-y-2 border-t pt-2">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Service Title:</span>
+            <span className="font-semibold">{selectedBooking.service?.title}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Category:</span>
+            <span className="font-semibold">{selectedBooking.service?.category?.name}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Booking Date:</span>
+            <span className="font-semibold">
+              {new Date(selectedBooking.bookingDate).toLocaleDateString()}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Time Slot:</span>
+            <span className="font-semibold">{selectedBooking.timeSlot}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Address:</span>
+            <span className="font-semibold capitalize">{selectedBooking.address}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Booking Status:</span>
+            <span className="font-semibold text-primary">{selectedBooking?.status}</span>
+          </div>
+          <div className="flex justify-between text-sm border-t pt-2">
+            <span className="font-bold">Total Amount:</span>
+            <span className="font-bold text-emerald-600">
+              ৳ {selectedBooking?.totalAmount}
+            </span>
+          </div>
+        </div>
+
+        {/* Payment Details Section */}
+        {selectedBooking.payment && (
+          <div className="p-3 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 rounded-xl space-y-1.5">
+            <div className="flex justify-between items-center">
+              <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase text-[10px]">
+                Payment Information
+              </span>
+              <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 rounded-full">
+                {selectedBooking?.payment?.status}
+              </span>
+            </div>
+            <div className="flex justify-between text-muted-foreground">
+              <span>Provider:</span>
+              <span className="font-semibold text-foreground">{selectedBooking?.payment?.provider}</span>
+            </div>
+            <div className="flex justify-between text-muted-foreground">
+              <span>Transaction ID:</span>
+              <span className="font-mono text-[10px] text-foreground truncate max-w-[200px]">
+                {selectedBooking?.payment?.transactionId}
+              </span>
+            </div>
+            {selectedBooking?.payment?.paidAt && (
+              <div className="flex justify-between text-muted-foreground">
+                <span>Paid At:</span>
+                <span className="text-foreground">
+                  {new Date(selectedBooking?.payment?.paidAt).toLocaleString()}
                 </span>
-                <div className="flex items-center gap-3">
-                  <Avatar className="size-10">
-                    <AvatarImage src={selectedBooking.customer?.profileImage} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-bold">
-                      {selectedBooking.customer?.name?.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-bold text-sm text-foreground">
-                      {selectedBooking.customer?.name}
-                    </p>
-                    <p className="text-muted-foreground">{selectedBooking.customer?.email}</p>
-                  </div>
-                </div>
               </div>
+            )}
+          </div>
+        )}
 
-              <div className="space-y-2 border-t pt-2">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Service Title:</span>
-                  <span className="font-semibold">{selectedBooking.service?.title}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Category:</span>
-                  <span className="font-semibold">{selectedBooking.service?.category?.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Booking Date:</span>
-                  <span className="font-semibold">
-                    {new Date(selectedBooking.bookingDate).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Time Slot:</span>
-                  <span className="font-semibold">{selectedBooking.timeSlot}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Address:</span>
-                  <span className="font-semibold capitalize">{selectedBooking.address}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Payment Status:</span>
-                  <span className="font-semibold">
-                    {selectedBooking.payment?.status || "UNPAID"}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm border-t pt-2">
-                  <span className="font-bold">Total Amount:</span>
-                  <span className="font-bold text-emerald-600">
-                    ৳ {selectedBooking.totalAmount}
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-card border p-3 rounded-xl space-y-1 text-[11px] text-muted-foreground">
-                <p>
-                  Booking ID: <span className="font-mono text-foreground">{selectedBooking.id}</span>
-                </p>
-                <p>Created At: {new Date(selectedBooking.createdAt).toLocaleString()}</p>
+        {/* Review & Rating Section */}
+        {selectedBooking?.review && (
+          <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-amber-700 dark:text-amber-400 uppercase text-[10px]">
+                Customer Review
+              </span>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`size-3 ${
+                      i < selectedBooking?.review?.rating
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-muted-foreground/20"
+                    }`}
+                  />
+                ))}
+                <span className="ml-1 text-[11px] font-bold text-amber-600">
+                  {selectedBooking?.review?.rating}/5
+                </span>
               </div>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+            <p className="text-muted-foreground italic bg-background/60 p-2 rounded-lg border border-amber-100 dark:border-amber-900/30">
+              &quot;{selectedBooking?.review?.comment}&quot;
+            </p>
+          </div>
+        )}
+
+        {/* Meta Info */}
+        <div className="bg-card border p-3 rounded-xl space-y-1 text-[11px] text-muted-foreground">
+          <p>
+            Booking ID: <span className="font-mono text-foreground">{selectedBooking.id}</span>
+          </p>
+          <p>Created At: {new Date(selectedBooking.createdAt).toLocaleString()}</p>
+        </div>
+      </div>
+    )}
+  </DialogContent>
+</Dialog>
     </div>
   );
 }

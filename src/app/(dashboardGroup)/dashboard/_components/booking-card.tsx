@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { CustomerBooking } from "@/lib/types";
 import { STATUS_CFG } from "./booking-constants";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
 import {
   CalendarDays,
   DollarSign,
@@ -12,7 +14,9 @@ import {
   Star,
   User,
   Eye,
+  Loader2,
 } from "lucide-react";
+import { createCheckoutSession } from "@/service/booikng/booking";
 
 interface BookingCardProps {
   booking: CustomerBooking;
@@ -20,14 +24,36 @@ interface BookingCardProps {
 }
 
 export function BookingCard({ booking, onView }: BookingCardProps) {
+  const [paying, setPaying] = useState(false);
   const cfg = STATUS_CFG[booking.status] ?? STATUS_CFG["REQUESTED"];
   const tech = booking.service.technicianProfile?.user;
+  
   const date = new Date(booking.bookingDate).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
+  
   const needsReview = booking.status === "COMPLETED" && !booking.review;
+
+  // পেমেন্ট বাটনে ক্লিক করলে চেকআউট সেশন তৈরি করে Stripe URL-এ রিডাইরেক্ট করবে
+  const handlePayment = async () => {
+    try {
+      setPaying(true);
+      const res = await createCheckoutSession(booking.id);
+
+      if (res?.success && res?.data?.checkoutUrl) {
+        window.location.href = res.data.checkoutUrl; // স্ট্রাইপ চেকআউট পেজে রিডাইরেক্ট
+      } else {
+        alert(res?.error || "Failed to initiate payment");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Something went wrong during payment");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-card/60 p-4 hover:border-primary/20 hover:shadow-sm transition-all duration-200">
@@ -84,6 +110,46 @@ export function BookingCard({ booking, onView }: BookingCardProps) {
           </span>
         )}
       </div>
+
+      {/* Payment Button Section */}
+      <div>
+  {booking.payment?.status === "COMPLETED" ? (
+    <Button
+      variant="outline"
+      disabled
+      className="w-full h-8 text-xs bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900"
+    >
+      Payment Complete
+    </Button>
+  ) : [
+      "REQUESTED",
+      "DECLINED",
+      "CANCELLED",
+    ].includes(booking.status) ? (
+    <Button
+      variant="outline"
+      disabled
+      className="w-full h-8 text-xs"
+    >
+      Payment Not Available
+    </Button>
+  ) : (
+    <Button
+      onClick={handlePayment}
+      disabled={paying}
+      className="w-full h-8 text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground"
+    >
+      {paying ? (
+        <>
+          <Loader2 className="mr-2 size-3 animate-spin" />
+          Redirecting...
+        </>
+      ) : (
+        "Pay Now"
+      )}
+    </Button>
+  )}
+</div>
 
       {/* Review stars if exists */}
       {booking.review && (

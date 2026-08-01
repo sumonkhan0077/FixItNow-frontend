@@ -1,16 +1,34 @@
-import { Star, ShieldCheck, Wrench, UserCheck } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Star, ShieldCheck, Wrench, UserCheck, Loader2, CheckCircle2 } from "lucide-react";
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createBooking } from "@/service/booikng/booking";
+import { NavbarProps } from "@/lib/types";
+
 
 interface Category {
   name: string;
 }
 
 interface ServiceItem {
+  id: string;
   title: string;
   price: number | string;
   category: Category;
 }
-
 
 interface TechUser {
   name: string;
@@ -23,12 +41,72 @@ interface Technician {
   user: TechUser;
 }
 
- export interface ServiceActionCardProps {
+export interface ServiceActionCardProps {
   service: ServiceItem;
   tech: Technician;
 }
 
-export default function ServiceActionCard({ service, tech }: ServiceActionCardProps) {
+
+
+type CombinedProps = ServiceActionCardProps & NavbarProps;
+
+export default function ServiceActionCard({ service, tech , user}: CombinedProps ) {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  // Error & Success states
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  
+  // Form input states
+  const [bookingDate, setBookingDate] = useState("");
+  const [address, setAddress] = useState("");
+
+  const handleBookingSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+
+    const bookingData = {
+      serviceId: service.id,
+      bookingDate,
+      address,
+    };
+
+    try {
+      const result = await createBooking(bookingData);
+
+      if (result?.error || !result || (result.success === false)) {
+        setErrorMessage(result?.message || "Technician is not available on this day. Please choose another date.");
+        setLoading(false);
+        return;
+      }
+
+    
+      setIsOpen(false);
+      setIsSuccessModalOpen(true);
+
+    } catch (error) {
+      console.error("Booking failed", error);
+      setErrorMessage("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSuccessRedirect = () => {
+    setIsSuccessModalOpen(false);
+    const destination = 
+    user?.role === "ADMIN"
+      ? "/admin-dashboard"
+      : user?.role === "TECHNICIAN"
+      ? "/technician-dashboard"
+      : "/dashboard/bookings";
+
+  router.push(destination);
+  };
+
   return (
     <GsapWrapper animation="fadeUp" delay={0.2}>
       <div className="flex flex-col space-y-6">
@@ -63,11 +141,94 @@ export default function ServiceActionCard({ service, tech }: ServiceActionCardPr
           </p>
         </div>
 
-        {/* Order Button */}
-        <button className="w-full py-4 bg-primary/95 hover:bg-slate-900 text-white font-medium rounded-2xl shadow-lg shadow-[#C05621]/20 transition-all duration-300 flex items-center justify-center gap-2 text-base cursor-pointer">
+        {/* Place Order Button */}
+        <button 
+          onClick={() => {
+            setErrorMessage("");
+            setIsOpen(true);
+          }}
+          className="w-full py-4 bg-primary/95 hover:bg-slate-900 text-white font-medium rounded-2xl shadow-lg shadow-[#C05621]/20 transition-all duration-300 flex items-center justify-center gap-2 text-base cursor-pointer"
+        >
           <span>Place Order Now</span>
           <span>🛒</span>
         </button>
+
+        {/* 1. Booking Input Dialog / Modal */}
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Confirm Your Booking</DialogTitle>
+              <DialogDescription>
+                Provide your service date and address to complete the order for <span className="font-semibold text-primary">{service.title}</span>.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleBookingSubmit} className="space-y-4 py-4">
+              {/* Error Message Show */}
+              {errorMessage && (
+                <div className="p-3 text-sm text-red-600 bg-red-50 dark:bg-red-950/50 dark:text-red-400 rounded-lg border border-red-200 dark:border-red-900">
+                  {errorMessage}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="bookingDate">Booking Date</Label>
+                <Input
+                  id="bookingDate"
+                  type="date"
+                  value={bookingDate}
+                  onChange={(e) => setBookingDate(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="address">Service Address</Label>
+                <Input
+                  id="address"
+                  type="text"
+                  placeholder="e.g. Pabna Sadar, Pabna"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
+
+              <DialogFooter className="pt-4">
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "Confirm Booking"
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* 2. Success Modal (OK button click -> Dashboard/booking) */}
+        <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
+          <DialogContent className="sm:max-w-[380px] text-center py-6">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <DialogHeader>
+                <DialogTitle className="text-center">Booking Successful!</DialogTitle>
+                <DialogDescription className="text-center">
+                  Your booking has been placed successfully. Click below to view your bookings.
+                </DialogDescription>
+              </DialogHeader>
+              <Button onClick={handleSuccessRedirect} className="w-full mt-2">
+                OK
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Specifications Card */}
         <div className="bg-slate-800 dark:bg-slate-900 text-white rounded-[2rem] p-6 shadow-xl space-y-5 border border-slate-800">
