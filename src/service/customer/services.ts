@@ -1,4 +1,4 @@
-import { GetAllServicesError, ServiceQueryParams, ServicesApiResponse } from "@/lib/types";
+import { GetAllServicesError, ServiceQueryParams, ServicesApiResponse, TServicesApiResponse, TSingleServiceApiResponse } from "@/lib/types";
 
 
 const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
@@ -6,7 +6,7 @@ const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
 
 export const getAllServices = async (
   params: ServiceQueryParams = {}
-): Promise<ServicesApiResponse | GetAllServicesError> => {
+): Promise<TServicesApiResponse | GetAllServicesError> => {
   try {
     const query = new URLSearchParams();
     
@@ -43,12 +43,44 @@ export const getAllServices = async (
       };
     }
 
-    const data: ServicesApiResponse = await res.json();
+    const data: TServicesApiResponse = await res.json();
     return data;
   } catch (err) {
     console.error("Services API Exception:", err);
     return {
       error: err instanceof Error ? err.message : "Failed to fetch services",
+      details: err,
+    };
+  }
+};
+
+export const getSingleService = async (
+  serviceId: string
+): Promise<TSingleServiceApiResponse | GetAllServicesError> => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/services/${serviceId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      // console.error("Single Service API Error Response:", res.status, errorText);
+      return {
+        error: `API returned ${res.status}: ${errorText || res.statusText}`,
+        status: res.status,
+      };
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    // console.error("Single Service API Exception:", err);
+    return {
+      error: err instanceof Error ? err.message : "Failed to fetch single service",
       details: err,
     };
   }

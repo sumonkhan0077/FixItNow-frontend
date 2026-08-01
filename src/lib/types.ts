@@ -387,7 +387,7 @@ export interface ServiceItem {
   };
 }
 
-export interface ServicesApiResponse {
+export interface TServicesApiResponse {
   success: boolean;
   statusCode: number;
   message: string;
@@ -405,4 +405,79 @@ export interface GetAllServicesError {
   error: string;
   status?: number;
   details?: unknown;
+}
+
+export interface SingleServiceItem {
+  id: string;
+  technicianProfileId: string;
+  categoryId: string;
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  category: {
+    id: string;
+    name: string;
+    description: string;
+    icon: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+  technicianProfile: {
+    id: string;
+    userId: string;
+    bio: string;
+    experience: number;
+    serviceArea: string;
+    averageRating: number;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      phone: string | null;
+      profileImage: string | null;
+      address: string | null;
+      role: string;
+      status: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    availabilities: Array<{
+      dayOfWeek: string;
+      startTime: string;
+      endTime: string;
+    }>;
+    reviews: Array<{
+      id: string;
+      bookingId: string;
+      customerId: string;
+      technicianProfileId: string;
+      rating: number;
+      comment: string;
+      createdAt: string;
+      customer: {
+        id: string;
+        name: string;
+        email: string;
+        phone: string | null;
+        profileImage: string | null;
+        address: string | null;
+        role: string;
+        status: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    }>;
+  };
+}
+
+export interface TSingleServiceApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: SingleServiceItem;
 }
