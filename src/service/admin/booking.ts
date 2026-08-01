@@ -65,7 +65,7 @@ export type BookingItem = {
   service: BookingService;
   payment: BookingPayment;
   review: {
-    rating: number;
+    rating: number | string;
     comment: string;
     createdAt: string;
   } | null;
@@ -84,6 +84,7 @@ export type BookingsApiResponse = {
 };
 
 export type GetAllBookingsError = {
+  success?: boolean;
   error: string;
   status?: number;
   details?: unknown;

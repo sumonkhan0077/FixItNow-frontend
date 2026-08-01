@@ -1,10 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Eye, Star, MapPin, User, Wrench, Calendar, 
-  CheckCircle2, XCircle, Clock, CreditCard, 
-  Sparkles, X, AlertCircle, Hourglass, Receipt, Tag, MessageSquareQuote
+import {
+  Eye,
+  Star,
+  MapPin,
+  User,
+  Wrench,
+  Calendar,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  CreditCard,
+  Sparkles,
+  X,
+  AlertCircle,
+  Hourglass,
+  Receipt,
+  Tag,
+  MessageSquareQuote,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -27,7 +41,20 @@ const formatDate = (dateString?: string) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "N/A";
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const day = date.getUTCDate();
   const month = months[date.getUTCMonth()];
   const year = date.getUTCFullYear();
@@ -35,7 +62,7 @@ const formatDate = (dateString?: string) => {
   return `${month} ${day}, ${year}`;
 };
 
-// স্ট্যাটাস অনুযায়ী ব্যাজের কালার ডাইনামিক করার ফাংশন
+
 const getStatusBadge = (status: string) => {
   switch (status) {
     case "COMPLETED":
@@ -77,15 +104,14 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Trigger Button (asChild যোগ করা হয়েছে এবং <button> ফিক্স করা হয়েছে) */}
+     
       <DialogTrigger className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center gap-1.5 border border-emerald-500/20 shadow-sm active:scale-[0.98]">
-  <Eye className="size-3.5" />
-  Details
-</DialogTrigger>
+        <Eye className="size-3.5" />
+        Details
+      </DialogTrigger>
 
       {/* Center Dialog Content */}
       <DialogContent className="!w-[90vw] !max-w-sm sm:!max-w-xl md:!max-w-2xl lg:!max-w-3xl max-h-[90vh] overflow-y-auto p-0 bg-background/95 backdrop-blur-xl sm:rounded-2xl border border-border/80 shadow-2xl transition-all [&>button]:hidden">
-        
         {/* Header */}
         <DialogHeader className="p-5 border-b border-border/60 bg-muted/30 sticky top-0 z-20 backdrop-blur-md">
           <div className="flex items-center justify-between">
@@ -118,18 +144,18 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
 
         {/* Modal Body */}
         <div className="p-6 space-y-6">
-
           {/* SECTION 1: CUSTOMER & TECHNICIAN INFO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
             {/* Customer Box */}
             <div className="space-y-2">
               <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-                <User className="size-3.5 text-emerald-500" /> Customer Information
+                <User className="size-3.5 text-emerald-500" /> Customer
+                Information
               </h3>
               <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 flex items-center gap-3">
                 <div className="relative size-12 rounded-full overflow-hidden bg-muted border border-border shrink-0">
-                  {booking.customer?.profileImage && booking.customer.profileImage !== "fsdfs" ? (
+                  {booking.customer?.profileImage &&
+                  booking.customer.profileImage !== "fsdfs" ? (
                     <Image
                       src={booking.customer.profileImage}
                       alt={booking.customer.name || "Customer"}
@@ -143,8 +169,12 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <h4 className="font-bold text-foreground text-sm truncate">{booking.customer?.name || "N/A"}</h4>
-                  <p className="text-xs text-muted-foreground truncate">{booking.customer?.email}</p>
+                  <h4 className="font-bold text-foreground text-sm truncate">
+                    {booking.customer?.name || "N/A"}
+                  </h4>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {booking.customer?.email}
+                  </p>
                 </div>
               </div>
             </div>
@@ -152,7 +182,8 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
             {/* Technician Box */}
             <div className="space-y-2">
               <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-                <Wrench className="size-3.5 text-emerald-500" /> Assigned Technician
+                <Wrench className="size-3.5 text-emerald-500" /> Assigned
+                Technician
               </h3>
               <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 flex items-center gap-3">
                 <div className="size-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 shrink-0">
@@ -163,18 +194,19 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                     {booking.service?.technicianProfile?.user?.name || "N/A"}
                   </h4>
                   <p className="text-xs text-muted-foreground truncate">
-                    {booking.service?.technicianProfile?.user?.email || "No Email"}
+                    {booking.service?.technicianProfile?.user?.email ||
+                      "No Email"}
                   </p>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* SECTION 2: SERVICE DETAILS */}
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-              <Sparkles className="size-3.5 text-emerald-500" /> Service Information
+              <Sparkles className="size-3.5 text-emerald-500" /> Service
+              Information
             </h3>
 
             <div className="p-4 rounded-xl border border-border/70 bg-card/60 space-y-3">
@@ -195,15 +227,20 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
                     </div>
                   )}
                   <div>
-                    <h4 className="font-bold text-foreground text-sm">{booking.service?.title}</h4>
+                    <h4 className="font-bold text-foreground text-sm">
+                      {booking.service?.title}
+                    </h4>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 mt-1 rounded text-[10px] bg-muted font-medium text-muted-foreground">
-                      <Tag className="size-3" /> {booking.service?.category?.name}
+                      <Tag className="size-3" />{" "}
+                      {booking.service?.category?.name}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-muted-foreground">Price</p>
-                  <p className="font-extrabold text-sm text-emerald-600 dark:text-emerald-400">৳{booking.service?.price} BDT</p>
+                  <p className="font-extrabold text-sm text-emerald-600 dark:text-emerald-400">
+                    ৳{booking.service?.price} BDT
+                  </p>
                 </div>
               </div>
 
@@ -218,14 +255,17 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
           {/* SECTION 3: SCHEDULE & LOCATION */}
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-              <Calendar className="size-3.5 text-emerald-500" /> Schedule & Location
+              <Calendar className="size-3.5 text-emerald-500" /> Schedule &
+              Location
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
               <div className="p-3 rounded-xl border border-border/70 bg-card/60 flex items-center gap-2.5">
                 <Calendar className="size-4 text-emerald-500 shrink-0" />
                 <div>
-                  <p className="text-[10px] text-muted-foreground font-medium">Date</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">
+                    Date
+                  </p>
                   <p className="font-semibold text-foreground">
                     {formatDate(booking.bookingDate)}
                   </p>
@@ -235,16 +275,24 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
               <div className="p-3 rounded-xl border border-border/70 bg-card/60 flex items-center gap-2.5">
                 <Clock className="size-4 text-emerald-500 shrink-0" />
                 <div>
-                  <p className="text-[10px] text-muted-foreground font-medium">Time Slot</p>
-                  <p className="font-semibold text-foreground">{booking.timeSlot || "N/A"}</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">
+                    Time Slot
+                  </p>
+                  <p className="font-semibold text-foreground">
+                    {booking.timeSlot || "N/A"}
+                  </p>
                 </div>
               </div>
 
               <div className="p-3 rounded-xl border border-border/70 bg-card/60 flex items-center gap-2.5">
                 <MapPin className="size-4 text-emerald-500 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-[10px] text-muted-foreground font-medium">Address</p>
-                  <p className="font-semibold text-foreground capitalize truncate">{booking.address || "N/A"}</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">
+                    Address
+                  </p>
+                  <p className="font-semibold text-foreground capitalize truncate">
+                    {booking.address || "N/A"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -253,24 +301,38 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
           {/* SECTION 4: PAYMENT INFORMATION */}
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-              <CreditCard className="size-3.5 text-emerald-500" /> Payment Details
+              <CreditCard className="size-3.5 text-emerald-500" /> Payment
+              Details
             </h3>
 
             <div className="p-4 rounded-xl border border-border/70 bg-card/60 space-y-3">
               <div className="flex items-center justify-between border-b border-border/50 pb-2.5">
-                <span className="text-xs text-muted-foreground font-medium">Total Amount</span>
-                <span className="font-black text-base text-foreground">৳{booking.totalAmount} BDT</span>
+                <span className="text-xs text-muted-foreground font-medium">
+                  Total Amount
+                </span>
+                <span className="font-black text-base text-foreground">
+                  ৳{booking.totalAmount} BDT
+                </span>
               </div>
 
               {booking.payment ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs pt-1">
                   <div>
-                    <p className="text-[10px] text-muted-foreground">Provider</p>
-                    <p className="font-semibold text-foreground uppercase">{booking.payment.provider}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      Provider
+                    </p>
+                    <p className="font-semibold text-foreground uppercase">
+                      {booking.payment.provider}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-muted-foreground">Transaction ID</p>
-                    <p className="font-mono text-foreground font-semibold truncate" title={booking.payment.transactionId}>
+                    <p className="text-[10px] text-muted-foreground">
+                      Transaction ID
+                    </p>
+                    <p
+                      className="font-mono text-foreground font-semibold truncate"
+                      title={booking.payment.transactionId}
+                    >
                       {booking.payment.transactionId}
                     </p>
                   </div>
@@ -293,25 +355,19 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
           {booking.review && (
             <div className="space-y-2.5">
               <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-                <MessageSquareQuote className="size-3.5 text-amber-500" /> Customer Review
+                <MessageSquareQuote className="size-3.5 text-amber-500" />{" "}
+                Customer Review
               </h3>
 
               <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10 space-y-2.5">
                 <div className="flex items-center justify-between">
                   {/* Star Rating Render */}
                   <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`size-4 ${
-                          star <= (booking.review?.rating || 0)
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-muted-foreground/30"
-                        }`}
-                      />
-                    ))}
+                   ⭐
                     <span className="ml-1.5 font-bold text-xs text-foreground">
-                      {booking.review.rating}.0
+                      {booking.review?.rating
+                        ? `${booking.review.rating}.0`
+                        : "0.0"}
                     </span>
                   </div>
 
@@ -322,7 +378,13 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
 
                 {/* Comment area */}
                 <div className="text-xs text-foreground/90 italic bg-background/60 dark:bg-card/60 p-3 rounded-lg border border-border/40">
-                  <p className={!showFullReview && booking.review.comment.length > 120 ? "line-clamp-2" : ""}>
+                  <p
+                    className={
+                      !showFullReview && booking.review.comment.length > 120
+                        ? "line-clamp-2"
+                        : ""
+                    }
+                  >
                     "{booking.review.comment}"
                   </p>
                   {booking.review.comment.length > 120 && (
@@ -338,14 +400,12 @@ export function BookingDetailsModal({ booking }: BookingDetailsModalProps) {
               </div>
             </div>
           )}
-
         </div>
 
         {/* Footer */}
         <div className="p-3 border-t border-border/60 bg-muted/30 text-center text-[11px] text-muted-foreground">
           Created: {formatDate(booking.createdAt)}
         </div>
-
       </DialogContent>
     </Dialog>
   );

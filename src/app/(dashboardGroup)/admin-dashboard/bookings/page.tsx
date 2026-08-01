@@ -15,23 +15,24 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
   const searchTerm = params?.searchTerm || "";
   const status = params?.status || "";
 
-  // Dynamic parameters সহ API Call করা হচ্ছে
   const result = await getAllBookings({
     searchTerm,
     status: status === "ALL" ? "" : status,
   });
 
-  // if ("error" in result) {
-  //   return (
-  //     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
-  //       <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive">
-  //         <p className="font-semibold">Failed to load bookings</p>
-  //         <p className="text-sm mt-1">{result.error}</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
+  if ("error" in result) {
+    return (
+      <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+        <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive">
+          <p className="font-semibold">Failed to load bookings</p>
+          {/* <p className="text-sm mt-1">{result.error}</p> */}
+        </div>
+      </div>
+    );
+  }
+
+  // এখন TypeScript নিশ্চিত যে result হলো সফল রেসপন্স
   const bookings: BookingItem[] = result.data || [];
   const totalBookings = result.meta?.total || bookings.length;
 

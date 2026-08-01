@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Mona_Sans } from "next/font/google"; 
+import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/shared/navbar";
@@ -21,14 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${monaSans.variable} h-full antialiased`}
-    >
-      
-      <body className="min-h-full flex flex-col font-sans ">{children}
+    <html lang="en" className={`${monaSans.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-sans ">
+       
+        {children}
 
-         <Toaster richColors position="top-right" />
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

@@ -1,16 +1,18 @@
+import Footer from "@/components/HomePage/Footer";
 import { Navbar } from "@/components/shared/navbar";
 import { getMe } from "@/service/getMe";
 
 const AuthGroupLayout = async ({ children }: { children: React.ReactNode }) => {
-//   const res = await getMe();
+  const res = await getMe();
 
-// //   console.log("Backend Response:", res); 
-//   const userProfile = res?.data?.profile || res?.profile || res?.data || null;
+//   console.log("Backend Response:", res); 
+  const userProfile = res?.data?.profile || res?.profile || res?.data || null;
 
   return (
     <div>
-      {/* <Navbar user={userProfile} /> */}
+      <Navbar user={userProfile} />
       {children}
+      <Footer/>
     </div>
   );
 };
