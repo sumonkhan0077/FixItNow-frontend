@@ -9,6 +9,7 @@ import ServicesSection from "@/components/HomePage/ServicesSection";
 import TeamSection from "@/components/HomePage/TeamSection";
 import TopServicesSection from "@/components/HomePage/TopServices";
 import { Navbar } from "@/components/shared/navbar";
+import { ServiceItem } from "@/lib/types";
 import { getAllServices } from "@/service/customer/services";
 import { getMe } from "@/service/getMe";
 
@@ -17,7 +18,7 @@ const page = async () => {
   
   const response = await getAllServices();
 
-  let servicesList = [];
+  let servicesList: ServiceItem[] = [];
 
   if (response && typeof response === "object" && "data" in response) {
     const apiData = response.data;
@@ -32,6 +33,15 @@ const page = async () => {
       servicesList = apiData;
     }
   }
+
+  const topRatedServices = [...servicesList]
+    .sort((a, b) => {
+    
+      const ratingA = a.technicianProfile?.averageRating || 0;
+      const ratingB = b.technicianProfile?.averageRating || 0;
+      return ratingB - ratingA;
+    })
+    .slice(0, 8);
   //   console.log("Backend Response:", res);
   const userProfile = res?.data?.profile || res?.profile || res?.data || null;
   return (
@@ -40,7 +50,7 @@ const page = async () => {
       <HeaderSection></HeaderSection>
       <AboutSection></AboutSection>
       <CategorySection></CategorySection>
-      <TopServicesSection services={servicesList}></TopServicesSection>
+      <TopServicesSection services={topRatedServices}></TopServicesSection>
 
       <TeamSection></TeamSection>
       <ServicesSection></ServicesSection>

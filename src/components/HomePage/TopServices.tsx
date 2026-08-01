@@ -1,20 +1,18 @@
 import Image from "next/image";
-import { ArrowRight, Star, StarIcon } from "lucide-react"; 
+import { ArrowRight, Star } from "lucide-react"; 
 
 import { ServiceItem } from "@/lib/types";
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
 import Link from "next/link";
 
-
-interface ServiceSectionProps {
+export interface ServiceSectionProps {
   services: ServiceItem[]; 
 }
 
 export default function TopServicesSection({ services }: ServiceSectionProps) {
   return (
-    <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
+    <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
       {/* --- Section Header (Centered) --- */}
-      
       <GsapWrapper animation="fadeUp" delay={0.1} className="mb-20 text-center flex flex-col items-center">
         <div className="flex items-center justify-center gap-2 mb-4">
             <span className="w-6 h-[2px] bg-primary"></span>
@@ -50,12 +48,13 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                   
-                  {/* Optional Badge: Category Name & Price */}
+                  {/* Optional Badge: Category Name */}
                   <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
                     {item.category.name}
                   </div>
-                  <div className="absolute bg-black/70 backdrop-blur-xl  shadow-xl backdrop-saturate-150 top-4 right-4  text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex  items-center justify-center gap-3">
-                  <Star className="text-primary size-4"/> {item.technicianProfile.averageRating}
+                  {/* Rating Badge */}
+                  <div className="absolute bg-black/70 backdrop-blur-xl shadow-xl backdrop-saturate-150 top-4 right-4 text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex items-center justify-center gap-2">
+                    <Star className="text-primary size-4"/> {item.technicianProfile?.averageRating || 0}
                   </div>
                 </div>
 
@@ -76,7 +75,7 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
                       {item.technicianProfile?.user?.profileImage && (
                         <Image
                           src={item.technicianProfile.user.profileImage}
-                          alt={item.technicianProfile.user.name}
+                          alt={item.technicianProfile?.user?.name || "Technician"}
                           width={32}
                           height={32}
                           className="rounded-full object-cover w-8 h-8"
@@ -88,7 +87,7 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
                     </div>
 
                     <Link
-                      href={`/services/${item.id}`} // 
+                      href={`/services/${item.id}`}
                       className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer"
                     >
                       <span>Explore</span>
@@ -101,6 +100,17 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
           );
         })}
       </div>
+
+      {/* --- Show More / Explore All Services Button --- */}
+      <GsapWrapper animation="fadeUp" delay={0.5} className="mt-16 flex justify-center">
+        <Link
+          href="/services"
+          className="px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium text-sm hover:bg-primary dark:hover:bg-primary dark:hover:text-white transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2 group cursor-pointer"
+        >
+          <span>Explore All Services</span>
+          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </GsapWrapper>
     </section>
   );
 }

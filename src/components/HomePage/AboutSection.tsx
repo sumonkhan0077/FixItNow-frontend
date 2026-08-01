@@ -28,10 +28,11 @@ export default function AboutSection() {
           </p>
 
           <div className="pt-2">
-            <button className="group inline-flex text-white items-center gap-2 text-xs font-medium px-7 py-3.5 rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 cursor-pointer shadow-lg shadow-primary/20">
+            <button className="group inline-flex bg-primary  text-white  font-medium text-sm hover:bg-slate-900 dark:hover:bg-primary  transition-all duration-300 items-center gap-2  px-7 py-3.5 rounded-full  cursor-pointer shadow-lg shadow-primary/20">
               <span>More About Us</span>
               <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
             </button>
+
           </div>
         </GsapWrapper>
 
