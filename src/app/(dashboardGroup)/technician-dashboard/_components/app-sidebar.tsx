@@ -41,7 +41,7 @@ const navItems = [
   { title: "My Services",   url: "/technician-dashboard/services",     icon: Wrench },
   { title: "Bookings",      url: "/technician-dashboard/bookings",     icon: CalendarDays },
   { title: "Reviews",       url: "/technician-dashboard/reviews",      icon: Star },
-  { title: "Notifications", url: "/technician-dashboard/notifications",icon: Bell },
+
 ];
 
 interface AppSidebarProps {

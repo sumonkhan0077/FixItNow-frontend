@@ -125,24 +125,17 @@ export function Navbar({ user }: NavbarProps) {
         )}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md transition-transform group-hover:scale-105">
-            <Command className="size-5" />
+        <Link href="/">
+          <div className="mb-5">
+            <span className="text-secondary text-4xl font-normal">FixIt</span>
+            <span className="text-primary text-xl font-normal ">Now</span>
           </div>
-          <span
-            className={cn(
-              "text-xl font-bold tracking-tight transition-colors",
-              scrolled ? "text-foreground" : "text-white",
-            )}
-          >
-            Acme<span className="text-primary">.</span>
-          </span>
         </Link>
 
         {/* Desktop Nav Links  */}
         <nav className="hidden items-center gap-1.5 md:flex uppercase">
           {navLinks.map((link) => {
-            const Icon = link?.icon; // অথবা LucideIcon টাইপ
+            const Icon = link?.icon; 
             if (!Icon) return null;
             return (
               <Link

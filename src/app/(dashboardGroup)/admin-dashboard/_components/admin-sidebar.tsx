@@ -23,7 +23,7 @@ const navItems = [
   { title: "Bookings",    url: "/admin-dashboard/bookings",    icon: CalendarDays },
   { title: "Categories",  url: "/admin-dashboard/categories",  icon: Tag },
   { title: "Analytics",   url: "/admin-dashboard/analytics",   icon: BarChart3 },
-  { title: "Settings",    url: "/admin-dashboard/settings",    icon: Settings },
+ 
 ];
 
 interface AdminSidebarProps {

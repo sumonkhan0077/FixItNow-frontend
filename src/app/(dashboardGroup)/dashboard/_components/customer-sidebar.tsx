@@ -21,7 +21,7 @@ const navItems = [
   { title: "My Bookings",   url: "/dashboard/bookings",      icon: CalendarDays },
   { title: "Profile",       url: "/dashboard/profile",       icon: User },
   { title: "Edit Profile",  url: "/dashboard/edit-profile",  icon: Settings },
-  { title: "Notifications", url: "/dashboard/notifications", icon: Bell },
+
 ];
 
 interface CustomerSidebarProps {
