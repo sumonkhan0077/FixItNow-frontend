@@ -7,7 +7,7 @@ interface Category {
 
 interface ServiceItem {
   title: string;
-  price: number;
+  price: number | string;
   category: Category;
 }
 
@@ -23,7 +23,7 @@ interface Technician {
   user: TechUser;
 }
 
-interface ServiceActionCardProps {
+ export interface ServiceActionCardProps {
   service: ServiceItem;
   tech: Technician;
 }
@@ -64,13 +64,13 @@ export default function ServiceActionCard({ service, tech }: ServiceActionCardPr
         </div>
 
         {/* Order Button */}
-        <button className="w-full py-4 bg-[#C05621] hover:bg-[#A0441B] text-white font-medium rounded-2xl shadow-lg shadow-[#C05621]/20 transition-all duration-300 flex items-center justify-center gap-2 text-base cursor-pointer">
+        <button className="w-full py-4 bg-primary/95 hover:bg-slate-900 text-white font-medium rounded-2xl shadow-lg shadow-[#C05621]/20 transition-all duration-300 flex items-center justify-center gap-2 text-base cursor-pointer">
           <span>Place Order Now</span>
           <span>🛒</span>
         </button>
 
         {/* Specifications Card */}
-        <div className="bg-[#1A2E3B] dark:bg-slate-900 text-white rounded-[2rem] p-6 shadow-xl space-y-5 border border-slate-800">
+        <div className="bg-slate-800 dark:bg-slate-900 text-white rounded-[2rem] p-6 shadow-xl space-y-5 border border-slate-800">
           <h3 className="text-sm font-semibold uppercase tracking-widest text-[#E29578]">
             Specifications
           </h3>

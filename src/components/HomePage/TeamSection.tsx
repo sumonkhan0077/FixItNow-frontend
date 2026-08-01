@@ -1,7 +1,14 @@
 "use client";
 
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
-import { Share2, Globe, MessageCircle, Send, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Share2,
+  Globe,
+  MessageCircle,
+  Send,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -15,7 +22,8 @@ const teamMembers = [
     id: 1,
     name: "Tania Shaine",
     role: "Technician",
-    image: "https://images.unsplash.com/photo-1613063074391-12ed77ac5a13?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1613063074391-12ed77ac5a13?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -26,7 +34,8 @@ const teamMembers = [
     id: 2,
     name: "Preston Harley",
     role: "Installer",
-    image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -37,7 +46,8 @@ const teamMembers = [
     id: 3,
     name: "Violet Jessie",
     role: "Electrician",
-    image: "https://images.unsplash.com/photo-1714331251780-db56109a9887?q=80&w=713&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1714331251780-db56109a9887?q=80&w=713&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -48,7 +58,8 @@ const teamMembers = [
     id: 4,
     name: "Michael Smith",
     role: "Plumber",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -59,7 +70,8 @@ const teamMembers = [
     id: 5,
     name: "Sarah Jenkins",
     role: "Painter",
-    image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -70,7 +82,8 @@ const teamMembers = [
     id: 6,
     name: "David Warner",
     role: "Carpenter",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     socials: [
       { icon: Globe, href: "#", label: "Website" },
       { icon: Send, href: "#", label: "Telegram" },
@@ -83,9 +96,12 @@ export default function TeamSection() {
   return (
     <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-colors mt-20">
       <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto">
-        
         {/* Section Header */}
-        <GsapWrapper animation="fadeUp" delay={0.1} className="mb-16 text-center flex flex-col items-center">
+        <GsapWrapper
+          animation="fadeUp"
+          delay={0.1}
+          className="mb-16 text-center flex flex-col items-center"
+        >
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="w-6 h-[2px] bg-primary"></span>
             <span className="text-xs font-bold tracking-widest text-white/80 dark:text-slate-400 uppercase">
@@ -123,7 +139,6 @@ export default function TeamSection() {
             {teamMembers.map((member) => (
               <SwiperSlide key={member.id}>
                 <div className="group flex flex-col space-y-4">
-                  
                   {/* Image Box with Hover Social Icons */}
                   <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-lg bg-slate-200 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
                     <Image
@@ -132,13 +147,12 @@ export default function TeamSection() {
                       fill
                       className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
-                    
+
                     {/* Overlay Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                     {/* Floating Social Icons Container */}
                     <div className="absolute bottom-6 right-6 flex flex-col-reverse items-center gap-2 z-20">
-                      
                       {/* Share Toggle Button */}
                       <button className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-all cursor-pointer">
                         <Share2 className="w-5 h-5" />
@@ -160,7 +174,6 @@ export default function TeamSection() {
                           );
                         })}
                       </div>
-
                     </div>
                   </div>
 
@@ -173,7 +186,6 @@ export default function TeamSection() {
                       {member.role}
                     </p>
                   </div>
-
                 </div>
               </SwiperSlide>
             ))}
@@ -189,7 +201,6 @@ export default function TeamSection() {
             </button>
           </div>
         </GsapWrapper>
-
       </section>
     </div>
   );

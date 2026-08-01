@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface GsapWrapperProps {
   children: React.ReactNode;
@@ -25,32 +27,68 @@ export function GsapWrapper({
     const el = ref.current;
     if (!el) return;
 
+    let tween: gsap.core.Tween;
+
     if (animation === "stagger") {
-      gsap.fromTo(
+      tween = gsap.fromTo(
         el.children,
         { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.5,
-          stagger: 0.1,
+          duration: 0.6,
+          stagger: 0.12,
           delay,
           ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 95%",
+            toggleActions: "play none none none",
+          },
         }
       );
     } else if (animation === "fadeUp") {
-      gsap.fromTo(
+      tween = gsap.fromTo(
         el,
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.6, delay, ease: "power3.out" }
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 95%",
+            toggleActions: "play none none none",
+          },
+        }
       );
     } else {
-      gsap.fromTo(
+      tween = gsap.fromTo(
         el,
         { opacity: 0 },
-        { opacity: 1, duration: 0.5, delay, ease: "power2.out" }
+        {
+          opacity: 1,
+          duration: 0.5,
+          delay,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 95%",
+            toggleActions: "play none none none",
+          },
+        }
       );
     }
+
+   
+    return () => {
+      if (tween && tween.scrollTrigger) {
+        tween.scrollTrigger.kill();
+      }
+      tween.kill();
+    };
   }, [animation, delay]);
 
   return (

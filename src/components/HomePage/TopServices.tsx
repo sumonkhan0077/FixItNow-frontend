@@ -1,26 +1,30 @@
 import Image from "next/image";
-import { ArrowRight, Star } from "lucide-react"; 
+import { ArrowRight, Star } from "lucide-react";
 
 import { ServiceItem } from "@/lib/types";
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
 import Link from "next/link";
 
 export interface ServiceSectionProps {
-  services: ServiceItem[]; 
+  services: ServiceItem[];
 }
 
 export default function TopServicesSection({ services }: ServiceSectionProps) {
   return (
     <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
       {/* --- Section Header (Centered) --- */}
-      <GsapWrapper animation="fadeUp" delay={0.1} className="mb-20 text-center flex flex-col items-center">
+      <GsapWrapper
+        animation="fadeUp"
+        delay={0.1}
+        className="mb-20 text-center flex flex-col items-center"
+      >
         <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="w-6 h-[2px] bg-primary"></span>
-            <span className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase">
-              Our Popular Services
-            </span>
-            <span className="w-6 h-[2px] bg-primary"></span>
-          </div>
+          <span className="w-6 h-[2px] bg-primary"></span>
+          <span className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase">
+            Our Popular Services
+          </span>
+          <span className="w-6 h-[2px] bg-primary"></span>
+        </div>
         <h2 className="text-3xl md:text-5xl font-light text-slate-900 dark:text-white tracking-tight leading-tight">
           Reliable Handyman Solutions, <br />
           From Repairs{" "}
@@ -47,14 +51,15 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-                  
+
                   {/* Optional Badge: Category Name */}
                   <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
                     {item.category.name}
                   </div>
                   {/* Rating Badge */}
                   <div className="absolute bg-black/70 backdrop-blur-xl shadow-xl backdrop-saturate-150 top-4 right-4 text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex items-center justify-center gap-2">
-                    <Star className="text-primary size-4"/> {item.technicianProfile?.averageRating || 0}
+                    <Star className="text-primary size-4" />{" "}
+                    {item.technicianProfile?.averageRating || 0}
                   </div>
                 </div>
 
@@ -75,7 +80,9 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
                       {item.technicianProfile?.user?.profileImage && (
                         <Image
                           src={item.technicianProfile.user.profileImage}
-                          alt={item.technicianProfile?.user?.name || "Technician"}
+                          alt={
+                            item.technicianProfile?.user?.name || "Technician"
+                          }
                           width={32}
                           height={32}
                           className="rounded-full object-cover w-8 h-8"
@@ -102,7 +109,11 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
       </div>
 
       {/* --- Show More / Explore All Services Button --- */}
-      <GsapWrapper animation="fadeUp" delay={0.5} className="mt-16 flex justify-center">
+      <GsapWrapper
+        animation="fadeUp"
+        delay={0.5}
+        className="mt-16 flex justify-center"
+      >
         <Link
           href="/services"
           className="px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium text-sm hover:bg-primary dark:hover:bg-primary dark:hover:text-white transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2 group cursor-pointer"

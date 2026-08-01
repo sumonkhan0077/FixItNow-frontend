@@ -1,4 +1,4 @@
-import { GetAllServicesError, ServiceQueryParams, ServicesApiResponse, TServicesApiResponse, TSingleServiceApiResponse } from "@/lib/types";
+import { GetAllServicesError, ServiceQueryParams,  TServicesApiResponse, TSingleServiceApiResponse } from "@/lib/types";
 
 
 const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
