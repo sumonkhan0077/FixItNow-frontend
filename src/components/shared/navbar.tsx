@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ForwardRefExoticComponent, RefAttributes } from "react";
 import Link from "next/link";
 import {
   Command,
@@ -19,6 +19,7 @@ import {
   Home,
   Wrench,
   PhoneCall,
+  LucideProps,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -39,7 +40,7 @@ import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 // Primary navigation links
-const navLinks = [
+const navLinks  = [
   { label: "Home", href: "/", icon: Home },
   { label: "Services", href: "/services", icon: Wrench },
   { label: "Contact Us", href: "/contactus", icon: PhoneCall },
@@ -139,7 +140,7 @@ export function Navbar({user} : NavbarProps) {
         {/* Desktop Nav Links (শুধু বড় স্ক্রিনে দেখাবে) */}
         <nav className="hidden items-center gap-1.5 md:flex uppercase">
           {navLinks.map((link) => {
-            const Icon = link?.icon;
+            const  Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>> | undefined  = link?.icon;
             return (
               <Link
                 key={link?.href}
@@ -316,7 +317,7 @@ export function Navbar({user} : NavbarProps) {
                     Navigation
                   </div>
                   {navLinks.map((link) => {
-                    const Icon = link?.icon;
+                    const Icon : ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>> | undefined = link?.icon;
                     return (
                       <DropdownMenuItem
                         key={link?.href}

@@ -1,95 +1,38 @@
-import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
-import {
-  Wrench,
-  Zap,
-  Hammer,
-  Paintbrush,
-  Layers,
-  Home,
-  ArrowRight,
-} from "lucide-react";
 import Image from "next/image";
+import { ArrowRight, Star, StarIcon } from "lucide-react"; 
 
-const categories = [
-  {
-    id: 1,
-    title: "Plumbing",
-    description:
-      "From pipe installations to complete bathroom fittings, we provide reliable residential plumbing solutions.",
-    image:
-      "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=800&auto=format&fit=crop",
-    icon: Wrench,
-  },
-  {
-    id: 2,
-    title: "Electrical",
-    description:
-      "Professional wiring, circuit repairs, and smart home electrical solutions carried out by certified experts.",
-    image:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop",
-    icon: Zap,
-  },
-  {
-    id: 3,
-    title: "Carpentry",
-    description:
-      "Custom woodwork, furniture repair, door installations, and fine carpentry tailored for your home.",
-    image:
-      "https://images.unsplash.com/photo-1541888946425-d0fbb18fcd07?q=80&w=800&auto=format&fit=crop",
-    icon: Hammer,
-  },
-  {
-    id: 4,
-    title: "Painting",
-    description:
-      "Give your property a fresh, modern aesthetic with top-tier interior and exterior professional painting.",
-    image:
-      "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop",
-    icon: Paintbrush,
-  },
-  {
-    id: 5,
-    title: "Flooring",
-    description:
-      "Expert floor installation, tile fixing, and wooden flooring repairs to enhance your indoor spaces.",
-    image:
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop",
-    icon: Layers,
-  },
-  {
-    id: 6,
-    title: "Home Renovation",
-    description:
-      "Complete home remodeling and upgrade services handled with precision and guaranteed workmanship.",
-    image:
-      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop",
-    icon: Home,
-  },
-];
+import { ServiceItem } from "@/lib/types";
+import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
+import Link from "next/link";
 
-export default function TopServicesSection() {
+
+interface ServiceSectionProps {
+  services: ServiceItem[]; 
+}
+
+export default function TopServicesSection({ services }: ServiceSectionProps) {
   return (
     <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
       {/* --- Section Header (Centered) --- */}
+      
       <GsapWrapper animation="fadeUp" delay={0.1} className="mb-20 text-center flex flex-col items-center">
         <div className="flex items-center justify-center gap-2 mb-4">
             <span className="w-6 h-[2px] bg-primary"></span>
             <span className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase">
-             Our Handyman Services
+              Our Popular Services
             </span>
             <span className="w-6 h-[2px] bg-primary"></span>
           </div>
-        <h2 className="text-3xl md:text-5xl font-normal text-slate-900 dark:text-white tracking-tight leading-tight">
+        <h2 className="text-3xl md:text-5xl font-light text-slate-900 dark:text-white tracking-tight leading-tight">
           Reliable Handyman Solutions, <br />
           From Repairs{" "}
           <span className="text-primary italic font-light">to Upgrades</span>
         </h2>
       </GsapWrapper>
 
-      {/* --- Categories Grid --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
-        {categories.map((item, index) => {
-       
+      {/* --- Services Grid --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6">
+        {services.map((item, index) => {
           return (
             <GsapWrapper
               key={item.id}
@@ -106,30 +49,51 @@ export default function TopServicesSection() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-
-                
+                  
+                  {/* Optional Badge: Category Name & Price */}
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
+                    {item.category.name}
+                  </div>
+                  <div className="absolute bg-black/70 backdrop-blur-xl  shadow-xl backdrop-saturate-150 top-4 right-4  text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex  items-center justify-center gap-3">
+                  <Star className="text-primary size-4"/> {item.technicianProfile.averageRating}
+                  </div>
                 </div>
 
-                {/* Content Box (Added pt-8 to give space for the overlapping icon) */}
-                <div className="p-6 pt-9 flex-1 flex flex-col justify-between space-y-5">
+                {/* Content Box */}
+                <div className="p-6 pt-6 flex-1 flex flex-col justify-between space-y-5">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-medium text-slate-900 dark:text-white">
+                    <h3 className="text-xl capitalize font-normal text-slate-900 line-clamp-2 dark:text-white">
                       {item.title}
                     </h3>
-                    <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
+                    <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed font-normal line-clamp-2">
                       {item.description}
                     </p>
                   </div>
 
-                  {/* Explore Service Link */}
-                  <div className="pt-2">
-                    <a
-                      href="#service"
-                      className="inline-flex items-center gap-1.5 text-md font-medium text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer"
+                  {/* Technician Info & Explore Link */}
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {item.technicianProfile?.user?.profileImage && (
+                        <Image
+                          src={item.technicianProfile.user.profileImage}
+                          alt={item.technicianProfile.user.name}
+                          width={32}
+                          height={32}
+                          className="rounded-full object-cover w-8 h-8"
+                        />
+                      )}
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        {item.technicianProfile?.user?.name}
+                      </span>
+                    </div>
+
+                    <Link
+                      href={`/services/${item.id}`} // 
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer"
                     >
-                      <span>Explore Service</span>
-                      <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                    </a>
+                      <span>Explore</span>
+                      <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
                 </div>
               </div>

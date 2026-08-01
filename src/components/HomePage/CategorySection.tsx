@@ -83,7 +83,7 @@ export default function CategorySection() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="w-6 h-[2px] bg-primary"></span>
             <span className="text-xs font-semibold tracking-widest text-white/80 dark:text-slate-400 uppercase">
-              Our Handyman Services
+              Our Category Services
             </span>
             <span className="w-6 h-[2px] bg-primary"></span>
           </div>

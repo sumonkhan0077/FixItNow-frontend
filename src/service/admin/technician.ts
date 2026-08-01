@@ -124,7 +124,7 @@ export const getAllUsers = async (
     // console.log("Technicians API Success:", data);
     return data;
   } catch (err) {
-    console.error("Technicians API Exception:", err);
+    // console.error("Technicians API Exception:", err);
     return {
       error: err instanceof Error ? err.message : "Failed to fetch technicians",
       details: err,
