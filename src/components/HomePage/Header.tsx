@@ -136,7 +136,7 @@ export default function HeaderSection() {
   const BadgeIcon = activeSlide.badgeIcon;
 
   return (
-    <main className="min-h-screen bg-background font-sans">
+    <main className="min-h-screen bg-background font-sans mt-12">
       {/* ================= HERO SLIDER SECTION ================= */}
       <section
         ref={heroRef}

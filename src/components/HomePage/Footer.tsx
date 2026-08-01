@@ -20,7 +20,7 @@ const Footer = () => {
             <Link href="/">
               <div className="mb-5">
                 <span className="text-white text-5xl font-normal">FixIt</span>
-                <span className="text-primary text-xl font-normal">Now</span>
+                <span className="text-primary text-xl font-normal ">Now</span>
               </div>
             </Link>
             <p className="text-sm leading-relaxed mb-6">
