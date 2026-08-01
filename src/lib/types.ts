@@ -328,3 +328,81 @@ export interface UsersApiResponse {
   meta?: Meta;       
 }
 
+
+export interface ServiceQueryParams {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  minPrice?: number | string;
+  maxPrice?: number | string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  serviceArea?: string;
+}
+
+export interface ServiceItem {
+  id: string;
+  technicianProfileId: string;
+  categoryId: string;
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  category: {
+    id: string;
+    name: string;
+    description: string;
+    icon: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+  technicianProfile: {
+    id: string;
+    userId: string;
+    bio: string;
+    experience: number;
+    serviceArea: string;
+    averageRating: number;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      phone: string | null;
+      profileImage: string | null;
+      address: string | null;
+      role: string;
+      status: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    availabilities: Array<{
+      dayOfWeek: string;
+      startTime: string;
+      endTime: string;
+    }>;
+  };
+}
+
+export interface ServicesApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    meta: {
+      page: number;
+      limit: number;
+      total: number;
+    };
+    data: ServiceItem[];
+  };
+}
+
+export interface GetAllServicesError {
+  error: string;
+  status?: number;
+  details?: unknown;
+}

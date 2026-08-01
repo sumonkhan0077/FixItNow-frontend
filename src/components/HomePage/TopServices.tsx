@@ -89,7 +89,7 @@ export default function TopServicesSection() {
       {/* --- Categories Grid --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
         {categories.map((item, index) => {
-          const IconComponent = item.icon;
+       
           return (
             <GsapWrapper
               key={item.id}
@@ -107,10 +107,7 @@ export default function TopServicesSection() {
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
 
-                  {/* Floating Icon Box (Positioned absolutely on the bottom edge of the image) */}
-                  <div className="absolute -bottom-6 left-6 w-16 h-16 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg dark:border-slate-900 z-20">
-                    <IconComponent className="w-5 h-5 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />{" "}
-                  </div>
+                
                 </div>
 
                 {/* Content Box (Added pt-8 to give space for the overlapping icon) */}
