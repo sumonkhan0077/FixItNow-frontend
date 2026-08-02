@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface CategoryCard {
   id: number;
@@ -22,7 +23,7 @@ const categories: CategoryCard[] = [
       "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     rotation: "-rotate-8",
   },
-   {
+  {
     id: 2,
     title: "Flooring",
     description:
@@ -31,7 +32,7 @@ const categories: CategoryCard[] = [
       "https://images.unsplash.com/photo-1737040621533-6cc229f1e506?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     rotation: "rotate-2",
   },
-  
+
   {
     id: 3,
     title: "Carpentry",
@@ -50,7 +51,7 @@ const categories: CategoryCard[] = [
       "https://images.unsplash.com/photo-1585676737728-432f58d5fdba?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     rotation: "rotate-6",
   },
- {
+  {
     id: 5,
     title: "Electrical",
     description:
@@ -141,13 +142,14 @@ export default function CategorySection() {
                       </p>
 
                       <div className="pt-1">
-                        <a
-                          href="#service"
+                       
+                        <Link
+                          href="/services"
                           className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                         >
                           <span>Explore Service</span>
                           <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

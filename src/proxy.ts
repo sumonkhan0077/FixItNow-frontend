@@ -11,6 +11,8 @@ const PUBLIC_ROUTES = ["/", "/services"];
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  //  console.log("Proxy Running...", pathname);
+
   let accessToken = request.cookies.get("accessToken")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
