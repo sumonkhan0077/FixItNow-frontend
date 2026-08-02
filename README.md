@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛠️ FixItNow - Local Service & Technician Hiring Platform
 
-## Getting Started
+**FixItNow** is a full-stack web application designed to connect users with reliable local service providers and technicians seamlessly. Users can easily browse services, filter them by category, price, or location, and hire professionals. It features dedicated dashboards for Customers, Technicians, and Administrators.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Live Links & Repositories
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Live Frontend:** [https://fixitnow-frontend-nu.vercel.app/](https://fixitnow-frontend-nu.vercel.app/)
+*   **Backend Repository:** [https://github.com/sumonkhan0077/FixItNow-backend](https://github.com/sumonkhan0077/FixItNow-backend)
+*   **Backend Live API:** [https://fix-it-now-backend-ten.vercel.app/](https://fix-it-now-backend-ten.vercel.app/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 Test Credentials
 
-## Learn More
+You can use the following credentials to test different user roles in the application:
 
-To learn more about Next.js, take a look at the following resources:
+### Admin Account
+*   **Email:** `admin@gmail.com`
+*   **Password:** `admin123`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Technician Account
+*   **Email:** `asdf8@gmail.com`
+*   **Password:** `12345`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ✨ Key Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+*   **Advanced Filtering & Search:** Search services by keywords, category, price range, ratings, and service areas.
+*   **Dynamic Pagination:** Browse through multiple pages of services smoothly.
+*   **Role-Based Access Control (RBAC):** Separate dashboards and permissions for Customers, Technicians, and Admins.
+*   **Responsive UI:** Fully mobile and tablet friendly with slide-out filter drawers using Tailwind CSS and Shadcn UI.
+*   **Secure Authentication:** Protected API routes and cookie-based/token-based authentication.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛠️ Tech Stack
+
+### Frontend:
+*   **Framework:** Next.js (App Router)
+*   **Styling:** Tailwind CSS
+*   **UI Components:** Shadcn UI, Lucide Icons
+*   **Language:** TypeScript
+
+### Backend:
+*   **Runtime:** Node.js, Express.js
+*   **Database & ORM:** Prisma ORM, PostgreSQL
+*   **Deployment:** Vercel
+
+---
+
+## ⚙️ Getting Started Locally
+
+To run this project on your local machine, follow these steps:
+
+### 👨‍💻 Author
+
+Sumon Khan - [GitHub Profile](https://github.com/sumonkhan0077)
