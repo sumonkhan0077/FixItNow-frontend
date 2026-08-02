@@ -1,10 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Eye, Star, MapPin, Briefcase, Mail, 
-  Wrench, Calendar, CheckCircle2, XCircle, User,
-  Clock, ShieldCheck, Sparkles, X
+import {
+  Eye,
+  Star,
+  MapPin,
+  Briefcase,
+  Mail,
+  Wrench,
+  Calendar,
+  CheckCircle2,
+  XCircle,
+  User,
+  Clock,
+  ShieldCheck,
+  Sparkles,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -26,7 +37,20 @@ const formatDate = (dateString?: string) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "N/A";
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const day = date.getUTCDate();
   const month = months[date.getUTCMonth()];
   const year = date.getUTCFullYear();
@@ -39,8 +63,7 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-     
-      <DialogTrigger >
+      <DialogTrigger>
         <div className="w-full mt-4 py-2.5 px-4 bg-purple-500/10 hover:bg-purple-600 hover:text-white text-purple-600 dark:text-purple-300 font-semibold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-2 border border-purple-500/20 shadow-sm active:scale-[0.98]">
           <Eye className="size-4" />
           View Details
@@ -49,7 +72,6 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
 
       {/* Center Dialog Content */}
       <DialogContent className="!w-[90vw] !max-w-sm sm:!max-w-xl md:!max-w-2xl lg:!max-w-3xl max-h-[90vh] overflow-y-auto p-0 bg-background/95 backdrop-blur-xl sm:rounded-2xl border border-border/80 shadow-2xl transition-all [&>button]:hidden">
-        
         {/* Header */}
         <DialogHeader className="p-5 border-b border-border/60 bg-muted/30 sticky top-0 z-20 backdrop-blur-md">
           <div className="flex items-center justify-between">
@@ -95,15 +117,13 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
 
         {/* Modal Body */}
         <div className="p-6 space-y-6">
-
           {/* SECTION 1: TECHNICIAN INFO */}
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
               <User className="size-3.5" /> Technician Info
             </h3>
-            
+
             <div className="p-4 rounded-xl border border-border/70 bg-card/60 hover:bg-card transition-colors shadow-sm space-y-4">
-              
               {/* Profile Bar */}
               <div className="flex items-center gap-3.5 pb-3.5 border-b border-border/50">
                 <div className="relative size-14 rounded-full overflow-hidden bg-muted border-2 border-background shadow-md shrink-0">
@@ -125,7 +145,8 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                     {tech.user?.name || "Unknown Technician"}
                   </h4>
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <ShieldCheck className="size-3.5 text-purple-500" /> Verified Partner
+                    <ShieldCheck className="size-3.5 text-purple-500" />{" "}
+                    Verified Partner
                   </p>
                 </div>
               </div>
@@ -135,24 +156,36 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                 <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/40">
                   <Mail className="size-4 text-muted-foreground shrink-0" />
                   <div className="min-w-0">
-                    <p className="text-[10px] text-muted-foreground font-medium">Email</p>
-                    <p className="font-semibold text-foreground truncate">{tech.user?.email || "N/A"}</p>
+                    <p className="text-[10px] text-muted-foreground font-medium">
+                      Email
+                    </p>
+                    <p className="font-semibold text-foreground truncate">
+                      {tech.user?.email || "N/A"}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/40">
                   <MapPin className="size-4 text-muted-foreground shrink-0" />
                   <div className="min-w-0">
-                    <p className="text-[10px] text-muted-foreground font-medium">Area</p>
-                    <p className="font-semibold text-foreground truncate">{tech.serviceArea || "N/A"}</p>
+                    <p className="text-[10px] text-muted-foreground font-medium">
+                      Area
+                    </p>
+                    <p className="font-semibold text-foreground truncate">
+                      {tech.serviceArea || "N/A"}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/40">
                   <Briefcase className="size-4 text-muted-foreground shrink-0" />
                   <div className="min-w-0">
-                    <p className="text-[10px] text-muted-foreground font-medium">Experience</p>
-                    <p className="font-semibold text-foreground">{tech.experience || 0} Years</p>
+                    <p className="text-[10px] text-muted-foreground font-medium">
+                      Experience
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {tech.experience || 0} Years
+                    </p>
                   </div>
                 </div>
               </div>
@@ -169,14 +202,15 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
           {/* SECTION 2: OFFERED SERVICES (Compact Style) */}
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 flex items-center gap-1.5">
-              <Sparkles className="size-3.5" /> Offered Services ({tech.services?.length || 0})
+              <Sparkles className="size-3.5" /> Offered Services (
+              {tech.services?.length || 0})
             </h3>
 
             {tech.services && tech.services.length > 0 ? (
               <div className="space-y-2">
                 {tech.services.map((service: any) => (
-                  <div 
-                    key={service.id} 
+                  <div
+                    key={service.id}
                     className="p-2.5 rounded-lg border border-border/60 bg-card/60 hover:bg-card transition-all flex items-center gap-3"
                   >
                     {/* Small Thumbnail Image */}
@@ -196,14 +230,18 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                     )}
 
                     {/* Compact Details */}
+                    {/* Compact Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <h4 className="font-bold text-foreground text-xs truncate">{service.title}</h4>
+                        <h4 className="font-bold text-foreground text-xs truncate">
+                          {service.title}
+                        </h4>
                         <span className="font-extrabold text-[11px] text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded shrink-0">
                           ৳{service.price} BDT
                         </span>
                       </div>
-                      <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                 
+                      <p className="text-[11px] text-muted-foreground mt-0.5 whitespace-normal break-words">
                         {service.description || "No description provided."}
                       </p>
                     </div>
@@ -227,15 +265,19 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
               {tech.availabilities && tech.availabilities.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {tech.availabilities.map((slot: any) => (
-                    <div 
-                      key={slot.id} 
+                    <div
+                      key={slot.id}
                       className="flex items-center justify-between p-2 rounded-lg border border-border/50 bg-muted/30 text-xs"
                     >
                       <div className="flex items-center gap-2">
                         <Clock className="size-3 text-purple-500" />
                         <div>
-                          <p className="font-semibold text-foreground text-[11px] capitalize">{slot.dayOfWeek?.toLowerCase()}</p>
-                          <p className="text-[10px] text-muted-foreground">{slot.startTime} - {slot.endTime}</p>
+                          <p className="font-semibold text-foreground text-[11px] capitalize">
+                            {slot.dayOfWeek?.toLowerCase()}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground">
+                            {slot.startTime} - {slot.endTime}
+                          </p>
                         </div>
                       </div>
                       {slot.isAvailable ? (
@@ -247,7 +289,9 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-muted-foreground italic text-center py-1">No availability configured.</p>
+                <p className="text-xs text-muted-foreground italic text-center py-1">
+                  No availability configured.
+                </p>
               )}
             </div>
           </div>
@@ -259,8 +303,12 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                 <Star className="size-4 fill-amber-500" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-foreground">Rating & Feedback</p>
-                <p className="text-[10px] text-muted-foreground">Based on completed jobs</p>
+                <p className="text-xs font-semibold text-foreground">
+                  Rating & Feedback
+                </p>
+                <p className="text-[10px] text-muted-foreground">
+                  Based on completed jobs
+                </p>
               </div>
             </div>
             <div className="text-right">
@@ -268,17 +316,17 @@ export function TechnicianDetailsSheet({ tech }: TechnicianDetailsProps) {
                 {tech.averageRating ? tech.averageRating.toFixed(1) : "0.0"}
               </span>
               <span className="text-xs text-muted-foreground"> / 5.0</span>
-              <p className="text-[10px] text-muted-foreground">{tech._count?.reviews || 0} Reviews</p>
+              <p className="text-[10px] text-muted-foreground">
+                {tech._count?.reviews || 0} Reviews
+              </p>
             </div>
           </div>
-
         </div>
 
         {/* Footer */}
         <div className="p-3 border-t border-border/60 bg-muted/30 text-center text-[11px] text-muted-foreground">
           Joined System: {formatDate(tech.createdAt)}
         </div>
-
       </DialogContent>
     </Dialog>
   );

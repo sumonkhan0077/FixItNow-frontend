@@ -3,6 +3,7 @@ import { getAllServices } from "@/service/customer/services";
 import ServicesShow from "./_components/ServicesShow";
 import ServicesTopSection from "./_components/ServicesTopSection";
 import ServicesFilterBar from "./_components/ServicesFilterBar";
+import ServicesPagination from "./_components/ServicesPagination";
 import {
   Sheet,
   SheetContent,
@@ -19,12 +20,37 @@ const ServicesPage = async ({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) => {
   const resolvedParams = await searchParams;
-  const response = await getAllServices(resolvedParams);
+
+  const rawLimit = resolvedParams.limit;
+  const limitValue =
+    typeof rawLimit === "string"
+      ? Number(rawLimit)
+      : Array.isArray(rawLimit)
+        ? Number(rawLimit[0])
+        : 9;
+
+  const queryParams = {
+    ...resolvedParams,
+    page: resolvedParams.page
+      ? Number(
+          Array.isArray(resolvedParams.page)
+            ? resolvedParams.page[0]
+            : resolvedParams.page,
+        )
+      : undefined,
+    limit: isNaN(limitValue) ? 9 : limitValue,
+  };
+
+  const response = await getAllServices(queryParams);
 
   let servicesList: ServiceItem[] = [];
+  let totalPages = 1;
+  const currentPage = Number(resolvedParams.page) || 1;
+  const limit = Number(queryParams.limit) || 9;
 
   if (response && typeof response === "object" && "data" in response) {
     const apiData = response.data;
+
     if (
       apiData &&
       typeof apiData === "object" &&
@@ -32,6 +58,21 @@ const ServicesPage = async ({
       Array.isArray(apiData.data)
     ) {
       servicesList = apiData.data;
+
+      // ব্যাকএন্ডের meta থেকে total এবং limit দিয়ে totalPages বের করে নেওয়া হলো
+      if (
+        "meta" in apiData &&
+        apiData.meta &&
+        typeof apiData.meta === "object"
+      ) {
+        const meta = apiData.meta as any;
+        if (meta.total) {
+          const totalItems = Number(meta.total) || 0;
+          const itemsPerPage = Number(meta.limit) || limit;
+          // Math.ceil দিয়ে মোট পেজ সংখ্যা হিসাব করা (যেমন: ১৪ / ৯ = ২)
+          totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+        }
+      }
     } else if (Array.isArray(apiData)) {
       servicesList = apiData;
     }
@@ -84,9 +125,18 @@ const ServicesPage = async ({
           <div className="hidden lg:block lg:col-span-1 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto pr-1 custom-scrollbar">
             <ServicesFilterBar />
           </div>
-          {/* Right Side: Services Show Component */}
-          <div className="lg:col-span-3">
+
+          {/* Right Side: Services Show Component & Pagination */}
+          <div className="lg:col-span-3 flex flex-col w-full">
             <ServicesShow services={servicesList} />
+
+            {/* পেজিনেশন কম্পোনেন্ট */}
+            <div className="w-full mt-8 mb-4">
+              <ServicesPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
+            </div>
           </div>
         </div>
       </div>

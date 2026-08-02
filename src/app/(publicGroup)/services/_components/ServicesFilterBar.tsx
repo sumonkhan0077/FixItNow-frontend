@@ -110,21 +110,7 @@ export default function ServicesFilterBar() {
       </div>
 
       {/* Category */}
-      <div className="space-y-2">
-        <label className="text-xs font-medium text-muted-foreground">Category</label>
-        <Select value={categoryId || ""} onValueChange={(val) => setCategoryId(val)}>
-          <SelectTrigger className="w-full h-11 rounded-xl">
-            <SelectValue placeholder="Select Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="plumbing">Plumbing</SelectItem>
-            <SelectItem value="electrical">Electrical</SelectItem>
-            <SelectItem value="painting">Painting</SelectItem>
-            <SelectItem value="cleaning">Cleaning</SelectItem>
-            <SelectItem value="ac">AC Repair</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+    
 
       {/* Service Area */}
       <div className="space-y-2">
