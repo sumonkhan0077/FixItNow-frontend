@@ -367,15 +367,17 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
       )}
 
       {/* ── Create / Edit Modal ── */}
+     {/* ── Create / Edit Modal ── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-lg" showCloseButton>
-          <DialogHeader>
+        <DialogContent className="sm:max-w-lg max-h-[90vh] flex flex-col overflow-hidden" showCloseButton>
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle>
               {isEditMode ? "Edit Service" : "Create New Service"}
             </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} noValidate className="space-y-4 py-2">
+          {/* Scrollable Container */}
+          <form onSubmit={handleSubmit} noValidate className="space-y-4 py-2 overflow-y-auto pr-1 flex-1 custom-scrollbar">
             <Field label="Title" required error={errors.title}>
               <Input
                 value={form.title}
@@ -390,7 +392,7 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="Describe what this service includes..."
-                className="min-h-[90px] resize-none bg-background/50"
+                className="min-h-[120px] resize-none bg-background/50"
               />
             </Field>
 
@@ -450,7 +452,8 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
               </Field>
             </div>
 
-            <DialogFooter className="pt-2">
+            {/* Footer inside/outside flow */}
+            <DialogFooter className="pt-4 flex-shrink-0">
               <Button type="submit" disabled={submitting} className="gap-2 w-full sm:w-auto">
                 {submitting ? (
                   <>

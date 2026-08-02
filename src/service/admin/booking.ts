@@ -1,6 +1,6 @@
 import { getCookie } from "@/utils/getCookies";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://fix-it-now-backend-ten.vercel.app";
 
 export type BookingStatus = "REQUESTED" | "ACCEPTED" | "PAID" | "COMPLETED" | "CANCELLED";
 

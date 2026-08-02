@@ -3,7 +3,8 @@
 
 import { getCookie } from "./getCookies";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://fix-it-now-backend-ten.vercel.app";
+// const BASE_URL = "http://localhost:5000";
 
 const serverFetchHelper = async (endpoint: string, options: RequestInit) => {
   const { headers, ...restOptions } = options;

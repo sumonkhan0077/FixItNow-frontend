@@ -5,7 +5,7 @@ import {
   TSingleServiceApiResponse,
 } from "@/lib/types";
 
-const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.BACKEND_API_URL || "https://fix-it-now-backend-ten.vercel.app";
 
 export const getAllServices = async (
   params: ServiceQueryParams = {},
@@ -61,6 +61,7 @@ export const getAllServices = async (
     }
 
     const data: TServicesApiResponse = await res.json();
+    // console.log(data, 'servove sfh')
     return data;
   } catch (err) {
     // console.error("Services API Exception:", err);

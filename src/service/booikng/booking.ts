@@ -1,7 +1,7 @@
 "use server";
 import { getCookie } from "@/utils/getCookies";
 
-const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.BACKEND_API_URL || "https://fix-it-now-backend-ten.vercel.app";
 
 export async function createBooking(bookingData: {
   serviceId: string;

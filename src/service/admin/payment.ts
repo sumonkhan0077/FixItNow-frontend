@@ -1,7 +1,7 @@
 
 import { cookies } from "next/headers";
 
-const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.BACKEND_API_URL || "https://fix-it-now-backend-ten.vercel.app";
 
 async function getAuthHeader() {
   const cookieStore = await cookies();

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Star, Wrench } from "lucide-react";
 
 import { ServiceItem } from "@/lib/types";
 import { GsapWrapper } from "@/app/(dashboardGroup)/technician-dashboard/_components/gsap-wrapper";
@@ -10,6 +10,8 @@ export interface ServiceSectionProps {
 }
 
 export default function TopServicesSection({ services }: ServiceSectionProps) {
+  console.log(services, "imge");
+
   return (
     <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
       {/* --- Section Header (Centered) --- */}
@@ -32,84 +34,108 @@ export default function TopServicesSection({ services }: ServiceSectionProps) {
         </h2>
       </GsapWrapper>
 
-      {/* --- Services Grid --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6">
-        {services.map((item, index) => {
-          return (
-            <GsapWrapper
-              key={item.id}
-              animation="fadeUp"
-              delay={0.2 + index * 0.1}
-            >
-              <div className="group bg-white dark:bg-slate-900 border border-slate-200/85 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full">
-                {/* Top Image Container */}
-                <div className="relative w-full h-56">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                  />
+      {/* --- Services Grid or Empty State --- */}
+      {services.length === 0 ? (
+        <GsapWrapper animation="fadeUp" delay={0.2} className="flex justify-center">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 py-16 px-8 text-center max-w-md w-full shadow-sm">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <Wrench className="size-7" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                No Services Available
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Currently, there are no services to display. Please check back later.
+              </p>
+            </div>
+          </div>
+        </GsapWrapper>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6">
+          {services.map((item, index) => {
+            return (
+              <GsapWrapper
+                key={item.id}
+                animation="fadeUp"
+                delay={0.2 + index * 0.1}
+              >
+                <div className="group bg-white dark:bg-slate-900 border border-slate-200/85 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full">
+                  {/* Top Image Container */}
+                  <div className="relative w-full h-56">
+                    <Image
+                      src={
+                        item.image
+                          ? item.image
+                          : "/placeholder-image.jpg"
+                      }
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    />
 
-                  {/* Optional Badge: Category Name */}
-                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
-                    {item.category.name}
+                    {/* Optional Badge: Category Name */}
+                    <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
+                      {item.category?.name || "General"}
+                    </div>
+                    {/* Rating Badge */}
+                    <div className="absolute bg-black/70 backdrop-blur-xl shadow-xl backdrop-saturate-150 top-4 right-4 text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex items-center justify-center gap-2">
+                      <Star className="text-primary size-4" />{" "}
+                      {item.technicianProfile?.averageRating || 0}
+                    </div>
                   </div>
-                  {/* Rating Badge */}
-                  <div className="absolute bg-black/70 backdrop-blur-xl shadow-xl backdrop-saturate-150 top-4 right-4 text-primary text-xs font-semibold px-3 py-1.5 rounded-full flex items-center justify-center gap-2">
-                    <Star className="text-primary size-4" />{" "}
-                    {item.technicianProfile?.averageRating || 0}
-                  </div>
-                </div>
 
-                {/* Content Box */}
-                <div className="p-6 pt-6 flex-1 flex flex-col justify-between space-y-5">
-                  <div className="space-y-2">
-                    <div>
-                        <h1 className="text-primary/95 text-md font-bold">৳ {item.price}</h1>
+                  {/* Content Box */}
+                  <div className="p-6 pt-6 flex-1 flex flex-col justify-between space-y-5">
+                    <div className="space-y-2">
+                      <div>
+                        <h1 className="text-primary/95 text-md font-bold">
+                          ৳ {item.price}
+                        </h1>
                       </div>
-                    <h3 className="text-xl capitalize font-normal text-slate-900 line-clamp-2 dark:text-white">
-                      {item.title}
-                    </h3>
-                    <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed font-normal line-clamp-2">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Technician Info & Explore Link */}
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {item.technicianProfile?.user?.profileImage && (
-                        <Image
-                          src={item.technicianProfile.user.profileImage}
-                          alt={
-                            item.technicianProfile?.user?.name || "Technician"
-                          }
-                          width={32}
-                          height={32}
-                          className="rounded-full object-cover w-8 h-8"
-                        />
-                      )}
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                        {item.technicianProfile?.user?.name}
-                      </span>
+                      <h3 className="text-xl capitalize font-normal text-slate-900 line-clamp-2 dark:text-white">
+                        {item.title}
+                      </h3>
+                      <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed font-normal line-clamp-2">
+                        {item.description}
+                      </p>
                     </div>
 
-                    <Link
-                      href={`/services/${item.id}`}
-                      className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer"
-                    >
-                      <span>Explore</span>
-                      <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    {/* Technician Info & Explore Link */}
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {item.technicianProfile?.user?.profileImage && (
+                          <Image
+                            src={item.technicianProfile.user.profileImage}
+                            alt={
+                              item.technicianProfile?.user?.name || "Technician"
+                            }
+                            width={32}
+                            height={32}
+                            className="rounded-full object-cover w-8 h-8"
+                          />
+                        )}
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                          {item.technicianProfile?.user?.name}
+                        </span>
+                      </div>
+
+                      <Link
+                        href={`/services/${item.id}`}
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer"
+                      >
+                        <span>Explore</span>
+                        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </GsapWrapper>
-          );
-        })}
-      </div>
+              </GsapWrapper>
+            );
+          })}
+        </div>
+      )}
 
       {/* --- Show More / Explore All Services Button --- */}
       <GsapWrapper
