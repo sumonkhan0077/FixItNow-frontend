@@ -332,12 +332,26 @@ export interface UsersApiResponse {
 export interface ServiceQueryParams {
   page?: number;
   limit?: number;
+
   searchTerm?: string;
+
   minPrice?: number | string;
   maxPrice?: number | string;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
+
+
+  categoryId?: string;
+
+
   serviceArea?: string;
+
+
+  rating?: number | string;
+
+  availableToday?: boolean;
+
+ 
+  sortBy?: "createdAt" | "price";
+  sortOrder?: "asc" | "desc";
 }
 
 export interface ServiceItem {

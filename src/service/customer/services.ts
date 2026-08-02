@@ -1,28 +1,45 @@
-import { GetAllServicesError, ServiceQueryParams,  TServicesApiResponse, TSingleServiceApiResponse } from "@/lib/types";
-
+import {
+  GetAllServicesError,
+  ServiceQueryParams,
+  TServicesApiResponse,
+  TSingleServiceApiResponse,
+} from "@/lib/types";
 
 const BASE_URL = process.env.BACKEND_API_URL || "http://localhost:5000";
 
-
 export const getAllServices = async (
-  params: ServiceQueryParams = {}
+  params: ServiceQueryParams = {},
 ): Promise<TServicesApiResponse | GetAllServicesError> => {
   try {
     const query = new URLSearchParams();
-    
-    if (params.page) query.set("page", String(params.page));
-    if (params.limit) query.set("limit", String(params.limit));
-    if (params.searchTerm) query.set("searchTerm", params.searchTerm);
+
+    if (params.page !== undefined) query.set("page", String(params.page));
+
+    if (params.limit !== undefined) query.set("limit", String(params.limit));
+
+    if (params.searchTerm?.trim())
+      query.set("searchTerm", params.searchTerm.trim());
+
     if (params.minPrice) query.set("minPrice", String(params.minPrice));
+
     if (params.maxPrice) query.set("maxPrice", String(params.maxPrice));
+
     if (params.sortBy) query.set("sortBy", params.sortBy);
+
     if (params.sortOrder) query.set("sortOrder", params.sortOrder);
-    if (params.serviceArea) query.set("serviceArea", params.serviceArea);
+
+    if (params.serviceArea?.trim())
+      query.set("serviceArea", params.serviceArea.trim());
+
+    if (params.categoryId) query.set("categoryId", params.categoryId);
+
+    if (params.rating) query.set("rating", String(params.rating));
+
+    if (params.availableToday) query.set("availableToday", "true");
 
     const qs = query.toString();
     const url = `/api/services/all${qs ? `?${qs}` : ""}`;
 
-   
     // const accessToken = await getCookie("accessToken");
 
     const res = await fetch(`${BASE_URL}${url}`, {
@@ -36,7 +53,7 @@ export const getAllServices = async (
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("Services API Error Response:", res.status, errorText);
+      // console.error("Services API Error Response:", res.status, errorText);
       return {
         error: `API returned ${res.status}: ${errorText || res.statusText}`,
         status: res.status,
@@ -46,7 +63,7 @@ export const getAllServices = async (
     const data: TServicesApiResponse = await res.json();
     return data;
   } catch (err) {
-    console.error("Services API Exception:", err);
+    // console.error("Services API Exception:", err);
     return {
       error: err instanceof Error ? err.message : "Failed to fetch services",
       details: err,
@@ -55,7 +72,7 @@ export const getAllServices = async (
 };
 
 export const getSingleService = async (
-  serviceId: string
+  serviceId: string,
 ): Promise<TSingleServiceApiResponse | GetAllServicesError> => {
   try {
     const res = await fetch(`${BASE_URL}/api/services/${serviceId}`, {
@@ -80,7 +97,8 @@ export const getSingleService = async (
   } catch (err) {
     // console.error("Single Service API Exception:", err);
     return {
-      error: err instanceof Error ? err.message : "Failed to fetch single service",
+      error:
+        err instanceof Error ? err.message : "Failed to fetch single service",
       details: err,
     };
   }

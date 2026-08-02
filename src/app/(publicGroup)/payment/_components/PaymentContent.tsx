@@ -43,7 +43,7 @@ export default function PaymentContent() {
         <div className="flex flex-col gap-3 pt-2">
           {isSuccess ? (
             <Button  className="w-full gap-2 h-11 text-base font-semibold ">
-              <Link href="/dashboard/booking" className="flex justify-center items-center gap-2">
+              <Link href="/dashboard/bookings" className="flex justify-center items-center gap-2">
                 View My Bookings <ArrowRight className="size-4" />
               </Link>
             </Button>

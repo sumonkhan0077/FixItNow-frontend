@@ -1,121 +1,170 @@
-// import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from "next/server";
 import { JwtPayload } from "jsonwebtoken";
-import { cookies } from "next/headers";
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
-
 
 import { jwtUtils } from "@/utils/jwt";
 import { getNewAccessToken } from "@/service/refreshToken";
 
-
 const AUTH_ROUTES = ["/login", "/register"];
-// const PUBLIC_ROUTES = ["/", "/news", "/login", "/register"]
-const PUBLIC_ROUTES = ["/", "/services"]
 
-// This function can be marked `async` if using `await` inside
+const PUBLIC_ROUTES = ["/", "/services"];
+
 export async function proxy(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+  const pathname = request.nextUrl.pathname;
 
-    const cookieStore = await cookies();
-    // const accessToken = cookieStore.get("accessToken")?.value;
+  let accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
 
-    
+  const response = NextResponse.next();
 
-    let accessToken = request.cookies.get("accessToken")?.value;
-    const refreshToken = request.cookies.get("refreshToken")?.value;
+  let decodedAccessToken = accessToken
+    ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string)
+    : null;
 
-    let decodedAccessToken = accessToken ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string) : null;
+  const decodedRefreshToken = refreshToken
+    ? jwtUtils.verifyToken(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET as string,
+      )
+    : null;
 
-    const decodedRefreshToken = refreshToken ? jwtUtils.verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET as string) : null;
+  /**
+   * --------------------------------------
+   * Refresh Access Token
+   * --------------------------------------
+   */
+  if (!decodedAccessToken?.success && decodedRefreshToken?.success) {
+    const result = await getNewAccessToken();
 
-    if(!decodedAccessToken?.success && decodedRefreshToken?.success){
-        //access token has expired but refresh token is valid, get new access token from backend
-        const result = await getNewAccessToken();
+    if (result.success && result.data.accessToken) {
+      accessToken = result.data.accessToken;
 
-        if(result.success){
-            const newAccessToken = result.data.accessToken;
-
-            cookieStore.set("accessToken", newAccessToken , {
-                httpOnly : true,
-                maxAge : 60 * 60 * 24,
-                sameSite : "lax",
-            });
-
-            accessToken = newAccessToken;
-            decodedAccessToken = jwtUtils.verifyToken(accessToken!, process.env.JWT_ACCESS_SECRET as string);
-
-
-        }
+      response.cookies.set("accessToken", accessToken!, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
     }
-
-
-    let userRole = null;
-
-    if(!decodedAccessToken?.success){
-        //token has expired or is invalid, clear the cookies
-        cookieStore.delete("accessToken");
-        // return NextResponse.redirect(new URL('/login', request.url));
+    if (accessToken) {
+      decodedAccessToken = jwtUtils.verifyToken(
+        accessToken,
+        process.env.JWT_ACCESS_SECRET!,
+      );
     }
+  }
 
-    if(decodedAccessToken?.success && decodedAccessToken.data){
-        userRole = (decodedAccessToken.data as JwtPayload).role;
+  /**
+   * --------------------------------------
+   * Invalid Token
+   * --------------------------------------
+   */
+  if (!decodedAccessToken?.success) {
+    response.cookies.delete("accessToken");
+  }
+
+  /**
+   * --------------------------------------
+   * User Role
+   * --------------------------------------
+   */
+
+  let userRole: string | null = null;
+
+  if (decodedAccessToken?.success && decodedAccessToken.data) {
+    userRole = (decodedAccessToken.data as JwtPayload).role;
+  }
+
+  console.log(decodedAccessToken);
+console.log(userRole);
+
+  /**
+   * --------------------------------------
+   * Public Route Check
+   * --------------------------------------
+   */
+
+  const isPublicRoute =
+    pathname === "/" ||
+    PUBLIC_ROUTES.some(
+      (route) =>
+        route !== "/" &&
+        (pathname === route || pathname.startsWith(route + "/")),
+    );
+
+  /**
+   * --------------------------------------
+   * Auth Route Check
+   * --------------------------------------
+   */
+
+  const isAuthRoute = AUTH_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
+
+  /**
+   * --------------------------------------
+   * Logged In User -> Login/Register
+   * --------------------------------------
+   */
+
+  if (accessToken && isAuthRoute) {
+    switch (userRole) {
+      case "CUSTOMER":
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+
+      case "TECHNICIAN":
+        return NextResponse.redirect(
+          new URL("/technician-dashboard", request.url),
+        );
+
+      case "ADMIN":
+        return NextResponse.redirect(new URL("/admin-dashboard", request.url));
+
+      default:
+        return NextResponse.redirect(new URL("/", request.url));
     }
+  }
 
-            
-    //user is logged in and trying to access login or register page, redirect to dashboard or root home page
-    if(accessToken && AUTH_ROUTES.includes(pathname)){
-        if(userRole === "CUSTOMER"){
-            return NextResponse.redirect(new URL('/dashboard', request.url));
-        }else if(userRole === "ADMIN"){
-            return NextResponse.redirect(new URL('/admin-dashboard', request.url));
-        }else if(userRole === "TECHNICIAN"){
-            return NextResponse.redirect(new URL('/technician-dashboard', request.url));
-        }else{
-            return NextResponse.redirect(new URL('/', request.url));
-        }
-    }
+  /**
+   * --------------------------------------
+   * Private Route Protection
+   * --------------------------------------
+   */
 
-    const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
+  if (!accessToken && !isPublicRoute && !isAuthRoute) {
+    const loginUrl = new URL("/login", request.url);
 
-    const isAuthRoute = AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
+    loginUrl.searchParams.set("redirectTo", pathname);
 
-    // Authenticated Pages Protection : Authorization is not handled yet
-    if(!accessToken && !isPublicRoute && !isAuthRoute){
-        const loginUrl = new URL('/login', request.url)
+    return NextResponse.redirect(loginUrl);
+  }
 
-        loginUrl.searchParams.set("redirectTo", pathname)
+  /**
+   * --------------------------------------
+   * Role Based Authorization
+   * --------------------------------------
+   */
 
-        return NextResponse.redirect(loginUrl);
-    }
+  if (pathname.startsWith("/dashboard") && userRole !== "CUSTOMER") {
+    return NextResponse.redirect(new URL("/403", request.url));
+  }
 
-    // Authorization : Role based access control
-    if(pathname.startsWith("/dashboard") && userRole !== "CUSTOMER"){
-        return NextResponse.redirect(new URL('/not-found', request.url));
-    }else if(pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN"){
-        return NextResponse.redirect(new URL('/not-found', request.url));
-    }else if(pathname.startsWith("/technician-dashboard") && userRole !== "TECHNICIAN"){
-        return NextResponse.redirect(new URL('/not-found', request.url));
-    }
+  if (
+    pathname.startsWith("/technician-dashboard") &&
+    userRole !== "TECHNICIAN"
+  ) {
+    return NextResponse.redirect(new URL("/403", request.url));
+  }
 
-    // const subscriptionStatus = await getSubscriptionStatus();
+  if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
+    return NextResponse.redirect(new URL("/403", request.url));
+  }
 
-    // const isActive = Boolean(
-    //     subscriptionStatus?.success && subscriptionStatus.data?.isSubscribed,
-    // );
-
-  
-
-   
-    
-    // return NextResponse.redirect(new URL('/', request.url))
-    return NextResponse.next()
+  return response;
 }
 
 export const config = {
-    matcher: [
-        // '/dashboard/:path*',
-        // '/admin-dashboard/:path*',
-        '/((?!api|_next/static|favicon.ico|_next/image|.*\\.png$).*)'
-    ],
-}
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+  ],
+};

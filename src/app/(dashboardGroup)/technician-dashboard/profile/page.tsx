@@ -10,6 +10,8 @@ import {
   MessageSquare, AlertCircle,
 } from "lucide-react";
 import { TechnicianProfileData } from "@/lib/types";
+import { ReviewCard } from "../_components/ReviewCard";
+
 
 function HeroCard({ profile }: { profile: TechnicianProfileData }) {
   const { user } = profile;
@@ -46,9 +48,9 @@ function HeroCard({ profile }: { profile: TechnicianProfileData }) {
 
 function InfoGrid({ profile }: { profile: TechnicianProfileData }) {
   const rows = [
-    { icon: MapPin,       label: "Service Area", value: profile.serviceArea },
-    { icon: Clock,        label: "Experience",   value: profile.experience ? `${profile.experience} years` : undefined },
-    { icon: Star,         label: "Avg. Rating",  value: profile.averageRating?.toFixed(1) },
+    { icon: MapPin,      label: "Service Area", value: profile.serviceArea },
+    { icon: Clock,       label: "Experience",   value: profile.experience ? `${profile.experience} years` : undefined },
+    { icon: Star,        label: "Avg. Rating",  value: profile.averageRating?.toFixed(1) },
     { icon: CalendarDays, label: "Member Since", value: new Date(profile.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) },
   ].filter((r) => r.value !== undefined);
 
@@ -116,56 +118,54 @@ export default async function ProfilePage() {
             <p className="text-sm text-muted-foreground">No services added yet.</p>
           ) : (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-  {profile.services.map((svc, i) => (
-    <div
-      key={i}
-      className="group relative flex items-center gap-3.5 rounded-xl border border-border/50 bg-background/50 p-3 hover:-translate-y-0.5 hover:shadow-md hover:border-border transition-all duration-200"
-    >
-      {/* Small Service Image Thumbnail */}
-      <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted border border-border/40">
-        {svc.image ? (
-          <Image
-            src={svc.image}
-            alt={svc.title}
-            fill
-            sizes="80px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            unoptimized
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center bg-primary/5">
-            <Wrench className="size-6 text-muted-foreground/40" />
-          </div>
-        )}
-      </div>
+              {profile.services.map((svc, i) => (
+                <div
+                  key={i}
+                  className="group relative flex items-center gap-3.5 rounded-xl border border-border/50 bg-background/50 p-3 hover:-translate-y-0.5 hover:shadow-md hover:border-border transition-all duration-200"
+                >
+                  <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted border border-border/40">
+                    {svc.image ? (
+                      <Image
+                        src={svc.image}
+                        alt={svc.title}
+                        fill
+                        sizes="80px"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center bg-primary/5">
+                        <Wrench className="size-6 text-muted-foreground/40" />
+                      </div>
+                    )}
+                  </div>
 
-      {/* Service Content Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <h4 className="text-sm font-semibold text-foreground truncate pr-1">
-            {svc.title}
-          </h4>
-          <span className="flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-            <DollarSign className="size-3 -mr-0.5" />
-            {svc.price}
-          </span>
-        </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <h4 className="text-sm font-semibold text-foreground truncate pr-1">
+                        {svc.title}
+                      </h4>
+                      <span className="flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                        <DollarSign className="size-3 -mr-0.5" />
+                        {svc.price}
+                      </span>
+                    </div>
 
-        <div className="mb-1.5">
-          <Badge variant="secondary" className="text-[10px] px-2 py-0 h-4 font-normal">
-            {svc.category?.name}
-          </Badge>
-        </div>
+                    <div className="mb-1.5">
+                      <Badge variant="secondary" className="text-[10px] px-2 py-0 h-4 font-normal">
+                        {svc.category?.name}
+                      </Badge>
+                    </div>
 
-        {svc.description && (
-          <p className="text-xs text-muted-foreground line-clamp-1 leading-normal">
-            {svc.description}
-          </p>
-        )}
-      </div>
-    </div>
-  ))}
-</div>
+                    {svc.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-1 leading-normal">
+                        {svc.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </GsapWrapper>
@@ -212,17 +212,7 @@ export default async function ProfilePage() {
           ) : (
             <div className="space-y-3">
               {profile.reviews.map((review) => (
-                <div key={review.id} className="rounded-xl border border-border/50 bg-background/50 p-4">
-                  <div className="mb-2 flex items-center gap-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`size-3.5 ${i < review.rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`} />
-                    ))}
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {new Date(review.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-                    </span>
-                  </div>
-                  {review.comment && <p className="text-sm text-foreground">{review.comment}</p>}
-                </div>
+                <ReviewCard key={review.id} review={review} />
               ))}
             </div>
           )}

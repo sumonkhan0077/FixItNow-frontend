@@ -11,7 +11,7 @@ const ServicesShow = ({ services }: ServiceSectionProps) => {
     <div>
       <section className="px-4 md:px-8 max-w-7xl mx-auto bg-slate-50 dark:bg-slate-950 transition-colors">
         {/* --- Services Grid --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
           {services.map((item, index) => {
             return (
               <GsapWrapper
@@ -44,6 +44,10 @@ const ServicesShow = ({ services }: ServiceSectionProps) => {
                   {/* Content Box */}
                   <div className="p-6 pt-6 flex-1 flex flex-col justify-between space-y-5">
                     <div className="space-y-2">
+                      <div>
+                        <h1 className="text-primary/95 text-md font-bold">৳ {item.price}</h1>
+                      </div>
+
                       <h3 className="text-xl capitalize font-normal text-slate-900 line-clamp-2 dark:text-white">
                         {item.title}
                       </h3>

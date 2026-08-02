@@ -20,6 +20,8 @@ function StarsMini({ rating }: { rating: number }) {
 }
 
 function ReviewCard({ review }: { review: TechnicianReview }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const name     = review.customer?.name ?? "Customer";
   const initials = name.slice(0, 2).toUpperCase();
   const service  = review.booking?.service;
@@ -46,11 +48,21 @@ function ReviewCard({ review }: { review: TechnicianReview }) {
           <span className="text-xs text-muted-foreground shrink-0">{date}</span>
         </div>
 
-        {/* Comment */}
+        {/* Comment with Read More / Show Less */}
         {review.comment && (
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-            &quot;{review.comment}&quot;
-          </p>
+          <div>
+            <p className={`text-sm text-muted-foreground leading-relaxed ${!isExpanded ? "line-clamp-2" : ""}`}>
+              &quot;{review.comment}&quot;
+            </p>
+            {review.comment.length > 90 && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="mt-1 text-xs font-semibold text-primary hover:underline focus:outline-none"
+              >
+                {isExpanded ? "Show Less" : "Read More"}
+              </button>
+            )}
+          </div>
         )}
 
         {/* Service tag */}
