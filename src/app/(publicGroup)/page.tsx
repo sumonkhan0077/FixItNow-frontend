@@ -46,11 +46,11 @@ const page = async () => {
     <div>
       <Navbar user={userProfile}></Navbar>
       <HeaderSection></HeaderSection>
-      <AboutSection></AboutSection>
+      <CategorySection></CategorySection>
       <ServiceProcess></ServiceProcess>
       <TopServicesSection services={topRatedServices}></TopServicesSection>
-      <CategorySection></CategorySection>
 
+      <AboutSection></AboutSection>
       <TeamSection></TeamSection>
       <ServicesSection></ServicesSection>
       {/* <HandymanHoverGallery></HandymanHoverGallery> */}

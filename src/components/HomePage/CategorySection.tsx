@@ -10,153 +10,228 @@ interface CategoryCard {
   title: string;
   description: string;
   image: string;
-  rotation: string;
 }
 
 const categories: CategoryCard[] = [
   {
     id: 1,
     title: "Plumbing",
-    description:
-      "From pipe installations to complete bathroom fittings, we provide reliable residential plumbing solutions.",
-    image:
-      "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "-rotate-8",
+    description: "From pipe installations to complete bathroom fittings, we provide reliable residential plumbing solutions.",
+    image: "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?q=80&w=1374&auto=format&fit=crop",
   },
   {
     id: 2,
     title: "Flooring",
-    description:
-      "Expert floor installation, tile fixing, and wooden flooring repairs to enhance your indoor spaces.",
-    image:
-      "https://images.unsplash.com/photo-1737040621533-6cc229f1e506?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "rotate-2",
+    description: "Expert floor installation, tile fixing, and wooden flooring repairs to enhance your indoor spaces.",
+    image: "https://images.unsplash.com/photo-1737040621533-6cc229f1e506?q=80&w=687&auto=format&fit=crop",
   },
-
   {
     id: 3,
     title: "Carpentry",
-    description:
-      "Custom woodwork, furniture repair, door installations, and fine carpentry tailored for your home.",
-    image:
-      "https://images.unsplash.com/photo-1687422810663-c316494f725a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "-rotate-2",
+    description: "Custom woodwork, furniture repair, door installations, and fine carpentry tailored for your home.",
+    image: "https://images.unsplash.com/photo-1687422810663-c316494f725a?q=80&w=1470&auto=format&fit=crop",
   },
   {
     id: 4,
     title: "Painting",
-    description:
-      "Give your property a fresh, modern aesthetic with top-tier interior and exterior professional painting.",
-    image:
-      "https://images.unsplash.com/photo-1585676737728-432f58d5fdba?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "rotate-6",
+    description: "Give your property a fresh, modern aesthetic with top-tier interior and exterior professional painting.",
+    image: "https://images.unsplash.com/photo-1585676737728-432f58d5fdba?q=80&w=735&auto=format&fit=crop",
   },
   {
     id: 5,
     title: "Electrical",
-    description:
-      "Professional wiring, circuit repairs, and smart home electrical solutions carried out by certified experts.",
-    image:
-      "https://images.unsplash.com/photo-1660330589827-da8ab7dd3c02?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "rotate-8",
+    description: "Professional wiring, circuit repairs, and smart home electrical solutions carried out by certified experts.",
+    image: "https://images.unsplash.com/photo-1660330589827-da8ab7dd3c02?q=80&w=1632&auto=format&fit=crop",
   },
   {
     id: 6,
     title: "Home Renovation",
-    description:
-      "Complete home remodeling and upgrade services handled with precision and guaranteed workmanship.",
-    image:
-      "https://images.unsplash.com/photo-1685812446704-53a66e86c6fc?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rotation: "-rotate-3",
+    description: "Complete home remodeling and upgrade services handled with precision and guaranteed workmanship.",
+    image: "https://images.unsplash.com/photo-1685812446704-53a66e86c6fc?q=80&w=764&auto=format&fit=crop",
   },
 ];
 
 export default function CategorySection() {
   return (
-    <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-colors mt-8">
-      <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto transition-colors">
-        {/* --- Section Header (Centered) --- */}
+    <div className="relative bg-slate-50 transition-colors py-20 mt-8 overflow-hidden">
+      
+      <section className="relative px-4 md:px-8 max-w-7xl mx-auto z-10">
+        
+        {/* --- Section Header --- */}
         <GsapWrapper
           animation="fadeUp"
           delay={0.1}
-          className="mb-20 text-center flex flex-col items-center"
+          className="mb-16 text-center flex flex-col items-center"
         >
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="w-6 h-[2px] bg-primary"></span>
-            <span className="text-xs font-semibold tracking-widest text-white/80 dark:text-slate-400 uppercase">
-              Our Category Services
+            <span className="text-xs font-bold tracking-widest text-slate-600 dark:text-slate-400 uppercase">
+              OUR CATEGORY SERVICES
             </span>
             <span className="w-6 h-[2px] bg-primary"></span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-light text-white/90 tracking-tight leading-tight">
+          <h2 className="text-3xl md:text-5xl font-light text-slate-900 tracking-tight leading-tight">
             Reliable Handyman Solutions, <br />
-            Hover to{" "}
-            <span className="text-primary italic font-light">
-              Straighten Up
-            </span>
+            Designed in Your <span className="text-primary italic font-light">Exact Sketch Layout</span>
           </h2>
         </GsapWrapper>
 
-        {/* --- Categories Grid / Flex Container --- */}
-        <div className="flex flex-wrap items-center justify-center gap-6 pt-6">
-          {categories.map((item, index) => (
-            <GsapWrapper
-              key={item.id}
-              animation="fadeUp"
-              delay={0.2 + index * 0.1}
-            >
-              <div
-                className={`group relative h-[400px] w-[280px] overflow-hidden rounded-3xl bg-slate-900 shadow-xl transition-all duration-500 ease-in-out transform ${item.rotation} hover:rotate-0 hover:scale-105 hover:shadow-2xl hover:z-50 cursor-pointer flex flex-col justify-end`}
-              >
-                {/* Full Background Image */}
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-110 group-hover:blur-[3px] group-hover:brightness-75"
-                />
-
-                {/* Dark Overlay Gradient */}
-                {/* <div className=" absolute inset-0
-    bg-gradient-to-t
-    from-black/75
-    via-black/15
-    to-transparent
-    opacity-40
-    group-hover:opacity-85
-    transition-all duration-500" /> */}
-
-                {/* Content Container */}
-                <div className="relative p-6 z-10 flex flex-col justify-end h-full">
-                  {/* Title */}
-                  <h3 className="text-2xl font-semibold text-white mb-2">
-                    {item.title}
-                  </h3>
-
-                  {/* Description & Link (Appears on Hover) */}
+        {/* --- Bento Grid Layout --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* 1. বাম কলাম: ওপরের অংশ ছোট (4) এবং নিচের অংশ বড় (8) */}
+          <div className="flex flex-col gap-6">
+            {/* ওপরের ছোট বক্স (4) */}
+            <GsapWrapper animation="fadeUp" delay={0.2} className="h-[200px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[0].image} alt={categories[0].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-primary transition-colors">{categories[0].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
                   <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
                     <div className="overflow-hidden">
-                      <p className="text-sm text-slate-300 leading-relaxed font-normal pt-1 pb-4">
-                        {item.description}
-                      </p>
-
-                      <div className="pt-1">
-                       
-                        <Link
-                          href="/services"
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                        >
-                          <span>Explore Service</span>
-                          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      </div>
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[0].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
             </GsapWrapper>
-          ))}
+
+            {/* নিচের বড় বক্স (8) */}
+            <GsapWrapper animation="fadeUp" delay={0.3} className="h-[320px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[1].image} alt={categories[1].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-semibold text-white group-hover:text-primary transition-colors">{categories[1].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
+                    <div className="overflow-hidden">
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[1].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GsapWrapper>
+          </div>
+
+          {/* 2. মাঝের কলাম: ওপরের অংশ বড় (8) এবং নিচের অংশ ছোট (4) */}
+          <div className="flex flex-col gap-6">
+            {/* ওপরের বড় বক্স (8) */}
+            <GsapWrapper animation="fadeUp" delay={0.4} className="h-[320px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[2].image} alt={categories[2].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <span className="text-xs text-primary font-semibold uppercase tracking-wider mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Featured</span>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-semibold text-white group-hover:text-primary transition-colors">{categories[2].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
+                    <div className="overflow-hidden">
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[2].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GsapWrapper>
+
+            {/* নিচের ছোট বক্স (4) */}
+            <GsapWrapper animation="fadeUp" delay={0.5} className="h-[200px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[3].image} alt={categories[3].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-primary transition-colors">{categories[3].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
+                    <div className="overflow-hidden">
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[3].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GsapWrapper>
+          </div>
+
+          {/* 3. ডান কলাম: দুটি সমান ভাগে বিভক্ত (6 এবং 6) */}
+          <div className="flex flex-col gap-6">
+           
+            <GsapWrapper animation="fadeUp" delay={0.6} className="h-[258px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[4].image} alt={categories[4].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-primary transition-colors">{categories[4].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
+                    <div className="overflow-hidden">
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[4].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GsapWrapper>
+
+            <GsapWrapper animation="fadeUp" delay={0.7} className="h-[258px]">
+              <div className="group relative h-full w-full rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg flex flex-col justify-end">
+                <div className="absolute inset-0">
+                  <Image src={categories[5].image} alt={categories[5].title} fill className="object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                </div>
+                <div className="relative p-6 z-20 flex flex-col justify-end h-full">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-primary transition-colors">{categories[5].title}</h3>
+                    <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out">
+                    <div className="overflow-hidden">
+                      <p className="text-slate-200 text-xs leading-relaxed pt-2 mb-3">{categories[5].description}</p>
+                      <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-white">
+                        <span>Explore</span> <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GsapWrapper>
+          </div>
+
         </div>
       </section>
     </div>
