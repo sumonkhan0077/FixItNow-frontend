@@ -52,7 +52,7 @@ export default function AboutSection() {
             </div>
 
             {/* Overlapping Bottom Stats Card */}
-            <div className="relative lg:absolute lg:-bottom-16 lg:-left-12 mt-6 lg:mt-0 w-full sm:w-[90%] bg-slate-900 dark:bg-slate-900 text-white p-8 rounded-3xl shadow-2xl border border-slate-800 grid grid-cols-2 gap-6 z-20">
+            <div className="relative lg:absolute lg:-bottom-16 lg:-left-12 mt-6 lg:mt-0 w-full sm:w-[90%] bg-slate-900 dark:bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 grid grid-cols-2 gap-6 z-20">
               
               {/* Stat 1 */}
               <div className="space-y-3">

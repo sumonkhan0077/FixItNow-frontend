@@ -94,8 +94,39 @@ const teamMembers = [
 
 export default function TeamSection() {
   return (
-    <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-colors mt-20">
-      <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto">
+    <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-colors mt-20 pt-36 pb-36 md:pt-44 md:pb-44 overflow-hidden">
+      
+      {/* ================= TOP ASYMMETRIC / SMOOTH CURVE SVG SHAPE ================= */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-0">
+        <svg
+          className="relative block w-full h-16 md:h-28 text-slate-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,0 L0,0 Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+
+      {/* ================= BOTTOM ASYMMETRIC / SMOOTH CURVE SVG SHAPE ================= */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-0">
+        <svg
+          className="relative block w-full h-16 md:h-28 text-slate-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,120 C300,30 550,110 800,25 C950,-20 1100,70 1200,40 L1200,120 L0,120 Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+
+      <section className="relative px-4 md:px-8 max-w-7xl mx-auto z-10">
         {/* Section Header */}
         <GsapWrapper
           animation="fadeUp"
@@ -109,7 +140,7 @@ export default function TeamSection() {
             </span>
             <span className="w-6 h-[2px] bg-primary"></span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-normal text-white/90 dark:text-white tracking-tight leading-tight">
+          <h2 className="text-3xl md:text-5xl font-light text-white/90 dark:text-white tracking-tight leading-tight">
             Meet Our Professional <br />
             <span className="text-primary italic font-light">Service Team</span>
           </h2>

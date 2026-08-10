@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function ServicesSection() {
   return (
-    <div className="bg-gradient-to-br from-secondary/10 via-secondary/5 to-secondary/10 dark:from-slate-950 dark:via-slate-900/40 dark:to-slate-950 transition-colors py-24">
+    <div className="bg-slate-50 dark:from-slate-950 dark:via-slate-900/40 dark:to-slate-950 transition-colors py-24">
       <section className="px-4 md:px-8 max-w-7xl mx-auto space-y-16">
         
         {/* Section Header */}

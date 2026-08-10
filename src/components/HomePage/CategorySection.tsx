@@ -73,7 +73,7 @@ const categories: CategoryCard[] = [
 
 export default function CategorySection() {
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-colors mt-8">
+    <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-colors mt-8">
       <section className="py-24 px-4 md:px-8 max-w-7xl mx-auto transition-colors">
         {/* --- Section Header (Centered) --- */}
         <GsapWrapper
@@ -88,7 +88,7 @@ export default function CategorySection() {
             </span>
             <span className="w-6 h-[2px] bg-primary"></span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-normal text-white/90 tracking-tight leading-tight">
+          <h2 className="text-3xl md:text-5xl font-light text-white/90 tracking-tight leading-tight">
             Reliable Handyman Solutions, <br />
             Hover to{" "}
             <span className="text-primary italic font-light">

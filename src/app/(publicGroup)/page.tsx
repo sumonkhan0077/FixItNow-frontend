@@ -1,6 +1,7 @@
 import AboutSection from "@/components/HomePage/AboutSection";
 import CategorySection from "@/components/HomePage/CategorySection";
 import HeaderSection from "@/components/HomePage/Header";
+import ServiceProcess from "@/components/HomePage/ServiceProcess";
 
 import ServicesSection from "@/components/HomePage/ServicesSection";
 import TeamSection from "@/components/HomePage/TeamSection";
@@ -46,8 +47,9 @@ const page = async () => {
       <Navbar user={userProfile}></Navbar>
       <HeaderSection></HeaderSection>
       <AboutSection></AboutSection>
-      <CategorySection></CategorySection>
+      <ServiceProcess></ServiceProcess>
       <TopServicesSection services={topRatedServices}></TopServicesSection>
+      <CategorySection></CategorySection>
 
       <TeamSection></TeamSection>
       <ServicesSection></ServicesSection>
