@@ -2,6 +2,7 @@ import AboutSection from "@/components/HomePage/AboutSection";
 import CategorySection from "@/components/HomePage/CategorySection";
 import ChooseUs from "@/components/HomePage/ChooseUs";
 import HeaderSection from "@/components/HomePage/Header";
+import QuestionAnswer from "@/components/HomePage/QuestionSection";
 import ServiceProcess from "@/components/HomePage/ServiceProcess";
 
 import ServicesSection from "@/components/HomePage/ServicesSection";
@@ -54,6 +55,7 @@ const page = async () => {
       <ChooseUs></ChooseUs>
       <AboutSection></AboutSection>
       <TeamSection></TeamSection>
+      <QuestionAnswer></QuestionAnswer>
       <ServicesSection></ServicesSection>
       {/* <HandymanHoverGallery></HandymanHoverGallery> */}
    

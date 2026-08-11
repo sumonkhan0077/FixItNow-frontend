@@ -12,12 +12,12 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-brand-blue px-6 text-center text-white">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-brand-blue px-6 text-center text-black">
       <AlertTriangle className="h-12 w-12 text-primary" />
       <h1 className="mt-6 font-display text-4xl uppercase">
         Something Went Wrong
       </h1>
-      <p className="mt-4 max-w-md text-white/70">
+      <p className="mt-4 max-w-md text-black">
         {error.message || "An unexpected error occurred. Please try again."}
       </p>
       <div className="mt-8 flex gap-3">

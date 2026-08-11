@@ -6,7 +6,7 @@ import { getNewAccessToken } from "@/service/refreshToken";
 
 const AUTH_ROUTES = ["/login", "/register"];
 
-const PUBLIC_ROUTES = ["/", "/services"];
+const PUBLIC_ROUTES = ["/", "/services" , "/contactus", "/aboutus"];
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -76,8 +76,8 @@ export async function proxy(request: NextRequest) {
     userRole = (decodedAccessToken.data as JwtPayload).role;
   }
 
-  console.log(decodedAccessToken);
-console.log(userRole);
+//   console.log(decodedAccessToken);
+// console.log(userRole);
 
   /**
    * --------------------------------------

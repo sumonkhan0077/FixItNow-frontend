@@ -121,7 +121,7 @@ export function Navbar({ user }: NavbarProps) {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div
         className={cn(
-          "flex h-16 items-center justify-between gap-4 transition-all duration-300 px-4 sm:px-6 lg:px-10  bg-white/5 backdrop-blur-xl  shadow-xl backdrop-saturate-150",
+          "flex h-16 items-center justify-between gap-4 transition-all duration-300 px-4 sm:px-6 lg:px-8  bg-white/5 backdrop-blur-xl  shadow-xl backdrop-saturate-150",
         )}
       >
         {/* Logo */}
