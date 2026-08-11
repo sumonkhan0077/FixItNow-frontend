@@ -1,5 +1,6 @@
 import AboutSection from "@/components/HomePage/AboutSection";
 import CategorySection from "@/components/HomePage/CategorySection";
+import ChooseUs from "@/components/HomePage/ChooseUs";
 import HeaderSection from "@/components/HomePage/Header";
 import ServiceProcess from "@/components/HomePage/ServiceProcess";
 
@@ -50,6 +51,7 @@ const page = async () => {
       <ServiceProcess></ServiceProcess>
       <TopServicesSection services={topRatedServices}></TopServicesSection>
 
+      <ChooseUs></ChooseUs>
       <AboutSection></AboutSection>
       <TeamSection></TeamSection>
       <ServicesSection></ServicesSection>

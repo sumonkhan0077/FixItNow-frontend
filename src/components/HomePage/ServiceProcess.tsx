@@ -367,7 +367,7 @@ export default function ServiceProcess() {
                         {step.title}
                       </h3>
 
-                      <p className="mt-2 text-xs leading-6 text-slate-400 md:text-sm">
+                      <p className="mt-2 text-xs leading-6 text-slate-200 md:text-sm">
                         {step.description}
                       </p>
                     </div>

@@ -151,7 +151,7 @@ export default function TeamSection() {
           <Swiper
             modules={[Navigation, Autoplay]}
             spaceBetween={30}
-            slidesPerView={1}
+            slidesPerView={2}
             loop={true}
             breakpoints={{
               640: { slidesPerView: 2 },
