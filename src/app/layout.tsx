@@ -3,6 +3,7 @@ import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/shared/navbar";
+import SmoothScroll from "@/components/shared/SmoothScroll"
 
 const monaSans = Mona_Sans({
   variable: "--font-sans",
@@ -24,7 +25,10 @@ export default function RootLayout({
     <html lang="en" className={`${monaSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans ">
        
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
+        
 
         <Toaster richColors position="top-right" />
       </body>
